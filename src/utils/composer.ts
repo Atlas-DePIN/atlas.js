@@ -1,0 +1,94 @@
+// src/messages/composer.ts
+import { EncodeObject } from '@cosmjs/proto-signing';
+import { MsgPostFile, MsgDeleteFile } from '@atlas/atlas.js-protos/dist/types/atlas/storage/v1/tx';
+import { MsgDeleteNode, MsgPostNode } from '@atlas/atlas.js-protos/dist/types/atlas/filetree/v1/tx';
+import { IReadAuthorityKeeper } from '@/interfaces';
+
+export class MessageComposer {
+  /**
+   * Creates a properly formatted EncodeObject for file upload
+   */
+  static MsgPostFile(
+    fid: string,
+    creator: string,
+    merkleRoot: Uint8Array,
+    fileSize: number,
+    replicas: number = 3,
+    subscription: string = ""
+  ): EncodeObject {
+    // Use the MessageComposer from your protos
+    return {
+      typeUrl: MsgPostFile.typeUrl,
+      value: MsgPostFile.fromPartial({
+        fid,
+        creator,
+        merkle: merkleRoot,
+        fileSize: fileSize,
+        replicas: replicas,
+        subscription
+      })
+    };
+  }
+
+  static MsgDeleteFile(
+    creator: string,
+    fid: string
+  ): EncodeObject {
+    // Use the MessageComposer from your protos
+    return {
+      typeUrl: MsgDeleteFile.typeUrl,
+      value: MsgDeleteFile.fromPartial({
+        creator,
+        fileId: fid
+      })
+    };
+  }
+
+  /**
+   * Creates a file tree node message
+   */
+  static MsgPostNode(creator: string, path: string, nodeType: string, contents: string, viewers: IReadAuthorityKeeper, editors: string[]): EncodeObject {
+    return {
+      typeUrl: MsgPostNode.typeUrl,
+      value: MsgPostNode.fromPartial({
+        creator,
+        path,
+        nodeType,
+        contents,
+        viewers: JSON.stringify(viewers),
+        editors: JSON.stringify(editors)
+      })
+    };
+  }
+
+  static MsgDeleteNode(creator: string, path: string): EncodeObject {
+    return {
+      typeUrl: MsgDeleteNode.typeUrl,
+      value: MsgDeleteNode.fromPartial({
+        creator,
+        path: path.toLowerCase()
+      })
+    };
+  }
+
+  /**
+   * Creates a cosmos bank send message
+   */
+  static createBankSendMsg(
+    fromAddress: string,
+    toAddress: string,
+    amount: string, // e.g., "1000uatl"
+    denom: string = "uatl"
+  ): EncodeObject {
+    const cosmos = require('cosmjs-types/cosmos/bank/v1beta1/tx');
+    
+    return {
+      typeUrl: "/cosmos.bank.v1beta1.MsgSend",
+      value: cosmos.MsgSend.fromPartial({
+        fromAddress,
+        toAddress,
+        amount: [{ denom, amount }]
+      })
+    };
+  }
+}

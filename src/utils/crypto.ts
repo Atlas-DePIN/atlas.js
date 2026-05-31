@@ -112,6 +112,7 @@ export async function importAesBundle(eciesKey: PrivateKey, aes: string): Promis
 
 export function eciesEncrypt(key: string, content: Uint8Array): string {
   return encrypt(key, content).toHex().toString()
+  // Dev Note: toHex only exists on Uint8Array in NodeJS 22+/modern browser versions
 }
 
 export function eciesDecrypt(key: PrivateKey, content: string): Uint8Array {

@@ -1,10 +1,12 @@
 import { EventEmitter } from "events";
+import { Provider } from "@atlas/atlas.js-protos/dist/types/atlas/storage/v1/provider";
 import { StorageSubscription } from "@atlas/atlas.js-protos/dist/types/atlas/storage/v1/subscription";
 
+import { TreeNode } from "@/types";
 import { StorageEvents, StorageHandlerEvent, WalletEvents } from "@/types/events";
-import { SubscriptionError } from "@/types/errors";
+import { DirectoryLoadError, SubscriptionError } from "@/types/errors";
+import { IAtlasDriveInfo, IAtlasDirectoryInfo, IDirectory } from "@/interfaces";
 import { AtlasClient } from "./atlas-client";
-import { IAtlasDriveInfo } from "@/interfaces/IAtlasDriveInfo";
 import { SIGNER_SEED } from "./utils/constants";
 import { PrivateKey } from "eciesjs";
 import { bytesToHex } from "./utils/converters";
@@ -16,9 +18,24 @@ export class StorageHandler extends EventEmitter {
   protected access: PrivateKey;
   protected filetree: FiletreeHelper
   
+  private _providers: Provider[] = [];
+  get providers(): Provider[] {
+    return this._providers
+  }
+
   private _subscription: StorageSubscription
   get subscription(): StorageSubscription {
     return this._subscription
+  }
+
+  private _drives: IAtlasDriveInfo[] = [];
+  get drives(): IAtlasDriveInfo[] {
+    return this._drives
+  }
+
+  private _directory: IDirectory;
+  get directory(): IDirectory {
+    return this._directory
   }
 
   /**
@@ -45,15 +62,19 @@ export class StorageHandler extends EventEmitter {
     await handler.loadAccount()
   }
 
-  /**
-   * Ask the wallet to sign a stable seed and derive the local ECIES keypair.
-   *
-   * The derived keypair is used only to wrap and unwrap file encryption keys.
-   */
-  private async enableSigner(): Promise<void> {
+  protected async enableSigner(): Promise<void> {
     const signature = await this.client.signMessage(SIGNER_SEED);
     this.access = PrivateKey.fromHex(bytesToHex(signature.signature));
     this.filetree.useAccessKey(this.access)
+  }
+
+  public async loadProviders(): Promise<void> {
+    try {
+      this._providers = await this.client.query.providers();
+    } catch (err: any) {
+      // TODO: log error
+      throw err;
+    }
   }
 
   protected async loadAccount() {
@@ -65,36 +86,77 @@ export class StorageHandler extends EventEmitter {
       // TODO: log warning
     }
     
-    const drives = await this.listDrives();
+    this._drives = await this.listDrives();
+    if (this.drives.length === 0) {
+      const metadata: IAtlasDriveInfo = {
+        name: 'home',
+        size: 0,
+        isDefault: true
+      }
+      await this.filetree.createDrive(metadata)
+      this._drives = [metadata];
+      // await this.loadDirectory('home');
+      return
+    } else {
+      const defaultDrive = this.drives.find((drive) => drive.isDefault) ?? this.drives[0];
+      // await this.loadDirectory(defaultDrive.name);
+    }
   }
 
-  /**
-   * Load a subscription for the current handler address.
-   *
-   * Emits `NEW_SUB` when found and `NO_SUB` when the query fails.
-   */
   public async loadSubscription(id?: string): Promise<void> {
     try {
       this._subscription = await this.client.query.subscription(this.client.address, id);
-      this.emit(StorageHandlerEvent.NEW_SUB, this._subscription);
+      this.emit(StorageHandlerEvent.SUB_NEW, this.subscription);
     } catch (error) {
-      this.emit(StorageHandlerEvent.NO_SUB);
+      this.emit(StorageHandlerEvent.SUB_NONE);
       throw new SubscriptionError(`Failed to load subscription "${id}" for "${this.client.address}": ${error}`);
     }
   }
 
-  /**
-   * Find all drive nodes owned by the current user.
-   */
-  public async listDrives(): Promise<IAtlasDriveInfo[]> {
-    const nodes = await this.client.query.treeNodeChildren('', this._subscription.id, this.client.address) ?? [];
-    // [TODO]: logic will change once encryting node contents is implemented
-    return nodes
-      .filter((node) => node.nodeType === 'drive')
-      .map((node) => this.parseNodeContents<IAtlasDriveInfo>(node.contents, 'drive'));
+  public async loadDirectory(path: string, owner: string = this.client.address): Promise<void> {
+    if (!owner) {
+      throw new TypeError('Unable to load directory. No owner specified and no wallet connected.');
+    }
+    const node = await this.filetree.getTreeNode(path, owner)
+    const nextDirectory: IDirectory = {
+      metadata: JSON.parse(node.contents) as IAtlasDirectoryInfo,
+      path,
+      files: [],
+      subdirs: [],
+      objects: [],
+    };
+
+    const children: TreeNode[] = await this.filetree.getTreeNodeChildren(path, owner)
+    for (const [index, node] of children.entries()) {
+      try {
+        if (node.nodeType === 'directory') {
+          nextDirectory.subdirs.push(parseNodeContents(node.contents, `${path}/children[${index}]:directory`));
+        } else if (node.nodeType === 'file') {
+          nextDirectory.files.push(parseNodeContents(node.contents, `${path}/children[${index}]:file`));
+        } else {
+          nextDirectory.objects.push(node.contents);
+        }
+      } catch (err: any) {
+        console.warn(`Child ${index} of directory "${path}" has invalid "${node.nodeType}" contents:\n ${node.contents}`);
+      }
+    }
+
+    this._directory = nextDirectory;
+    this.emit(StorageHandlerEvent.DIR_NAV, nextDirectory.path);
   }
 
-  private parseNodeContents<T>(contents: string, path: string): T {
+
+  protected async listDrives(): Promise<IAtlasDriveInfo[]> {
+    const nodes = await this.filetree.getTreeNodeChildren("");
+    return nodes
+      .filter((node) => node.nodeType === 'drive')
+      .map((node) => this.safeParseNodeContents<IAtlasDriveInfo>(node.contents, 'drive'));
+  }
+
+
+
+
+  private safeParseNodeContents<T>(contents: string, path: string): T {
     try {
       return JSON.parse(contents) as T;
     } catch (err: any) {
@@ -103,4 +165,10 @@ export class StorageHandler extends EventEmitter {
   }
 }
 
-
+function parseNodeContents<T>(contents: string, path: string): T {
+  try {
+    return JSON.parse(contents) as T;
+  } catch (error) {
+    throw new Error(`Failed to parse filetree contents for "${path}": ${error}`);
+  }
+}

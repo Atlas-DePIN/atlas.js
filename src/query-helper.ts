@@ -25,16 +25,19 @@ export class QueryHelper implements IQueryHelper {
     (await this.client.atlas.storage.v1.file({ fid })).file;
 
   subscriptions = async (address: string): Promise<StorageSubscription[]> => 
-    (await this.client.atlas.storage.v1.subscriptions({ subscriberAddress: address })).subscriptions;
+    (await this.client.atlas.storage.v1.subscriptions({ subscriberAddress: address })).subscriptions ?? [];
 
   provider = async (address: string): Promise<Provider> =>
     (await this.client.atlas.storage.v1.provider({address})).provider;
 
-  treeNode = async (path: string, subscription: string, owner: string): Promise<TreeNode> => 
-    (await this.client.atlas.filetree.v1.treeNode({ path, subscription, owner })).node;
+  providers = async (): Promise<Provider[]> =>
+    (await this.client.atlas.storage.v1.providers({})).providers ?? [];
 
-  treeNodeChildren  = async (path: string, subscription: string, owner: string): Promise<TreeNode[]> => 
-    (await this.client.atlas.filetree.v1.treeNodeChildren({ path, subscription, owner })).nodes;
+  treeNode = async (owner: string, path: string): Promise<TreeNode> => 
+    (await this.client.atlas.filetree.v1.treeNode({ path, owner })).node;
+
+  treeNodeChildren  = async (owner: string, path: string): Promise<TreeNode[]> => 
+    (await this.client.atlas.filetree.v1.treeNodeChildren({ owner, path })).nodes ?? [];
 
 
   async subscription(address: string, id: string = ""): Promise<StorageSubscription> {

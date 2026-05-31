@@ -12,6 +12,7 @@ export interface IQueryHelper {
   subscriptions(address: string): Promise<StorageSubscription[]>;
   subscription(address: string, id?: string): Promise<StorageSubscription>;
   provider(address: string): Promise<Provider>;
+  providers(): Promise<Provider[]>;
 
   treeNode(path: string, subscription: string, owner: string): Promise<TreeNode>;
   treeNodeChildren(path: string, subscription: string, owner: string): Promise<TreeNode[]>;

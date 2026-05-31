@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@atlas/atlas.js-protos':
-        specifier: file:atlas-atlas.js-protos-0.1.3.tgz
-        version: file:atlas-atlas.js-protos-0.1.3.tgz(@chain-registry/v2-types@0.53.146)(@chain-registry/v2@1.71.237)(google-protobuf@3.21.4)
+        specifier: file:atlas-atlas.js-protos-0.2.0.tgz
+        version: file:atlas-atlas.js-protos-0.2.0.tgz(@chain-registry/v2-types@0.53.146)(@chain-registry/v2@1.71.237)(google-protobuf@3.21.4)
       '@cosmjs/encoding':
         specifier: ^0.38.1
         version: 0.38.1
@@ -109,9 +109,9 @@ packages:
     resolution: {integrity: sha512-1ImKEpP744yTViwtRPXzdtrCsblzwNj18gJTUpNeVzTUR7aTrS4LTU/mctLKkwKQhgqfcGDKovroa0Aasi0ngQ==}
     hasBin: true
 
-  '@atlas/atlas.js-protos@file:atlas-atlas.js-protos-0.1.3.tgz':
-    resolution: {integrity: sha512-4jXt46SjnPbBwuys7okqNI4by4VOmWuFfSiTm8XPmHaWZG3yUthj/C7L/2SuP/GOgXGDtM/2EFo2gN/lTppRGA==, tarball: file:atlas-atlas.js-protos-0.1.3.tgz}
-    version: 0.1.3
+  '@atlas/atlas.js-protos@file:atlas-atlas.js-protos-0.2.0.tgz':
+    resolution: {integrity: sha512-h2TmDT/wP5ePdyRtNBUC///X3zPID53oXoEnL88pOBLuDJ5esWAYozKW5iwQhuI+qhA9Ujhql/jRJWE5OGI6Xw==, tarball: file:atlas-atlas.js-protos-0.2.0.tgz}
+    version: 0.2.0
 
   '@babel/code-frame@7.29.7':
     resolution: {integrity: sha512-Aup7aUOfpbAUg2ROOJN6Iw5f9DMBlzu0mIkm/malLQFN/YQgO48wCj0Kxa3sEHJvPVFg7siR+qRInwXd2qhQKw==}
@@ -2371,7 +2371,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@atlas/atlas.js-protos@file:atlas-atlas.js-protos-0.1.3.tgz(@chain-registry/v2-types@0.53.146)(@chain-registry/v2@1.71.237)(google-protobuf@3.21.4)':
+  '@atlas/atlas.js-protos@file:atlas-atlas.js-protos-0.2.0.tgz(@chain-registry/v2-types@0.53.146)(@chain-registry/v2@1.71.237)(google-protobuf@3.21.4)':
     dependencies:
       '@ahm23/telescope': 2.3.1
       '@ahm23/telescope-ast': 2.3.1

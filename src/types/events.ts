@@ -12,6 +12,8 @@ export enum StorageEvents {
 }
 
 export enum StorageHandlerEvent {
-  NO_SUB = 'no-subscription',
-  NEW_SUB = 'new-subscription'
+  SUB_NONE = 'no-subscription',
+  SUB_NEW = 'new-subscription',
+
+  DIR_NAV = 'navigate-directory'
 }
