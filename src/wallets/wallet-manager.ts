@@ -5,12 +5,11 @@ import { TxBody } from 'cosmjs-types/cosmos/tx/v1beta1/tx';
 import { WalletType } from '@/types/wallet'
 import { WalletEvents } from '@/types/events'
 import { 
-  WalletConnection, 
-  WalletConfig, 
+  AtlasConfig,
   WalletInfo,
   SigningResult,
-  TxOptions
-} from '@/interfaces/wallet';
+  TxOptions,
+} from '@/interfaces';
 
 import { BaseWallet } from './base-wallet';
 import { KeplrWallet } from './adapters/keplr-adapter';
@@ -29,12 +28,12 @@ export class WalletManager extends EventEmitter {
   private wallet: BaseWallet | null = null;
 
   /** Configuration shared with every wallet adapter instance. */
-  private config: WalletConfig;
+  private config: AtlasConfig;
 
   /**
    * @param config - Wallet configuration (RPC endpoint, gas price, etc.).
    */
-  constructor(config: WalletConfig) {
+  constructor(config: AtlasConfig) {
     super();
     this.config = config;
   }
@@ -42,6 +41,10 @@ export class WalletManager extends EventEmitter {
   declare on: (event: WalletEvents | string, listener: (...args: any[]) => void) => this;
   declare off: (event: WalletEvents | string, listener: (...args: any[]) => void) => this;
   declare emit: (event: WalletEvents | string, ...args: any[]) => boolean;
+
+  public get address(): string {
+    return this.wallet?.address || "";
+  }
 
   /**
    * Check whether a wallet is currently connected and ready.
@@ -66,7 +69,7 @@ export class WalletManager extends EventEmitter {
    * @throws If the wallet type is unsupported or the browser extension
    *         is unavailable.
    */
-  async connect(type: WalletType, options?: any): Promise<WalletConnection> {
+  async connect(type: WalletType, options?: any): Promise<void> {
     // Disconnect existing wallet
     await this.disconnect();
 
@@ -103,10 +106,9 @@ export class WalletManager extends EventEmitter {
     }
 
     // Connect wallet
-    const connection = await this.wallet.connect();
+    await this.wallet.connect();
     
-    this.emit(WalletEvents.CONNECT, connection);
-    return connection;
+    this.emit(WalletEvents.CONNECT, this.wallet.address);
   }
 
   /**
@@ -143,11 +145,21 @@ export class WalletManager extends EventEmitter {
   }
 
   /**
+   * Return the wallet type, or `null` if no wallet is connected.
+   */
+  getWalletType(): WalletType | null {
+    return this.wallet?.getWalletType() || null;
+  }
+
+  /**
    * Fetch on-chain account information for the connected wallet address.
    *
    * @throws If no wallet is connected.
    */
   async getAccountInfo(): Promise<Account> {
+    if (!this.wallet) {
+      throw new Error('No wallet connected');
+    }
     return await this.wallet.getAccountInfo();
   }
 
@@ -157,6 +169,9 @@ export class WalletManager extends EventEmitter {
    * @throws If no wallet is connected.
    */
   async getAccountBalance(): Promise<readonly Coin[]> {
+    if (!this.wallet) {
+      throw new Error('No wallet connected');
+    }
     return await this.wallet.getAccountBalance();
   }
 

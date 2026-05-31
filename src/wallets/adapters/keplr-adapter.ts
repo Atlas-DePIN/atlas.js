@@ -2,9 +2,9 @@ import { OfflineSigner } from '@cosmjs/proto-signing';
 
 import { WalletType } from '@/types/wallet';
 import { 
-  WalletConnection, 
+  AtlasConfig,
   SigningResult,  
-} from '@/interfaces/wallet';
+} from '@/interfaces';
 
 import { BaseWallet } from '@/wallets';
 import { atlasDevnetChainConfig } from '@/defaults';
@@ -19,7 +19,7 @@ declare global {
 export class KeplrWallet extends BaseWallet {
   private keplr: any;
 
-  constructor(config: any) {
+  constructor(config: AtlasConfig) {
     super(config);
     this.keplr = window.keplr;
   }
@@ -32,7 +32,7 @@ export class KeplrWallet extends BaseWallet {
     return WalletType.KEPLR;
   }
 
-  async connect(): Promise<WalletConnection> {
+  async connect(): Promise<void> {
     if (!this.keplr) {
       throw new Error('Keplr wallet not installed');
     }
@@ -54,12 +54,6 @@ export class KeplrWallet extends BaseWallet {
 
       // Initialize clients with the offline signer
       await this.initializeClients(offlineSigner, accounts[0].address);
-
-      if (!this.wallet) {
-        throw new Error('Failed to create wallet connection');
-      }
-
-      return this.wallet;
     } catch (error: any) {
       throw new Error(`Keplr connection failed: ${error.message}`);
     }
@@ -68,16 +62,16 @@ export class KeplrWallet extends BaseWallet {
   async disconnect(): Promise<void> {
     this.signingClient = null;
     this.queryClient = null;
-    this.wallet = null;
+    this.address = "";
   }
 
   async signArbitrary(data: string | Uint8Array): Promise<SigningResult> {
-    if (!this.wallet) {
+    if (!this.address) {
       throw new Error("Wallet not connected");
     }
 
     try {
-      const signature = await this.keplr.signArbitrary(this.config.chainId, this.wallet.address, data);
+      const signature = await this.keplr.signArbitrary(this.config.chainId, this.address, data);
 
       return {
         signature: Uint8Array.from(atob(signature.signature), c => c.charCodeAt(0)),

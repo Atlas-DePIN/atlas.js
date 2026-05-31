@@ -6,11 +6,10 @@ import { TxBody } from 'cosmjs-types/cosmos/tx/v1beta1/tx';
 import { GlobalDecoderRegistry } from '@atlas/atlas.js-protos'
 import { WalletType } from '@/types/wallet'
 import {
-  WalletConfig, 
-  WalletConnection,
+  AtlasConfig,
   TxOptions,
   SigningResult,
-} from '@/interfaces/wallet'
+} from '@/interfaces'
 
 /**
  * Abstract base class for wallet implementations.
@@ -24,10 +23,13 @@ import {
  */
 export abstract class BaseWallet {
   /** Wallet-level configuration (RPC endpoint, gas price, etc.). */
-  protected config: WalletConfig;
+  protected config: AtlasConfig;
 
-  /** Active wallet connection details */
-  protected wallet: WalletConnection | null = null;
+  /** Active wallet address */
+  protected _address: string = "";
+  get address(): string {
+    return this._address;
+  }
 
   /** Read-only Stargate client for queries (balance, account info). */
   protected queryClient: StargateClient | null = null;
@@ -35,11 +37,13 @@ export abstract class BaseWallet {
   /** Signing Stargate client for broadcasting transactions. */
   protected signingClient: SigningStargateClient | null = null;
 
+  private _offlineSigner: any = null;
+
   /**
    * @param config - Configuration object containing endpoint, gas price,
    *                 and any subclass-specific options.
    */
-  constructor(config: WalletConfig) {
+  constructor(config: AtlasConfig) {
     this.config = config;
   }
 
@@ -50,7 +54,7 @@ export abstract class BaseWallet {
    * (via {@link initializeClients}), and return the resulting connection
    * metadata.
    */
-  abstract connect(): Promise<WalletConnection>;
+  abstract connect(): Promise<void>;
 
   /** Tear down the wallet connection and release any held resources. */
   abstract disconnect(): Promise<void>;
@@ -72,7 +76,7 @@ export abstract class BaseWallet {
    * are all not null.
    */
   isConnected(): boolean {
-    return !!this.wallet && !!this.signingClient && !!this.queryClient;
+    return !!this._offlineSigner && !!this.signingClient && !!this.queryClient;
   }
 
   /**
@@ -96,7 +100,7 @@ export abstract class BaseWallet {
    */
   async getAccountInfo(): Promise<Account> {
     this._validateConnection()
-    return await this.queryClient.getAccount(this.wallet.address);
+    return await this.queryClient.getAccount(this.address);
   }
 
   /**
@@ -106,7 +110,7 @@ export abstract class BaseWallet {
    */
   async getAccountBalance(): Promise<readonly Coin[]> {
     this._validateConnection()
-    return await this.queryClient.getAllBalances(this.wallet.address);
+    return await this.queryClient.getAllBalances(this.address);
   }
 
   /**
@@ -138,7 +142,7 @@ export abstract class BaseWallet {
       
       // Sign & broadcast the given transaction
       const txResponse = await this.signingClient.signAndBroadcast(
-        this.wallet.address,
+        this.address,
         txBody.messages,
         fee,
         options?.memo || ''
@@ -165,7 +169,7 @@ export abstract class BaseWallet {
   async simulateTransaction(messages: any[], options?: TxOptions): Promise<number> {
     this._validateConnection()
 
-    return await this.signingClient.simulate(this.wallet.address, messages, options?.memo || '');
+    return await this.signingClient.simulate(this.address, messages, options?.memo || '');
   }
 
   /**
@@ -205,11 +209,8 @@ export abstract class BaseWallet {
       );
 
       // Save wallet details
-      this.wallet = {
-        address,
-        walletType: this.getWalletType(),
-        offlineSigner
-      };
+      this._address = address
+      this._offlineSigner = offlineSigner
     } catch (error: any) {
       throw new Error(`Failed to initialize clients: ${error.message}`);
     }
@@ -224,12 +225,12 @@ export abstract class BaseWallet {
    * @throws If no wallet connection has been established.
    */
   async refreshClients(): Promise<void> {
-    if (!this.wallet.offlineSigner || !this.wallet) {
+    if (!this._offlineSigner || !this.address) {
       throw new Error('Cannot refresh clients without a proper connection established');
     }
     
     // Re-initialize clients
-    await this.initializeClients(this.wallet.offlineSigner, this.wallet.address);
+    await this.initializeClients(this._offlineSigner, this.address);
   }
 
   /**
