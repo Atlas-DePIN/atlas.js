@@ -62,7 +62,7 @@ export class KeplrWallet extends BaseWallet {
   async disconnect(): Promise<void> {
     this.signingClient = null;
     this.queryClient = null;
-    this.address = "";
+    this._address = "";
   }
 
   async signArbitrary(data: string | Uint8Array): Promise<SigningResult> {

@@ -19,4 +19,3 @@ export interface SigningResult {
   txHash?: string;
   signature: Uint8Array;
 }
-
