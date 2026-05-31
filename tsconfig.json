@@ -1,0 +1,49 @@
+{
+  "compilerOptions": {
+    "target": "es2020",
+    "useDefineForClassFields": true,
+    "module": "es2020",
+    "lib": ["esnext", "DOM", "DOM.Iterable"],
+    "types": ["node"],
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
+    "allowJs": false,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "noImplicitAny": false,
+    "stripInternal": true,
+
+    /* Bundler mode */
+    "outDir": "dist",
+    "sourceMap": false,
+    "declaration": false,
+    "declarationMap": false,
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+
+    /* Linting */
+    "strict": false,
+
+    "paths": {
+      "@/*": ["./src/*"]
+    },
+    "typeRoots": [
+      "node_modules/@types",
+      "./src/interfaces",
+      "src/interfaces"
+    ]
+  },
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.d.ts"
+  , "src/storage/test-encoding.bak"  ],
+  "exclude": [
+    "node_modules",
+    "**/node_modules/**",
+    "dist",
+    "build",
+    "tests/**/*.ts"
+  ]
+}
