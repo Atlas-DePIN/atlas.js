@@ -1,0 +1,44 @@
+import { IChainConfig } from "@/types/wallet";
+
+export const atlasDevnetChainConfig: IChainConfig = {
+  chainId: 'atlas-1',
+  chainName: 'Atlas Protocol',
+  rpc: 'https://rpc.atlasprotocol.cloud',
+  rest: 'https://api.atlasprotocol.cloud',
+  bip44: {
+    coinType: 118,
+  },
+  stakeCurrency: {
+    coinDenom: 'ATL',
+    coinMinimalDenom: 'uatl',
+    coinDecimals: 6,
+  },
+  bech32Config: {
+    bech32PrefixAccAddr: 'atl',
+    bech32PrefixAccPub: 'atlpub',
+    bech32PrefixValAddr: 'atlvaloper',
+    bech32PrefixValPub: 'atlvaloperpub',
+    bech32PrefixConsAddr: 'atlvalcons',
+    bech32PrefixConsPub: 'atlvalconspub',
+  },
+  currencies: [
+    {
+      coinDenom: 'ATL',
+      coinMinimalDenom: 'uatl',
+      coinDecimals: 6,
+    },
+  ],
+  feeCurrencies: [
+    {
+      coinDenom: 'ATL',
+      coinMinimalDenom: 'uatl',
+      coinDecimals: 6,
+      gasPriceStep: {
+        low: 0.025,
+        average: 0.03,
+        high: 0.04,
+      },
+    },
+  ],
+  features: [],
+}
