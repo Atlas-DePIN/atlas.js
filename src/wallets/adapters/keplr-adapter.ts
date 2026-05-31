@@ -7,7 +7,7 @@ import {
 } from '@/interfaces';
 
 import { BaseWallet } from '@/wallets';
-import { atlasDevnetChainConfig } from '@/defaults';
+import { atlasDevnetChainConfig } from '@/utils/defaults';
 
 declare global {
   interface Window {

@@ -37,6 +37,14 @@ export class AtlasClient extends EventEmitter implements IAtlasClient {
     return this._queryHelper
   }
 
+  /**
+   * Get the on-chain address of the active wallet, or an empty string
+   * if no wallet is connected.
+   */
+  get address(): string {
+    return this._walletManager.address
+  }
+
   declare on: (event: ClientEvent | string, listener: (...args: any[]) => void) => this;
   declare off: (event: ClientEvent | string, listener: (...args: any[]) => void) => this;
   declare emit: (event: ClientEvent | string, ...args: any[]) => boolean;
@@ -66,7 +74,7 @@ export class AtlasClient extends EventEmitter implements IAtlasClient {
     this.setupEventForwarding();
   }
 
-  static async newAtlasClient(config: AtlasConfig): Promise<AtlasClient> {
+  static async new(config: AtlasConfig): Promise<AtlasClient> {
     const client = new AtlasClient(config);
     await client.initialize()
     return client;
@@ -117,14 +125,6 @@ export class AtlasClient extends EventEmitter implements IAtlasClient {
    */
   getWalletType(): WalletType | null {
     return this._walletManager.getWalletType();
-  }
-
-  /**
-   * Return the on-chain address of the active wallet, or an empty string
-   * if no wallet is connected.
-   */
-  getCurrentAddress(): string {
-    return this._walletManager.address
   }
 
   /**

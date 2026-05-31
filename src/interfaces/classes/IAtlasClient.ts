@@ -3,6 +3,7 @@ import { QueryHelper } from "@/query-helper";
 
 export interface IAtlasClient  {
   get query(): QueryHelper
+  get address(): string
 
   initialize(): Promise<void>
   
@@ -10,5 +11,5 @@ export interface IAtlasClient  {
   connectWallet(type: WalletType, options?: any): Promise<void>
   disconnectWallet(): Promise<void>
   getWalletType(): WalletType | null
-  getCurrentAddress(): string
+
 }
