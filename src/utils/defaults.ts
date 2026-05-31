@@ -1,5 +1,8 @@
 import { IChainConfig } from "@/types/wallet";
 
+export const DEFAULT_REPLICAS: number = 3
+export const DEFAULT_ENCYRPTION_CHUNK_SIZE: number = 32 * Math.pow(1024, 2)
+
 export const atlasDevnetChainConfig: IChainConfig = {
   chainId: 'atlas-1',
   chainName: 'Atlas Protocol',

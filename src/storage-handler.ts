@@ -1,16 +1,24 @@
 import { EventEmitter } from "events";
+import { PrivateKey } from "eciesjs";
 import { Provider } from "@atlas/atlas.js-protos/dist/types/atlas/storage/v1/provider";
 import { StorageSubscription } from "@atlas/atlas.js-protos/dist/types/atlas/storage/v1/subscription";
 
-import { TreeNode } from "@/types";
-import { StorageEvents, StorageHandlerEvent, WalletEvents } from "@/types/events";
+import { TreeNode, QueuedFileStatus } from "@/types";
+import { FileProcessingEvent, StorageEvents, StorageHandlerEvent, WalletEvents } from "@/types/events";
 import { SubscriptionError } from "@/types/errors";
-import { IAtlasDriveInfo, IAtlasDirectoryInfo, IDirectory } from "@/interfaces";
+import { IAtlasDriveInfo, IAtlasDirectoryInfo, IDirectory, IQueuedFile, IFileUploadOptions } from "@/interfaces";
+
+import { DEFAULT_ENCYRPTION_CHUNK_SIZE, DEFAULT_REPLICAS } from "@/utils/defaults";
+import { encryptFile, generateAesKey } from "@/utils/crypto";
+import { buildMerkleTree } from "@/utils/merkle";
+import { SIGNER_SEED } from "@/utils/constants";
+import { bytesToHex } from "@/utils/converters";
+import { buildFid } from "@/utils/hash";
+
 import { AtlasClient } from "./atlas-client";
-import { SIGNER_SEED } from "./utils/constants";
-import { PrivateKey } from "eciesjs";
-import { bytesToHex } from "./utils/converters";
 import { FiletreeHelper } from "./filetree-helper";
+
+
 
 /**
  * Manages the storage lifecycle for a connected Atlas wallet.
@@ -31,6 +39,8 @@ export class StorageHandler extends EventEmitter {
 
   /** Helper for filetree read and write operations. */
   protected filetree: FiletreeHelper
+
+  protected queuedFiles: Map<string, IQueuedFile> = new Map();
 
   /** Providers available on the network. */
   private _providers: Provider[] = [];
@@ -227,6 +237,111 @@ export class StorageHandler extends EventEmitter {
     return nodes
       .filter((node) => node.nodeType === 'drive')
       .map((node) => this.safeParseNodeContents<IAtlasDriveInfo>(node.contents, 'drive'));
+  }
+
+
+
+  public async queuePublicFile(file: File, options: IFileUploadOptions): Promise<void> {
+    const queuedFile: IQueuedFile = {
+      file,
+      merkleRoot: new Uint8Array(),
+      nonce: Math.floor(Math.random() * 2_147_483_647),
+      replicas: options.replicas ?? DEFAULT_REPLICAS,
+      status: 'idle',
+    };
+
+    this.queuedFiles.set(file.name, queuedFile);
+  }
+
+
+  public async queuePrivateFile(file: File, options: IFileUploadOptions): Promise<void> {
+    const queuedFile: IQueuedFile = {
+      file,
+      merkleRoot: new Uint8Array(),
+      nonce: Math.floor(Math.random() * 2_147_483_647),
+      replicas: options.replicas ?? DEFAULT_REPLICAS,
+      encryption: options.encryption,
+      status: 'idle',
+    };
+
+    this.queuedFiles.set(file.name, queuedFile);
+  }
+
+  /**
+   * Prepare one queued file for upload.
+   *
+   * This runs optional encryption, Merkle tree construction, and FID derivation,
+   * updating queue status and emitting progress events as it goes.
+   */
+  private async processFile(fileKey: string): Promise<void> {
+    const queuedFile = this.queuedFiles.get(fileKey);
+    if (!queuedFile) return;
+
+    // Resolve progress scaling
+    const progressBase = queuedFile.encryption ? 50 : 0;
+    const progressRange = queuedFile.encryption ? 50 : 100;
+
+    try {
+      /// --- Step 1: Handle File Encryption if Needed
+      if (queuedFile.encryption) {
+        // Generate AES Key
+        console.debug(`[ATLAS.JS] Encrypting "${fileKey}" (${queuedFile.file.size} bytes, chunkSize=${queuedFile.encryption.chunkSize ?? DEFAULT_ENCYRPTION_CHUNK_SIZE})`);
+        this.updateQueuedFileStatus(fileKey, 'encrypting');
+        queuedFile.encryption.aes = queuedFile.encryption.aes ?? (await generateAesKey());
+
+        queuedFile.file = await encryptFile(queuedFile.file, queuedFile.encryption, (pct) => {
+          this.updateQueuedFileProgress(fileKey, pct / 2);
+        });
+
+        console.debug(`[ATLAS.JS] Encrypted "${fileKey}" (${queuedFile.file.size} bytes)`);
+        this.emit(FileProcessingEvent.ENCRYPTED, fileKey, { fileSize: queuedFile.file.size });
+      }
+
+      /// --- Step 2: Build File Merkletree
+      this.updateQueuedFileStatus(fileKey, 'merkling', progressBase);
+      const tree = await buildMerkleTree(queuedFile.file, undefined, { onProgress: (progress) => {
+          this.updateQueuedFileProgress(fileKey, progressBase + (progress / 100) * progressRange)}
+      });
+      queuedFile.merkleRoot = tree.root;
+      this.emit(FileProcessingEvent.MERKLE_BUILT, fileKey, { merkleRoot: bytesToHex(queuedFile.merkleRoot) });
+
+      /// --- Step 3: Generate File ID
+      queuedFile.fid = await buildFid(queuedFile.merkleRoot, this.client.address, queuedFile.nonce);
+      this.queuedFiles.set(fileKey, queuedFile);
+
+      this.updateQueuedFileStatus(fileKey, 'ready', 100);
+      this.emit(FileProcessingEvent.READY, fileKey);
+    } catch (error) {
+      console.error(`[ATLAS.JS] Failed to process file "${fileKey}"`);
+      this.handleFileProcessingError(fileKey, error);
+    }
+  }
+
+  private updateQueuedFileStatus(fileKey: string, status: QueuedFileStatus, progress: number = 0): void {
+    const queuedFile = this.queuedFiles.get(fileKey);
+    if (queuedFile) {
+      queuedFile.status = status;
+      queuedFile.progress = progress;
+      this.queuedFiles.set(fileKey, queuedFile);
+      this.emit(FileProcessingEvent.PROGRESS, fileKey, progress);
+    }
+  }
+
+  private updateQueuedFileProgress(fileKey: string, progress: number): void {
+    const queuedFile = this.queuedFiles.get(fileKey);
+    if (queuedFile) {
+      queuedFile.progress = progress;
+      this.queuedFiles.set(fileKey, queuedFile);
+      this.emit(FileProcessingEvent.PROGRESS, fileKey, progress);
+    }
+  }
+
+  private handleFileProcessingError(fileKey: string, error: unknown, originalController?: AbortController): void {
+    if (!this.queuedFiles.has(fileKey)) {
+      return;
+    }
+    this.updateQueuedFileStatus(fileKey, 'error', 0);
+    this.emit(FileProcessingEvent.ERROR, fileKey, error);
   }
 
   private safeParseNodeContents<T>(contents: string, path: string): T {

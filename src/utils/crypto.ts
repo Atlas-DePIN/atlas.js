@@ -1,8 +1,10 @@
 import { decrypt, encrypt, PrivateKey } from 'eciesjs'
 
-import { IAesBundle } from "@/interfaces"
+import { IAesBundle, IEncryptionOptions } from "@/interfaces"
 import { keyAlgo } from "./constants"
 import { hexToBytes, bytesToHex } from './converters'
+import { DEFAULT_ENCYRPTION_CHUNK_SIZE } from './defaults';
+import { CancellationException } from '@/types/errors';
 
 export async function aesStringCrypt(
   data: string,
@@ -108,6 +110,45 @@ export async function importAesBundle(eciesKey: PrivateKey, aes: string): Promis
   } catch (err) {
     throw err
   }
+}
+
+export async function encryptFile(file: File, opts: IEncryptionOptions, onProgress?: (progress: number) => void): Promise<File> {
+  if (!opts.aes) throw new Error('AES key and iv are required in the encryption options.');
+  
+  const chunkSize = opts.chunkSize ?? DEFAULT_ENCYRPTION_CHUNK_SIZE;
+  const encryptedBytes: Blob[] = [];
+  for (let i = 0; i < file.size; i += chunkSize) {
+    const blobChunk = file.slice(i, i + chunkSize);
+    encryptedBytes.push(
+      new Blob([(blobChunk.size + 16).toString().padStart(8, '0')]),
+      await aesBlobCrypt(blobChunk, opts.aes, 'encrypt'),
+    );
+
+    const bytesProcessed = Math.min(file.size, i + blobChunk.size);
+    onProgress?.((bytesProcessed / file.size) * 100);
+  }
+
+  return new File(encryptedBytes, file.name, {
+    type: file.type,
+    lastModified: file.lastModified,
+  });
+}
+
+export async function decryptFile(file: File, fileName: string, fileMeta: FilePropertyBag, aes: IAesBundle): Promise<File> {
+  const parts: Blob[] = [];
+  for (let cursor = 0; cursor < file.size;) {
+    const headerEnd = cursor + 8;
+    const segmentSize = Number(await file.slice(cursor, headerEnd).text());
+    if (!Number.isFinite(segmentSize) || segmentSize < 1) {
+      throw new Error('Encrypted file is malformed.');
+    }
+
+    const segmentEnd = headerEnd + segmentSize;
+    parts.push(await aesBlobCrypt(file.slice(headerEnd, segmentEnd), aes, 'decrypt'));
+    cursor = segmentEnd;
+  }
+
+  return new File(parts, fileName, fileMeta);
 }
 
 export function eciesEncrypt(key: string, content: Uint8Array): string {

@@ -17,3 +17,11 @@ export enum StorageHandlerEvent {
 
   DIR_NAV = 'navigate-directory'
 }
+
+export enum FileProcessingEvent {
+  PROGRESS = 'file:progress',
+  ENCRYPTED = 'file:encrypted',
+  MERKLE_BUILT = 'file:merkle-built',
+  READY = 'file:ready',
+  ERROR = 'file:error',
+}
