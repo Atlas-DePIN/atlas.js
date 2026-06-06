@@ -7,11 +7,11 @@ export interface UploadResult {
 }
 
 export class UploadHelper {
-  private static readonly MAX_ATTEMPTS = 2;
-  private static readonly RETRY_DELAY = 3000;
-
   /**
-   * Upload with Axios (has built-in progress tracking)
+   * Upload a file to a storage provider.
+   *
+   * Retries are handled by the caller (StorageHandler) across providers;
+   * this method attempts the upload exactly once.
    */
   public static async upload(
     hostname: string, 
@@ -19,39 +19,15 @@ export class UploadHelper {
     file: File,
     onProgress?: (progress: number) => void
   ): Promise<UploadResult> {
-    let lastError: Error | null = null;
-    
-    for (let attempt = 1; attempt <= this.MAX_ATTEMPTS; attempt++) {
-      try {
-        console.log(`Upload attempt ${attempt} for file: ${file.name}`);
-        
-        const result = await this.executeUpload(
-          hostname, 
-          fileId, 
-          file, 
-          onProgress
-        );
-        
-        console.log(`Upload successful on attempt ${attempt}`);
-        return result;
-        
-      } catch (error) {
-        lastError = error as Error;
-        console.error(`Upload attempt ${attempt} failed:`, error);
-        
-        if (attempt === this.MAX_ATTEMPTS) break;
-        
-        console.log(`Waiting ${this.RETRY_DELAY}ms before retry...`);
-        await this.delay(this.RETRY_DELAY);
-        
-        if (onProgress) onProgress(0);
-      }
+    try {
+      const result = await this.executeUpload(hostname, fileId, file, onProgress);
+      return result;
+    } catch (error) {
+      return {
+        success: false,
+        message: `Upload failed: ${(error as Error).message}`
+      };
     }
-    
-    return {
-      success: false,
-      message: `Upload failed. Last error: ${lastError?.message}`
-    };
   }
 
   /**
@@ -110,9 +86,5 @@ export class UploadHelper {
         throw new Error(`Upload error: ${axiosError.message}`);
       }
     }
-  }
-
-  private static delay(ms: number): Promise<void> {
-    return new Promise(resolve => setTimeout(resolve, ms));
   }
 }

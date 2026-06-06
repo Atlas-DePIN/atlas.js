@@ -21,7 +21,11 @@ import { EncodeObject } from "@atlas/atlas.js-protos";
 import { MessageComposer } from "./utils/composer";
 import { UploadHelper } from "./upload-helper";
 
-const DEFAULT_STORAGE_GATEWAY = 'storage.atlasprotocol.cloud';
+/** Maximum distinct providers to try per file before giving up. */
+const MAX_UPLOAD_PROVIDER_ATTEMPTS = 5;
+
+/** Upload attempts on a specific provider when one is explicitly named. */
+const SPECIFIC_PROVIDER_ATTEMPTS = 3;
 
 /**
  * Manages the storage lifecycle for a connected Atlas wallet.
@@ -269,14 +273,14 @@ export class StorageHandler extends EventEmitter {
     this.queuedFiles.set(file.name, queuedFile);
   }
 
-  public async startUploads(dir: string = this._directory.path) {
+  public async startUploads(provider: string = "", dir: string = this._directory.path) {
     if (this.queuedFiles.size === 0) {
       throw new Error('Cannot upload. Queue is empty.');
     }
     const queued = Array.from(this.queuedFiles.entries());
 
     await this.commitAll(queued, dir);
-    await this.uploadAll(queued);
+    await this.uploadAll(queued, provider);
 
     await this.loadSubscription();
     // await this.reloadDirectory();
@@ -305,21 +309,106 @@ export class StorageHandler extends EventEmitter {
     await this.client.signAndBroadcast(msgs);
   }
 
-  protected async uploadAll(files: Array<[string, IQueuedFile]>): Promise<void> {
+  protected async uploadAll(
+    files: Array<[string, IQueuedFile]>,
+    provider?: string,
+  ): Promise<void> {
+    if (this._providers.length === 0 && !provider) {
+      throw new Error('Cannot upload. No storage providers available.');
+    }
+
     await Promise.all(
       files.map(async ([key, queued]) => {
-        await this.processFile(key)
-        
-        this.updateQueuedFileStatus(key, 'uploading');
-        const result = await UploadHelper.upload(DEFAULT_STORAGE_GATEWAY, queued.fid, queued.file);
-        if (!result.success) {
-          this.updateQueuedFileStatus(key, 'error');
-          throw new Error(result.message ?? `Failed to upload file "${key}".`);
-        }
+        await this.processFile(key);
 
-        this.updateQueuedFileStatus(key, 'uploaded', 100);
-        this.queuedFiles.delete(key);
+        this.updateQueuedFileStatus(key, 'uploading');
+
+        if (provider) {
+          // Specific provider mode -- try the same provider up to 3 times
+          await this.trySpecificProvider(key, queued, provider);
+        } else {
+          // Random provider mode -- try distinct providers up to 5 times
+          await this.tryRandomProviders(key, queued);
+        }
       }),
+    );
+  }
+
+  /**
+   * Attempt uploading to a single named provider, retrying up to
+   * {@link SPECIFIC_PROVIDER_ATTEMPTS} times.
+   */
+  private async trySpecificProvider(
+    key: string,
+    queued: IQueuedFile,
+    hostname: string,
+  ): Promise<void> {
+    let lastError: Error | null = null;
+
+    for (let attempt = 1; attempt <= SPECIFIC_PROVIDER_ATTEMPTS; attempt++) {
+      try {
+        const result = await UploadHelper.upload(hostname, queued.fid, queued.file);
+
+        if (result.success) {
+          this.updateQueuedFileStatus(key, 'uploaded', 100);
+          this.queuedFiles.delete(key);
+          return;
+        }
+        lastError = new Error(result.message ?? `Upload returned unsuccessful status.`);
+      } catch (err: any) {
+        console.warn(
+          `Upload attempt ${attempt}/${SPECIFIC_PROVIDER_ATTEMPTS} to "${hostname}" failed: ${err.message}.`,
+        );
+        lastError = err;
+      }
+
+      this.updateQueuedFileProgress(key, 0);
+    }
+
+    this.updateQueuedFileStatus(key, 'error');
+    throw new Error(
+      `Failed to upload file "${key}" to "${hostname}" after ${SPECIFIC_PROVIDER_ATTEMPTS} attempts: ${lastError?.message}`,
+    );
+  }
+
+  /**
+   * Attempt uploading by trying distinct random providers until one succeeds
+   * or all available options are exhausted (up to
+   * {@link MAX_UPLOAD_PROVIDER_ATTEMPTS}).
+   */
+  private async tryRandomProviders(key: string, queued: IQueuedFile): Promise<void> {
+    const tried = new Set<string>();
+    let lastError: Error | null = null;
+
+    while (tried.size < Math.min(MAX_UPLOAD_PROVIDER_ATTEMPTS, this._providers.length)) {
+      const untried = this._providers.filter((p) => !tried.has(p.hostname));
+      if (untried.length === 0) break;
+
+      const provider = untried[Math.floor(Math.random() * untried.length)];
+      tried.add(provider.hostname);
+
+      try {
+        const result = await UploadHelper.upload(provider.hostname, queued.fid, queued.file);
+
+        if (result.success) {
+          this.updateQueuedFileStatus(key, 'uploaded', 100);
+          this.queuedFiles.delete(key);
+          return;
+        }
+        lastError = new Error(result.message ?? `Upload returned unsuccessful status.`);
+      } catch (err: any) {
+        console.warn(
+          `Upload to "${provider.hostname}" failed: ${err.message}. Trying next provider...`,
+        );
+        lastError = err;
+      }
+
+      this.updateQueuedFileProgress(key, 0);
+    }
+
+    this.updateQueuedFileStatus(key, 'error');
+    throw new Error(
+      `Failed to upload file "${key}" after ${tried.size} provider(s): ${lastError?.message}`,
     );
   }
 
