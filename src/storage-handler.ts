@@ -246,6 +246,12 @@ export class StorageHandler extends EventEmitter {
 
 
 
+  /**
+   * Add a public file to the upload queue.
+   *
+   * @param file    - The file to upload.
+   * @param options - Upload options (replicas, encryption, etc.).
+   */
   public async queuePublicFile(file: File, options: IFileUploadOptions): Promise<void> {
     const queuedFile: IQueuedFile = {
       file,
@@ -259,6 +265,13 @@ export class StorageHandler extends EventEmitter {
     this.queuedFiles.set(file.name, queuedFile);
   }
 
+  /**
+   * Add a private (encrypted) file to the upload queue.
+   *
+   *
+   * @param file    - The file to upload.
+   * @param options - Upload options (replicas, encryption config).
+   */
   public async queuePrivateFile(file: File, options: IFileUploadOptions): Promise<void> {
     const queuedFile: IQueuedFile = {
       file,
@@ -273,6 +286,19 @@ export class StorageHandler extends EventEmitter {
     this.queuedFiles.set(file.name, queuedFile);
   }
 
+  /**
+   * Commit queued files to the chain and upload them to storage providers.
+   *
+   * Runs the full upload pipeline for every file in the queue:
+   *   1. Commit file metadata on chain via {@link commitAll}.
+   *   2. Upload file data to provider(s) via {@link uploadAll}.
+   *   3. Refresh the subscription and loaded folder state.
+   *
+   * @param provider - Optional provider hostname. When omitted, files are uploaded 
+   *                   to randomly selected providers from the available pool.
+   * @param dir      - The target directory path on the filetree. Defaults
+   *                   to the currently loaded directory.
+   */
   public async startUploads(provider: string = "", dir: string = this._directory.path) {
     if (this.queuedFiles.size === 0) {
       throw new Error('Cannot upload. Queue is empty.');
