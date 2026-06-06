@@ -6,7 +6,7 @@
 
 # Interface: QueryClient
 
-Defined in: [src/types/wallet.ts:49](https://github.com/Atlas-DePIN/atlas.js/blob/8e7ce20786b7b1de5dee5357008fafafb29e194c/src/types/wallet.ts#L49)
+Defined in: [src/types/wallet.ts:49](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/types/wallet.ts#L49)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/types/wallet.ts:49](https://github.com/Atlas-DePIN/atlas.js/blo
 
 > **atlas**: `object`
 
-Defined in: [src/types/wallet.ts:55](https://github.com/Atlas-DePIN/atlas.js/blob/8e7ce20786b7b1de5dee5357008fafafb29e194c/src/types/wallet.ts#L55)
+Defined in: [src/types/wallet.ts:55](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/types/wallet.ts#L55)
 
 #### filetree
 
@@ -38,7 +38,7 @@ Defined in: [src/types/wallet.ts:55](https://github.com/Atlas-DePIN/atlas.js/blo
 
 > **cosmos**: `object`
 
-Defined in: [src/types/wallet.ts:50](https://github.com/Atlas-DePIN/atlas.js/blob/8e7ce20786b7b1de5dee5357008fafafb29e194c/src/types/wallet.ts#L50)
+Defined in: [src/types/wallet.ts:50](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/types/wallet.ts#L50)
 
 #### bank
 

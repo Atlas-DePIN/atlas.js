@@ -2,50 +2,47 @@
 
 ***
 
-[atlas.js](../README.md) / AtlasClient
+[atlas.js](../README.md) / StorageHandler
 
-# Class: AtlasClient
+# Class: StorageHandler
 
-Defined in: [src/atlas-client.ts:23](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/atlas-client.ts#L23)
+Defined in: [src/storage-handler.ts:40](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/storage-handler.ts#L40)
 
-High-level client for interacting with an Atlas blockchain node.
+Manages the storage lifecycle for a connected Atlas wallet.
 
-Wraps a [WalletManager](WalletManager.md) for wallet lifecycle and a [QueryHelper](QueryHelper.md)
-for read-only queries.  Emits wallet and lifecycle events so consumers
-can react to connection state changes without polling.
+Loads subscription info, provider list, drives, and directory contents from
+the chain.  Uses [FiletreeHelper](FiletreeHelper.md) for filetree operations and derives
+an access key from the wallet's signature for authenticated queries.
+
+Emits storage events so consumers can react to subscription changes and
+directory navigation without polling.
 
 ## Extends
 
 - `EventEmitter`
 
-## Implements
-
-- [`IAtlasClient`](../interfaces/IAtlasClient.md)
-
 ## Constructors
 
 ### Constructor
 
-> **new AtlasClient**(`config`): `AtlasClient`
+> **new StorageHandler**(`client`): `StorageHandler`
 
-Defined in: [src/atlas-client.ts:58](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/atlas-client.ts#L58)
+Defined in: [src/storage-handler.ts:77](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/storage-handler.ts#L77)
+
+Create a storage handler bound to an Atlas client and its active wallet.
+
+The handler listens for wallet connection changes so it can reload account
+storage state when the user switches accounts.
 
 #### Parameters
 
-##### config
+##### client
 
-[`AtlasConfig`](../interfaces/AtlasConfig.md)
-
-Client configuration (chain ID, RPC endpoint,
-                optional gas price and adjustment).
+[`AtlasClient`](AtlasClient.md)
 
 #### Returns
 
-`AtlasClient`
-
-#### Throws
-
-If `chainId` or `rpcEndpoint` are missing.
+`StorageHandler`
 
 #### Overrides
 
@@ -53,11 +50,27 @@ If `chainId` or `rpcEndpoint` are missing.
 
 ## Properties
 
+### access
+
+> `protected` **access**: `PrivateKey`
+
+Defined in: [src/storage-handler.ts:42](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/storage-handler.ts#L42)
+
+***
+
+### client
+
+> `protected` **client**: [`AtlasClient`](AtlasClient.md)
+
+Defined in: [src/storage-handler.ts:41](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/storage-handler.ts#L41)
+
+***
+
 ### emit
 
 > **emit**: (`event`, ...`args`) => `boolean`
 
-Defined in: [src/atlas-client.ts:50](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/atlas-client.ts#L50)
+Defined in: [src/storage-handler.ts:88](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/storage-handler.ts#L88)
 
 Synchronously calls each of the listeners registered for the event named `eventName`, in the order they were registered, passing the supplied arguments
 to each.
@@ -121,11 +134,19 @@ v0.1.26
 
 ***
 
+### filetree
+
+> `protected` **filetree**: [`FiletreeHelper`](FiletreeHelper.md)
+
+Defined in: [src/storage-handler.ts:43](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/storage-handler.ts#L43)
+
+***
+
 ### off
 
 > **off**: (`event`, `listener`) => `this`
 
-Defined in: [src/atlas-client.ts:49](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/atlas-client.ts#L49)
+Defined in: [src/storage-handler.ts:87](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/storage-handler.ts#L87)
 
 Alias for `emitter.removeListener()`.
 
@@ -157,7 +178,7 @@ v10.0.0
 
 > **on**: (`event`, `listener`) => `this`
 
-Defined in: [src/atlas-client.ts:48](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/atlas-client.ts#L48)
+Defined in: [src/storage-handler.ts:86](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/storage-handler.ts#L86)
 
 Adds the `listener` function to the end of the listeners array for the event
 named `eventName`. No checks are made to see if the `listener` has already
@@ -212,6 +233,14 @@ v0.1.101
 
 ***
 
+### queuedFiles
+
+> `protected` **queuedFiles**: `Map`\<`string`, [`IQueuedFile`](../interfaces/IQueuedFile.md)\>
+
+Defined in: [src/storage-handler.ts:45](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/storage-handler.ts#L45)
+
+***
+
 ### captureRejections
 
 > `static` **captureRejections**: `boolean`
@@ -234,7 +263,7 @@ v13.4.0, v12.16.0
 
 ### captureRejectionSymbol
 
-> `readonly` `static` **captureRejectionSymbol**: *typeof* [`captureRejectionSymbol`](#capturerejectionsymbol)
+> `readonly` `static` **captureRejectionSymbol**: *typeof* [`captureRejectionSymbol`](AtlasClient.md#capturerejectionsymbol)
 
 Defined in: node\_modules/.pnpm/@types+node@22.19.19/node\_modules/@types/node/events.d.ts:418
 
@@ -306,7 +335,7 @@ v0.11.2
 
 ### errorMonitor
 
-> `readonly` `static` **errorMonitor**: *typeof* [`errorMonitor`](#errormonitor)
+> `readonly` `static` **errorMonitor**: *typeof* [`errorMonitor`](AtlasClient.md#errormonitor)
 
 Defined in: node\_modules/.pnpm/@types+node@22.19.19/node\_modules/@types/node/events.d.ts:411
 
@@ -325,42 +354,59 @@ v13.6.0, v12.17.0
 
 ## Accessors
 
-### address
+### directory
 
 #### Get Signature
 
-> **get** **address**(): `string`
+> **get** **directory**(): [`IDirectory`](../interfaces/IDirectory.md)
 
-Defined in: [src/atlas-client.ts:44](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/atlas-client.ts#L44)
-
-Get the on-chain address of the active wallet, or an empty string
-if no wallet is connected.
+Defined in: [src/storage-handler.ts:67](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/storage-handler.ts#L67)
 
 ##### Returns
 
-`string`
-
-#### Implementation of
-
-[`IAtlasClient`](../interfaces/IAtlasClient.md).[`address`](../interfaces/IAtlasClient.md#address)
+[`IDirectory`](../interfaces/IDirectory.md)
 
 ***
 
-### query
+### drives
 
 #### Get Signature
 
-> **get** **query**(): [`QueryHelper`](QueryHelper.md)
+> **get** **drives**(): [`IAtlasDriveInfo`](../interfaces/IAtlasDriveInfo.md)[]
 
-Defined in: [src/atlas-client.ts:35](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/atlas-client.ts#L35)
+Defined in: [src/storage-handler.ts:61](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/storage-handler.ts#L61)
 
 ##### Returns
 
-[`QueryHelper`](QueryHelper.md)
+[`IAtlasDriveInfo`](../interfaces/IAtlasDriveInfo.md)[]
 
-#### Implementation of
+***
 
-[`IAtlasClient`](../interfaces/IAtlasClient.md).[`query`](../interfaces/IAtlasClient.md#query)
+### providers
+
+#### Get Signature
+
+> **get** **providers**(): `Provider`[]
+
+Defined in: [src/storage-handler.ts:49](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/storage-handler.ts#L49)
+
+##### Returns
+
+`Provider`[]
+
+***
+
+### subscription
+
+#### Get Signature
+
+> **get** **subscription**(): `StorageSubscription`
+
+Defined in: [src/storage-handler.ts:55](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/storage-handler.ts#L55)
+
+##### Returns
+
+`StorageSubscription`
 
 ## Methods
 
@@ -438,71 +484,39 @@ v0.1.26
 
 ***
 
-### connectWallet()
+### commitAll()
 
-> **connectWallet**(`type`, `options?`): `Promise`\<`void`\>
+> `protected` **commitAll**(`files`, `dir`): `Promise`\<`void`\>
 
-Defined in: [src/atlas-client.ts:141](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/atlas-client.ts#L141)
-
-Connect a wallet of the specified type.
-
-Disconnects any existing wallet first.  Ensures the query client is
-initialized before resolving.  Emits an `error` event on failure.
+Defined in: [src/storage-handler.ts:315](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/storage-handler.ts#L315)
 
 #### Parameters
 
-##### type
+##### files
 
-[`WalletType`](../enumerations/WalletType.md)
+\[`string`, [`IQueuedFile`](../interfaces/IQueuedFile.md)\][]
 
-The wallet type (Keplr, Leap, Mnemonic, etc.).
+##### dir
 
-##### options?
-
-`any`
-
-Optional parameters forwarded to the wallet adapter.
+`string`
 
 #### Returns
 
 `Promise`\<`void`\>
 
-#### Throws
-
-If the wallet type is unavailable or connection fails.
-
-#### Implementation of
-
-[`IAtlasClient`](../interfaces/IAtlasClient.md).[`connectWallet`](../interfaces/IAtlasClient.md#connectwallet)
-
 ***
 
-### disconnectWallet()
+### enableSigner()
 
-> **disconnectWallet**(): `Promise`\<`void`\>
+> `protected` **enableSigner**(): `Promise`\<`void`\>
 
-Defined in: [src/atlas-client.ts:149](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/atlas-client.ts#L149)
+Defined in: [src/storage-handler.ts:107](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/storage-handler.ts#L107)
 
-Disconnect the active wallet.
+Derive an ECIES access key from the wallet's signature.
 
-#### Returns
-
-`Promise`\<`void`\>
-
-#### Implementation of
-
-[`IAtlasClient`](../interfaces/IAtlasClient.md).[`disconnectWallet`](../interfaces/IAtlasClient.md#disconnectwallet)
-
-***
-
-### dispose()
-
-> **dispose**(): `Promise`\<`void`\>
-
-Defined in: [src/atlas-client.ts:287](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/atlas-client.ts#L287)
-
-Tear down the client: disconnect the wallet, mark as uninitialized,
-and remove all event listeners.
+Signs the SIGNER\_SEED message and converts the raw signature bytes
+into a `PrivateKey`.  The key is also passed to the filetree helper for
+authenticated filetree operations.
 
 #### Returns
 
@@ -554,7 +568,7 @@ v6.0.0
 Defined in: node\_modules/.pnpm/@types+node@22.19.19/node\_modules/@types/node/events.d.ts:819
 
 Returns the current max listener value for the `EventEmitter` which is either
-set by `emitter.setMaxListeners(n)` or defaults to [EventEmitter.defaultMaxListeners](#defaultmaxlisteners).
+set by `emitter.setMaxListeners(n)` or defaults to [EventEmitter.defaultMaxListeners](AtlasClient.md#defaultmaxlisteners).
 
 #### Returns
 
@@ -570,66 +584,20 @@ v1.0.0
 
 ***
 
-### getWalletType()
+### listDrives()
 
-> **getWalletType**(): [`WalletType`](../enumerations/WalletType.md)
+> `protected` **listDrives**(): `Promise`\<[`IAtlasDriveInfo`](../interfaces/IAtlasDriveInfo.md)[]\>
 
-Defined in: [src/atlas-client.ts:126](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/atlas-client.ts#L126)
+Defined in: [src/storage-handler.ts:240](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/storage-handler.ts#L240)
 
-Return the wallet type for the active session, or `null` if no wallet
-is connected.
+List all drives owned by the connected wallet.
 
-#### Returns
-
-[`WalletType`](../enumerations/WalletType.md)
-
-#### Implementation of
-
-[`IAtlasClient`](../interfaces/IAtlasClient.md).[`getWalletType`](../interfaces/IAtlasClient.md#getwallettype)
-
-***
-
-### initialize()
-
-> **initialize**(): `Promise`\<`void`\>
-
-Defined in: [src/atlas-client.ts:92](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/atlas-client.ts#L92)
-
-Initialize the query client and helper.
-
-Creates the raw RPC query client from the Atlas protobuf factory and
-wraps it in a [QueryHelper](QueryHelper.md).  Emits [ClientEvent.INITIALIZED](../enumerations/ClientEvent.md#initialized)
-on success.  Safe to call multiple times since subsequent calls are no-ops.
+Queries the filetree root children and filters for nodes with a
+`drive` type, parsing their contents into [IAtlasDriveInfo](../interfaces/IAtlasDriveInfo.md).
 
 #### Returns
 
-`Promise`\<`void`\>
-
-#### Throws
-
-If the RPC connection or protobuf client creation fails.
-
-#### Implementation of
-
-[`IAtlasClient`](../interfaces/IAtlasClient.md).[`initialize`](../interfaces/IAtlasClient.md#initialize)
-
-***
-
-### isWalletConnected()
-
-> **isWalletConnected**(): `boolean`
-
-Defined in: [src/atlas-client.ts:118](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/atlas-client.ts#L118)
-
-`true` when a wallet is connected and ready for signing operations.
-
-#### Returns
-
-`boolean`
-
-#### Implementation of
-
-[`IAtlasClient`](../interfaces/IAtlasClient.md).[`isWalletConnected`](../interfaces/IAtlasClient.md#iswalletconnected)
+`Promise`\<[`IAtlasDriveInfo`](../interfaces/IAtlasDriveInfo.md)[]\>
 
 ***
 
@@ -716,6 +684,108 @@ v0.1.26
 #### Inherited from
 
 `EventEmitter.listeners`
+
+***
+
+### loadAccount()
+
+> `protected` **loadAccount**(): `Promise`\<`void`\>
+
+Defined in: [src/storage-handler.ts:134](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/storage-handler.ts#L134)
+
+Load the wallet's subscription, derive the access key, then resolve
+drives and the default directory.
+
+If no drives exist, creates a default "home" drive and navigates into it.
+Otherwise loads the first drive marked as default.
+
+#### Returns
+
+`Promise`\<`void`\>
+
+***
+
+### loadDirectory()
+
+> **loadDirectory**(`path`, `owner?`): `Promise`\<`void`\>
+
+Defined in: [src/storage-handler.ts:198](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/storage-handler.ts#L198)
+
+Load the contents of a directory and update the `directory` getter.
+
+Fetches the directory tree node and its children, then parses each child
+into its typed representation (directory, file, or generic object).
+
+Emits [StorageHandlerEvent.DIR\_NAV](../enumerations/StorageHandlerEvent.md#dir_nav) on completion.
+
+#### Parameters
+
+##### path
+
+`string`
+
+The directory path to load.
+
+##### owner?
+
+`string` = `...`
+
+The on-chain address that owns the directory.  Defaults to
+               the connected wallet address.
+
+#### Returns
+
+`Promise`\<`void`\>
+
+#### Throws
+
+If no owner is available (no wallet connected).
+
+***
+
+### loadProviders()
+
+> **loadProviders**(): `Promise`\<`void`\>
+
+Defined in: [src/storage-handler.ts:118](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/storage-handler.ts#L118)
+
+Fetch the list of storage providers from the chain.
+
+Updates the `providers` getter on success.
+
+#### Returns
+
+`Promise`\<`void`\>
+
+***
+
+### loadSubscription()
+
+> **loadSubscription**(`id?`): `Promise`\<`void`\>
+
+Defined in: [src/storage-handler.ts:174](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/storage-handler.ts#L174)
+
+Load the storage subscription for the connected wallet.
+
+Emits [StorageHandlerEvent.SUB\_NEW](../enumerations/StorageHandlerEvent.md#sub_new) on success or
+[StorageHandlerEvent.SUB\_NONE](../enumerations/StorageHandlerEvent.md#sub_none) if the subscription cannot be found.
+
+#### Parameters
+
+##### id?
+
+`string`
+
+Optional subscription ID.  Omitting it loads the default
+            subscription for the wallet address.
+
+#### Returns
+
+`Promise`\<`void`\>
+
+#### Throws
+
+SubscriptionError if the query fails.
 
 ***
 
@@ -885,6 +955,80 @@ v6.0.0
 #### Inherited from
 
 `EventEmitter.prependOnceListener`
+
+***
+
+### processFile()
+
+> `protected` **processFile**(`fileKey`): `Promise`\<`void`\>
+
+Defined in: [src/storage-handler.ts:441](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/storage-handler.ts#L441)
+
+#### Parameters
+
+##### fileKey
+
+`string`
+
+#### Returns
+
+`Promise`\<`void`\>
+
+***
+
+### queuePrivateFile()
+
+> **queuePrivateFile**(`file`, `options`): `Promise`\<`void`\>
+
+Defined in: [src/storage-handler.ts:275](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/storage-handler.ts#L275)
+
+Add a private (encrypted) file to the upload queue.
+
+#### Parameters
+
+##### file
+
+`File`
+
+The file to upload.
+
+##### options
+
+[`IFileUploadOptions`](../interfaces/IFileUploadOptions.md)
+
+Upload options (replicas, encryption config).
+
+#### Returns
+
+`Promise`\<`void`\>
+
+***
+
+### queuePublicFile()
+
+> **queuePublicFile**(`file`, `options`): `Promise`\<`void`\>
+
+Defined in: [src/storage-handler.ts:255](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/storage-handler.ts#L255)
+
+Add a public file to the upload queue.
+
+#### Parameters
+
+##### file
+
+`File`
+
+The file to upload.
+
+##### options
+
+[`IFileUploadOptions`](../interfaces/IFileUploadOptions.md)
+
+Upload options (replicas, encryption, etc.).
+
+#### Returns
+
+`Promise`\<`void`\>
 
 ***
 
@@ -1131,71 +1275,60 @@ v0.3.5
 
 ***
 
-### signAndBroadcast()
+### startUploads()
 
-> **signAndBroadcast**(`messages`, `options?`): `Promise`\<`IndexedTx`\>
+> **startUploads**(`provider?`, `dir?`): `Promise`\<`void`\>
 
-Defined in: [src/atlas-client.ts:201](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/atlas-client.ts#L201)
+Defined in: [src/storage-handler.ts:302](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/storage-handler.ts#L302)
 
-Sign and broadcast a set of messages, then wait for
-on-chain inclusion.
+Commit queued files to the chain and upload them to storage providers.
 
-When `options` is a plain string it is treated as the transaction
-memo.  Polls for the transaction result until a timeout is reached.
+Runs the full upload pipeline for every file in the queue:
+  1. Commit file metadata on chain via [commitAll](#commitall).
+  2. Upload file data to provider(s) via [uploadAll](#uploadall).
+  3. Refresh the subscription and loaded folder state.
 
 #### Parameters
 
-##### messages
+##### provider?
 
-`any`[]
+`string` = `""`
 
-Array of messages to include in the tx.
+Optional provider hostname. When omitted, files are uploaded 
+                  to randomly selected providers from the available pool.
 
-##### options?
+##### dir?
 
-[`TxOptions`](../interfaces/TxOptions.md)
+`string` = `...`
 
-Optional fee/gas/memo overrides.
+The target directory path on the filetree. Defaults
+                  to the currently loaded directory.
 
 #### Returns
 
-`Promise`\<`IndexedTx`\>
-
-The indexed transaction once it appears on chain.
-
-#### Throws
-
-If no wallet is connected, broadcasting fails, or the
-        transaction does not confirm within the timeout.
+`Promise`\<`void`\>
 
 ***
 
-### signMessage()
+### uploadAll()
 
-> **signMessage**(`message`): `Promise`\<\{ `signature`: `Uint8Array`; `signedMessage`: `string` \| `Uint8Array`\<`ArrayBufferLike`\>; \}\>
+> `protected` **uploadAll**(`files`, `provider?`): `Promise`\<`void`\>
 
-Defined in: [src/atlas-client.ts:166](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/atlas-client.ts#L166)
-
-Sign an arbitrary message using the active wallet's key.
+Defined in: [src/storage-handler.ts:338](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/storage-handler.ts#L338)
 
 #### Parameters
 
-##### message
+##### files
 
-`string` \| `Uint8Array`\<`ArrayBufferLike`\>
+\[`string`, [`IQueuedFile`](../interfaces/IQueuedFile.md)\][]
 
-The data to sign (plain string or raw bytes).
+##### provider?
+
+`string`
 
 #### Returns
 
-`Promise`\<\{ `signature`: `Uint8Array`; `signedMessage`: `string` \| `Uint8Array`\<`ArrayBufferLike`\>; \}\>
-
-An object containing the raw `signature` and the original
-         `signedMessage`.
-
-#### Throws
-
-If no wallet is connected.
+`Promise`\<`void`\>
 
 ***
 
@@ -1420,19 +1553,23 @@ Since v3.2.0 - Use `listenerCount` instead.
 
 ### new()
 
-> `static` **new**(`config`): `Promise`\<`AtlasClient`\>
+> `static` **new**(`client`): `Promise`\<`void`\>
 
-Defined in: [src/atlas-client.ts:77](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/atlas-client.ts#L77)
+Defined in: [src/storage-handler.ts:95](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/storage-handler.ts#L95)
+
+Create a storage handler and load the user's storage account.
 
 #### Parameters
 
-##### config
+##### client
 
-[`AtlasConfig`](../interfaces/AtlasConfig.md)
+[`AtlasClient`](AtlasClient.md)
 
 #### Returns
 
-`Promise`\<`AtlasClient`\>
+`Promise`\<`void`\>
+
+The initialised handler instance.
 
 ***
 

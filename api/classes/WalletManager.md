@@ -2,33 +2,29 @@
 
 ***
 
-[atlas.js](../README.md) / AtlasClient
+[atlas.js](../README.md) / WalletManager
 
-# Class: AtlasClient
+# Class: WalletManager
 
-Defined in: [src/atlas-client.ts:23](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/atlas-client.ts#L23)
+Defined in: [src/wallets/wallet-manager.ts:26](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/wallets/wallet-manager.ts#L26)
 
-High-level client for interacting with an Atlas blockchain node.
+Central wallet manager that orchestrates wallet lifecycle and delegates
+chain operations to the active [BaseWallet](BaseWallet.md) implementation.
 
-Wraps a [WalletManager](WalletManager.md) for wallet lifecycle and a [QueryHelper](QueryHelper.md)
-for read-only queries.  Emits wallet and lifecycle events so consumers
-can react to connection state changes without polling.
+Extends `EventEmitter` to emit connect/disconnect events so consumers
+can react to wallet state changes without polling.
 
 ## Extends
 
 - `EventEmitter`
 
-## Implements
-
-- [`IAtlasClient`](../interfaces/IAtlasClient.md)
-
 ## Constructors
 
 ### Constructor
 
-> **new AtlasClient**(`config`): `AtlasClient`
+> **new WalletManager**(`config`): `WalletManager`
 
-Defined in: [src/atlas-client.ts:58](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/atlas-client.ts#L58)
+Defined in: [src/wallets/wallet-manager.ts:36](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/wallets/wallet-manager.ts#L36)
 
 #### Parameters
 
@@ -36,16 +32,11 @@ Defined in: [src/atlas-client.ts:58](https://github.com/Atlas-DePIN/atlas.js/blo
 
 [`AtlasConfig`](../interfaces/AtlasConfig.md)
 
-Client configuration (chain ID, RPC endpoint,
-                optional gas price and adjustment).
+Wallet configuration (RPC endpoint, gas price, etc.).
 
 #### Returns
 
-`AtlasClient`
-
-#### Throws
-
-If `chainId` or `rpcEndpoint` are missing.
+`WalletManager`
 
 #### Overrides
 
@@ -57,7 +48,7 @@ If `chainId` or `rpcEndpoint` are missing.
 
 > **emit**: (`event`, ...`args`) => `boolean`
 
-Defined in: [src/atlas-client.ts:50](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/atlas-client.ts#L50)
+Defined in: [src/wallets/wallet-manager.ts:43](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/wallets/wallet-manager.ts#L43)
 
 Synchronously calls each of the listeners registered for the event named `eventName`, in the order they were registered, passing the supplied arguments
 to each.
@@ -125,7 +116,7 @@ v0.1.26
 
 > **off**: (`event`, `listener`) => `this`
 
-Defined in: [src/atlas-client.ts:49](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/atlas-client.ts#L49)
+Defined in: [src/wallets/wallet-manager.ts:42](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/wallets/wallet-manager.ts#L42)
 
 Alias for `emitter.removeListener()`.
 
@@ -157,7 +148,7 @@ v10.0.0
 
 > **on**: (`event`, `listener`) => `this`
 
-Defined in: [src/atlas-client.ts:48](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/atlas-client.ts#L48)
+Defined in: [src/wallets/wallet-manager.ts:41](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/wallets/wallet-manager.ts#L41)
 
 Adds the `listener` function to the end of the listeners array for the event
 named `eventName`. No checks are made to see if the `listener` has already
@@ -234,7 +225,7 @@ v13.4.0, v12.16.0
 
 ### captureRejectionSymbol
 
-> `readonly` `static` **captureRejectionSymbol**: *typeof* [`captureRejectionSymbol`](#capturerejectionsymbol)
+> `readonly` `static` **captureRejectionSymbol**: *typeof* [`captureRejectionSymbol`](AtlasClient.md#capturerejectionsymbol)
 
 Defined in: node\_modules/.pnpm/@types+node@22.19.19/node\_modules/@types/node/events.d.ts:418
 
@@ -306,7 +297,7 @@ v0.11.2
 
 ### errorMonitor
 
-> `readonly` `static` **errorMonitor**: *typeof* [`errorMonitor`](#errormonitor)
+> `readonly` `static` **errorMonitor**: *typeof* [`errorMonitor`](AtlasClient.md#errormonitor)
 
 Defined in: node\_modules/.pnpm/@types+node@22.19.19/node\_modules/@types/node/events.d.ts:411
 
@@ -331,36 +322,11 @@ v13.6.0, v12.17.0
 
 > **get** **address**(): `string`
 
-Defined in: [src/atlas-client.ts:44](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/atlas-client.ts#L44)
-
-Get the on-chain address of the active wallet, or an empty string
-if no wallet is connected.
+Defined in: [src/wallets/wallet-manager.ts:45](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/wallets/wallet-manager.ts#L45)
 
 ##### Returns
 
 `string`
-
-#### Implementation of
-
-[`IAtlasClient`](../interfaces/IAtlasClient.md).[`address`](../interfaces/IAtlasClient.md#address)
-
-***
-
-### query
-
-#### Get Signature
-
-> **get** **query**(): [`QueryHelper`](QueryHelper.md)
-
-Defined in: [src/atlas-client.ts:35](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/atlas-client.ts#L35)
-
-##### Returns
-
-[`QueryHelper`](QueryHelper.md)
-
-#### Implementation of
-
-[`IAtlasClient`](../interfaces/IAtlasClient.md).[`query`](../interfaces/IAtlasClient.md#query)
 
 ## Methods
 
@@ -438,16 +404,18 @@ v0.1.26
 
 ***
 
-### connectWallet()
+### connect()
 
-> **connectWallet**(`type`, `options?`): `Promise`\<`void`\>
+> **connect**(`type`, `options?`): `Promise`\<`void`\>
 
-Defined in: [src/atlas-client.ts:141](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/atlas-client.ts#L141)
+Defined in: [src/wallets/wallet-manager.ts:72](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/wallets/wallet-manager.ts#L72)
 
 Connect a wallet of the specified type.
 
-Disconnects any existing wallet first.  Ensures the query client is
-initialized before resolving.  Emits an `error` event on failure.
+If a wallet is already connected it is disconnected first, ensuring
+only one active session at a time.
+
+Emits [WalletEvents.CONNECT](../enumerations/WalletEvents.md#connect) on success.
 
 #### Parameters
 
@@ -461,48 +429,33 @@ The wallet type (Keplr, Leap, Mnemonic, etc.).
 
 `any`
 
-Optional parameters forwarded to the wallet adapter.
+Optional parameters forwarded to the adapter
+                 constructor (e.g. `mnemonic` for mnemonic wallets).
 
 #### Returns
 
 `Promise`\<`void`\>
+
+Connection metadata for the newly-established session.
 
 #### Throws
 
-If the wallet type is unavailable or connection fails.
-
-#### Implementation of
-
-[`IAtlasClient`](../interfaces/IAtlasClient.md).[`connectWallet`](../interfaces/IAtlasClient.md#connectwallet)
+If the wallet type is unsupported or the browser extension
+        is unavailable.
 
 ***
 
-### disconnectWallet()
+### disconnect()
 
-> **disconnectWallet**(): `Promise`\<`void`\>
+> **disconnect**(): `Promise`\<`void`\>
 
-Defined in: [src/atlas-client.ts:149](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/atlas-client.ts#L149)
+Defined in: [src/wallets/wallet-manager.ts:121](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/wallets/wallet-manager.ts#L121)
 
 Disconnect the active wallet.
 
-#### Returns
-
-`Promise`\<`void`\>
-
-#### Implementation of
-
-[`IAtlasClient`](../interfaces/IAtlasClient.md).[`disconnectWallet`](../interfaces/IAtlasClient.md#disconnectwallet)
-
-***
-
-### dispose()
-
-> **dispose**(): `Promise`\<`void`\>
-
-Defined in: [src/atlas-client.ts:287](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/atlas-client.ts#L287)
-
-Tear down the client: disconnect the wallet, mark as uninitialized,
-and remove all event listeners.
+Delegates to the adapter's `disconnect`, clears the internal reference,
+and emits [WalletEvents.DISCONNECT](../enumerations/WalletEvents.md#disconnect).  Safe to call when no wallet
+is connected.
 
 #### Returns
 
@@ -547,6 +500,60 @@ v6.0.0
 
 ***
 
+### getAccountBalance()
+
+> **getAccountBalance**(): `Promise`\<readonly `Coin`[]\>
+
+Defined in: [src/wallets/wallet-manager.ts:171](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/wallets/wallet-manager.ts#L171)
+
+Fetch all non-zero balance coins for the connected wallet address.
+
+#### Returns
+
+`Promise`\<readonly `Coin`[]\>
+
+#### Throws
+
+If no wallet is connected.
+
+***
+
+### getAccountInfo()
+
+> **getAccountInfo**(): `Promise`\<`Account`\>
+
+Defined in: [src/wallets/wallet-manager.ts:159](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/wallets/wallet-manager.ts#L159)
+
+Fetch on-chain account information for the connected wallet address.
+
+#### Returns
+
+`Promise`\<`Account`\>
+
+#### Throws
+
+If no wallet is connected.
+
+***
+
+### getAvailableWallets()
+
+> **getAvailableWallets**(): [`WalletInfo`](../interfaces/WalletInfo.md)[]
+
+Defined in: [src/wallets/wallet-manager.ts:247](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/wallets/wallet-manager.ts#L247)
+
+Return metadata for all wallet types that can be used in the current
+environment.
+
+Checks whether each browser extension (Keplr, etc.) is installed and
+reports the result so the UI can show which options are available.
+
+#### Returns
+
+[`WalletInfo`](../interfaces/WalletInfo.md)[]
+
+***
+
 ### getMaxListeners()
 
 > **getMaxListeners**(): `number`
@@ -554,7 +561,7 @@ v6.0.0
 Defined in: node\_modules/.pnpm/@types+node@22.19.19/node\_modules/@types/node/events.d.ts:819
 
 Returns the current max listener value for the `EventEmitter` which is either
-set by `emitter.setMaxListeners(n)` or defaults to [EventEmitter.defaultMaxListeners](#defaultmaxlisteners).
+set by `emitter.setMaxListeners(n)` or defaults to [EventEmitter.defaultMaxListeners](AtlasClient.md#defaultmaxlisteners).
 
 #### Returns
 
@@ -570,66 +577,61 @@ v1.0.0
 
 ***
 
+### getQueryClient()
+
+> **getQueryClient**(): `StargateClient`
+
+Defined in: [src/wallets/wallet-manager.ts:135](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/wallets/wallet-manager.ts#L135)
+
+Return the read-only Stargate client from the active wallet, or `null`
+if no wallet is connected.
+
+#### Returns
+
+`StargateClient`
+
+***
+
+### getSigningClient()
+
+> **getSigningClient**(): `SigningStargateClient`
+
+Defined in: [src/wallets/wallet-manager.ts:143](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/wallets/wallet-manager.ts#L143)
+
+Return the signing Stargate client from the active wallet, or `null`
+if no wallet is connected.
+
+#### Returns
+
+`SigningStargateClient`
+
+***
+
 ### getWalletType()
 
 > **getWalletType**(): [`WalletType`](../enumerations/WalletType.md)
 
-Defined in: [src/atlas-client.ts:126](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/atlas-client.ts#L126)
+Defined in: [src/wallets/wallet-manager.ts:150](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/wallets/wallet-manager.ts#L150)
 
-Return the wallet type for the active session, or `null` if no wallet
-is connected.
+Return the wallet type, or `null` if no wallet is connected.
 
 #### Returns
 
 [`WalletType`](../enumerations/WalletType.md)
 
-#### Implementation of
-
-[`IAtlasClient`](../interfaces/IAtlasClient.md).[`getWalletType`](../interfaces/IAtlasClient.md#getwallettype)
-
 ***
 
-### initialize()
+### isConnected()
 
-> **initialize**(): `Promise`\<`void`\>
+> **isConnected**(): `boolean`
 
-Defined in: [src/atlas-client.ts:92](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/atlas-client.ts#L92)
+Defined in: [src/wallets/wallet-manager.ts:52](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/wallets/wallet-manager.ts#L52)
 
-Initialize the query client and helper.
-
-Creates the raw RPC query client from the Atlas protobuf factory and
-wraps it in a [QueryHelper](QueryHelper.md).  Emits [ClientEvent.INITIALIZED](../enumerations/ClientEvent.md#initialized)
-on success.  Safe to call multiple times since subsequent calls are no-ops.
-
-#### Returns
-
-`Promise`\<`void`\>
-
-#### Throws
-
-If the RPC connection or protobuf client creation fails.
-
-#### Implementation of
-
-[`IAtlasClient`](../interfaces/IAtlasClient.md).[`initialize`](../interfaces/IAtlasClient.md#initialize)
-
-***
-
-### isWalletConnected()
-
-> **isWalletConnected**(): `boolean`
-
-Defined in: [src/atlas-client.ts:118](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/atlas-client.ts#L118)
-
-`true` when a wallet is connected and ready for signing operations.
+Check whether a wallet is currently connected and ready.
 
 #### Returns
 
 `boolean`
-
-#### Implementation of
-
-[`IAtlasClient`](../interfaces/IAtlasClient.md).[`isWalletConnected`](../interfaces/IAtlasClient.md#iswalletconnected)
 
 ***
 
@@ -948,6 +950,27 @@ v9.4.0
 
 ***
 
+### refreshConnection()
+
+> **refreshConnection**(): `Promise`\<`void`\>
+
+Defined in: [src/wallets/wallet-manager.ts:236](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/wallets/wallet-manager.ts#L236)
+
+Re-initialize the underlying query and signing clients using the
+active wallet's existing signer and address.
+
+Useful after a network interruption or RPC endpoint rotation.
+
+#### Returns
+
+`Promise`\<`void`\>
+
+#### Throws
+
+If no wallet is connected.
+
+***
+
 ### removeAllListeners()
 
 > **removeAllListeners**(`eventName?`): `this`
@@ -1133,15 +1156,15 @@ v0.3.5
 
 ### signAndBroadcast()
 
-> **signAndBroadcast**(`messages`, `options?`): `Promise`\<`IndexedTx`\>
+> **signAndBroadcast**(`messages`, `options?`): `Promise`\<`string`\>
 
-Defined in: [src/atlas-client.ts:201](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/atlas-client.ts#L201)
+Defined in: [src/wallets/wallet-manager.ts:205](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/wallets/wallet-manager.ts#L205)
 
-Sign and broadcast a set of messages, then wait for
-on-chain inclusion.
+Sign and broadcast a set of messages.
 
-When `options` is a plain string it is treated as the transaction
-memo.  Polls for the transaction result until a timeout is reached.
+Constructs a minimal `TxBody` from the message array and delegates
+to the underlying wallet's `signAndBroadcastTransaction`.  Returns
+only the transaction hash.
 
 #### Parameters
 
@@ -1155,43 +1178,74 @@ Array of messages to include in the tx.
 
 [`TxOptions`](../interfaces/TxOptions.md)
 
-Optional fee/gas/memo overrides.
+Optional gas, fee, and memo overrides.
 
 #### Returns
 
-`Promise`\<`IndexedTx`\>
+`Promise`\<`string`\>
 
-The indexed transaction once it appears on chain.
+The on-chain transaction hash.
 
 #### Throws
 
-If no wallet is connected, broadcasting fails, or the
-        transaction does not confirm within the timeout.
+If no wallet is connected or broadcasting fails.
 
 ***
 
-### signMessage()
+### signArbitrary()
 
-> **signMessage**(`message`): `Promise`\<\{ `signature`: `Uint8Array`; `signedMessage`: `string` \| `Uint8Array`\<`ArrayBufferLike`\>; \}\>
+> **signArbitrary**(`data`): `Promise`\<[`SigningResult`](../interfaces/SigningResult.md)\>
 
-Defined in: [src/atlas-client.ts:166](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/atlas-client.ts#L166)
+Defined in: [src/wallets/wallet-manager.ts:185](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/wallets/wallet-manager.ts#L185)
 
-Sign an arbitrary message using the active wallet's key.
+Sign arbitrary data using the active wallet's key.
 
 #### Parameters
 
-##### message
+##### data
 
 `string` \| `Uint8Array`\<`ArrayBufferLike`\>
 
-The data to sign (plain string or raw bytes).
+The data to sign (string or raw bytes).
 
 #### Returns
 
-`Promise`\<\{ `signature`: `Uint8Array`; `signedMessage`: `string` \| `Uint8Array`\<`ArrayBufferLike`\>; \}\>
+`Promise`\<[`SigningResult`](../interfaces/SigningResult.md)\>
 
-An object containing the raw `signature` and the original
-         `signedMessage`.
+#### Throws
+
+If no wallet is connected.
+
+***
+
+### simulateTransaction()
+
+> **simulateTransaction**(`messages`, `options?`): `Promise`\<`number`\>
+
+Defined in: [src/wallets/wallet-manager.ts:224](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/wallets/wallet-manager.ts#L224)
+
+Dry-run a set of messages and return the estimated gas cost
+without broadcasting.
+
+#### Parameters
+
+##### messages
+
+`any`[]
+
+Array of messages to simulate.
+
+##### options?
+
+[`TxOptions`](../interfaces/TxOptions.md)
+
+Optional overrides (currently only memo is used).
+
+#### Returns
+
+`Promise`\<`number`\>
+
+Estimated gas units.
 
 #### Throws
 
@@ -1415,24 +1469,6 @@ Since v3.2.0 - Use `listenerCount` instead.
 #### Inherited from
 
 `EventEmitter.listenerCount`
-
-***
-
-### new()
-
-> `static` **new**(`config`): `Promise`\<`AtlasClient`\>
-
-Defined in: [src/atlas-client.ts:77](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/atlas-client.ts#L77)
-
-#### Parameters
-
-##### config
-
-[`AtlasConfig`](../interfaces/AtlasConfig.md)
-
-#### Returns
-
-`Promise`\<`AtlasClient`\>
 
 ***
 

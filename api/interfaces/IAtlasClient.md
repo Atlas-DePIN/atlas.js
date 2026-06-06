@@ -6,7 +6,7 @@
 
 # Interface: IAtlasClient
 
-Defined in: [src/interfaces/classes/IAtlasClient.ts:4](https://github.com/Atlas-DePIN/atlas.js/blob/8e7ce20786b7b1de5dee5357008fafafb29e194c/src/interfaces/classes/IAtlasClient.ts#L4)
+Defined in: [src/interfaces/classes/IAtlasClient.ts:4](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/interfaces/classes/IAtlasClient.ts#L4)
 
 ## Accessors
 
@@ -16,7 +16,7 @@ Defined in: [src/interfaces/classes/IAtlasClient.ts:4](https://github.com/Atlas-
 
 > **get** **address**(): `string`
 
-Defined in: [src/interfaces/classes/IAtlasClient.ts:6](https://github.com/Atlas-DePIN/atlas.js/blob/8e7ce20786b7b1de5dee5357008fafafb29e194c/src/interfaces/classes/IAtlasClient.ts#L6)
+Defined in: [src/interfaces/classes/IAtlasClient.ts:6](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/interfaces/classes/IAtlasClient.ts#L6)
 
 ##### Returns
 
@@ -28,13 +28,13 @@ Defined in: [src/interfaces/classes/IAtlasClient.ts:6](https://github.com/Atlas-
 
 #### Get Signature
 
-> **get** **query**(): `QueryHelper`
+> **get** **query**(): [`QueryHelper`](../classes/QueryHelper.md)
 
-Defined in: [src/interfaces/classes/IAtlasClient.ts:5](https://github.com/Atlas-DePIN/atlas.js/blob/8e7ce20786b7b1de5dee5357008fafafb29e194c/src/interfaces/classes/IAtlasClient.ts#L5)
+Defined in: [src/interfaces/classes/IAtlasClient.ts:5](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/interfaces/classes/IAtlasClient.ts#L5)
 
 ##### Returns
 
-`QueryHelper`
+[`QueryHelper`](../classes/QueryHelper.md)
 
 ## Methods
 
@@ -42,7 +42,7 @@ Defined in: [src/interfaces/classes/IAtlasClient.ts:5](https://github.com/Atlas-
 
 > **connectWallet**(`type`, `options?`): `Promise`\<`void`\>
 
-Defined in: [src/interfaces/classes/IAtlasClient.ts:11](https://github.com/Atlas-DePIN/atlas.js/blob/8e7ce20786b7b1de5dee5357008fafafb29e194c/src/interfaces/classes/IAtlasClient.ts#L11)
+Defined in: [src/interfaces/classes/IAtlasClient.ts:11](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/interfaces/classes/IAtlasClient.ts#L11)
 
 #### Parameters
 
@@ -64,7 +64,7 @@ Defined in: [src/interfaces/classes/IAtlasClient.ts:11](https://github.com/Atlas
 
 > **disconnectWallet**(): `Promise`\<`void`\>
 
-Defined in: [src/interfaces/classes/IAtlasClient.ts:12](https://github.com/Atlas-DePIN/atlas.js/blob/8e7ce20786b7b1de5dee5357008fafafb29e194c/src/interfaces/classes/IAtlasClient.ts#L12)
+Defined in: [src/interfaces/classes/IAtlasClient.ts:12](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/interfaces/classes/IAtlasClient.ts#L12)
 
 #### Returns
 
@@ -76,7 +76,7 @@ Defined in: [src/interfaces/classes/IAtlasClient.ts:12](https://github.com/Atlas
 
 > **getWalletType**(): [`WalletType`](../enumerations/WalletType.md)
 
-Defined in: [src/interfaces/classes/IAtlasClient.ts:13](https://github.com/Atlas-DePIN/atlas.js/blob/8e7ce20786b7b1de5dee5357008fafafb29e194c/src/interfaces/classes/IAtlasClient.ts#L13)
+Defined in: [src/interfaces/classes/IAtlasClient.ts:13](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/interfaces/classes/IAtlasClient.ts#L13)
 
 #### Returns
 
@@ -88,7 +88,7 @@ Defined in: [src/interfaces/classes/IAtlasClient.ts:13](https://github.com/Atlas
 
 > **initialize**(): `Promise`\<`void`\>
 
-Defined in: [src/interfaces/classes/IAtlasClient.ts:8](https://github.com/Atlas-DePIN/atlas.js/blob/8e7ce20786b7b1de5dee5357008fafafb29e194c/src/interfaces/classes/IAtlasClient.ts#L8)
+Defined in: [src/interfaces/classes/IAtlasClient.ts:8](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/interfaces/classes/IAtlasClient.ts#L8)
 
 #### Returns
 
@@ -100,7 +100,7 @@ Defined in: [src/interfaces/classes/IAtlasClient.ts:8](https://github.com/Atlas-
 
 > **isWalletConnected**(): `boolean`
 
-Defined in: [src/interfaces/classes/IAtlasClient.ts:10](https://github.com/Atlas-DePIN/atlas.js/blob/8e7ce20786b7b1de5dee5357008fafafb29e194c/src/interfaces/classes/IAtlasClient.ts#L10)
+Defined in: [src/interfaces/classes/IAtlasClient.ts:10](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/interfaces/classes/IAtlasClient.ts#L10)
 
 #### Returns
 
