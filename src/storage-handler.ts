@@ -17,8 +17,11 @@ import { buildFid } from "@/utils/hash";
 
 import { AtlasClient } from "./atlas-client";
 import { FiletreeHelper } from "./filetree-helper";
+import { EncodeObject } from "@atlas/atlas.js-protos";
+import { MessageComposer } from "./utils/composer";
+import { UploadHelper } from "./upload-helper";
 
-
+const DEFAULT_STORAGE_GATEWAY = 'storage.atlasprotocol.cloud';
 
 /**
  * Manages the storage lifecycle for a connected Atlas wallet.
@@ -31,13 +34,8 @@ import { FiletreeHelper } from "./filetree-helper";
  * directory navigation without polling.
  */
 export class StorageHandler extends EventEmitter {
-  /** The Atlas client used for chain queries and signing. */
   protected client: AtlasClient;
-
-  /** ECIES private key derived from the wallet's signature. */
   protected access: PrivateKey;
-
-  /** Helper for filetree read and write operations. */
   protected filetree: FiletreeHelper
 
   protected queuedFiles: Map<string, IQueuedFile> = new Map();
@@ -145,7 +143,10 @@ export class StorageHandler extends EventEmitter {
         size: 0,
         isDefault: true
       }
-      await this.filetree.createDrive(metadata)
+      const msg = await this.filetree.createDrive(metadata)
+      await this.client.signAndBroadcast([msg], {
+        gasAdjustment: 2,   // Dev Note: needed higher gas limit for this Tx. To investigate why.
+      });
       this._drives = [metadata];
       await this.loadDirectory('home');
       return
@@ -247,12 +248,12 @@ export class StorageHandler extends EventEmitter {
       merkleRoot: new Uint8Array(),
       nonce: Math.floor(Math.random() * 2_147_483_647),
       replicas: options.replicas ?? DEFAULT_REPLICAS,
+      metadata: {},
       status: 'idle',
     };
 
     this.queuedFiles.set(file.name, queuedFile);
   }
-
 
   public async queuePrivateFile(file: File, options: IFileUploadOptions): Promise<void> {
     const queuedFile: IQueuedFile = {
@@ -260,6 +261,7 @@ export class StorageHandler extends EventEmitter {
       merkleRoot: new Uint8Array(),
       nonce: Math.floor(Math.random() * 2_147_483_647),
       replicas: options.replicas ?? DEFAULT_REPLICAS,
+      metadata: {},
       encryption: options.encryption,
       status: 'idle',
     };
@@ -267,15 +269,63 @@ export class StorageHandler extends EventEmitter {
     this.queuedFiles.set(file.name, queuedFile);
   }
 
-  /**
-   * Prepare one queued file for upload.
-   *
-   * This runs optional encryption, Merkle tree construction, and FID derivation,
-   * updating queue status and emitting progress events as it goes.
-   */
-  private async processFile(fileKey: string): Promise<void> {
+  public async startUploads(dir: string = this._directory.path) {
+    if (this.queuedFiles.size === 0) {
+      throw new Error('Cannot upload. Queue is empty.');
+    }
+    const queued = Array.from(this.queuedFiles.entries());
+
+    await this.commitAll(queued, dir);
+    await this.uploadAll(queued);
+
+    await this.loadSubscription();
+    // await this.reloadDirectory();
+  }
+
+  protected async commitAll(files: Array<[string, IQueuedFile]>, dir: string) {
+    const msgs: EncodeObject[] = [
+      await this.filetree.incrementDirectoryItemCount(dir, files.length),
+    ];
+
+    for (const [key, queued] of files) {
+      this.updateQueuedFileStatus(key, 'uploading');
+      msgs.push(
+        MessageComposer.MsgPostFile(
+          queued.fid,
+          this.client.address,
+          queued.merkleRoot,
+          queued.file.size,
+          queued.replicas,
+          this.subscription.id,
+        ),
+      );
+      msgs.push(await this.filetree.createFile(queued, dir))
+    }
+
+    await this.client.signAndBroadcast(msgs);
+  }
+
+  protected async uploadAll(files: Array<[string, IQueuedFile]>): Promise<void> {
+    await Promise.all(
+      files.map(async ([key, queued]) => {
+        await this.processFile(key)
+        
+        this.updateQueuedFileStatus(key, 'uploading');
+        const result = await UploadHelper.upload(DEFAULT_STORAGE_GATEWAY, queued.fid, queued.file);
+        if (!result.success) {
+          this.updateQueuedFileStatus(key, 'error');
+          throw new Error(result.message ?? `Failed to upload file "${key}".`);
+        }
+
+        this.updateQueuedFileStatus(key, 'uploaded', 100);
+        this.queuedFiles.delete(key);
+      }),
+    );
+  }
+
+  protected async processFile(fileKey: string): Promise<void> {
     const queuedFile = this.queuedFiles.get(fileKey);
-    if (!queuedFile) return;
+    if (!queuedFile) throw new Error(`Queued file "${fileKey}" was not found.`);
 
     // Resolve progress scaling
     const progressBase = queuedFile.encryption ? 50 : 0;
@@ -336,7 +386,7 @@ export class StorageHandler extends EventEmitter {
     }
   }
 
-  private handleFileProcessingError(fileKey: string, error: unknown, originalController?: AbortController): void {
+  private handleFileProcessingError(fileKey: string, error: unknown): void {
     if (!this.queuedFiles.has(fileKey)) {
       return;
     }

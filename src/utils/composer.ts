@@ -61,6 +61,20 @@ export class MessageComposer {
     };
   }
 
+  static MsgPostNodeRaw(creator: string, path: string, nodeType: string, contents: string, viewers: string, editors: string): EncodeObject {
+    return {
+      typeUrl: MsgPostNode.typeUrl,
+      value: MsgPostNode.fromPartial({
+        creator,
+        path,
+        nodeType,
+        contents,
+        viewers,
+        editors
+      })
+    };
+  }
+
   static MsgDeleteNode(creator: string, path: string): EncodeObject {
     return {
       typeUrl: MsgDeleteNode.typeUrl,

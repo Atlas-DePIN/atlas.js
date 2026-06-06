@@ -8,6 +8,7 @@ export * from './IFileUploadProgress'
 
 export * from './IAtlasDriveInfo'
 export * from './IAtlasDirectoryInfo'
+export * from './IAtlasFileInfo'
 export * from './IReadAuthorityKeeper'
 
 export * from './IQueuedFile'

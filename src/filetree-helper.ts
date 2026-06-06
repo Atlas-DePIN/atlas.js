@@ -1,9 +1,12 @@
 import { AtlasClient } from "@/atlas-client";
 import { PrivateKey } from "eciesjs";
-import { IAesBundle, IAtlasDriveInfo, IReadAuthorityKeeper } from "@/interfaces";
+import { IAesBundle, IAtlasDirectoryInfo, IAtlasDriveInfo, IAtlasFileInfo, IQueuedFile, IReadAuthorityKeeper } from "@/interfaces";
 import { aesStringCrypt, exportAesBundle, generateAesKey, importAesBundle } from "@/utils/crypto";
 import { EncryptionType, TreeNode } from "@/types"
 import { MessageComposer } from "./utils/composer";
+import { bytesToHex } from "./utils/converters";
+import { EncodeObject } from "@atlas/atlas.js-protos";
+import { buildFileNodeContents, parseNodeContents } from "./utils/meta";
 
 
 export class FiletreeHelper {
@@ -49,7 +52,7 @@ export class FiletreeHelper {
   /**
    * Create a top-level drive node for the active account.
    */
-  public async createDrive(metadata: IAtlasDriveInfo, encryption: EncryptionType = EncryptionType.ENCRYPTED): Promise<void> {
+  public async createDrive(metadata: IAtlasDriveInfo, encryption: EncryptionType = EncryptionType.ENCRYPTED): Promise<EncodeObject> {
     this.requireSigner();
 
     let contents = JSON.stringify(metadata)
@@ -70,7 +73,7 @@ export class FiletreeHelper {
     }
 
     // Create & broadcast PostNode Tx message
-    const msg = MessageComposer.MsgPostNode(
+    return MessageComposer.MsgPostNode(
       this.client.address,
       metadata.name,
       'drive',
@@ -78,13 +81,50 @@ export class FiletreeHelper {
       readAuthorities,
       []
     );
-    await this.client.signAndBroadcast([msg], {
-      gasAdjustment: 2,   // Dev Note: needed higher gas limit for this Tx. To investigate why.
-    });
   }
 
+  public async createFile(file: IQueuedFile, dir: string): Promise<EncodeObject> {
+    let contents = JSON.stringify(buildFileNodeContents(file, dir));
+    let readAuthorities = {}
 
+    if (file.encryption?.aes) {
+      contents = await aesStringCrypt(contents, file.encryption.aes, "encrypt")
+      readAuthorities = await this.addReadAuthority({}, this.client.address, file.encryption.aes)
+    }
 
+    return MessageComposer.MsgPostNode(
+      this.client.address,
+      `${dir.replace(/\/+$/, '')}/${file.fid.replace(/^\/+/, '')}`,
+      'file',
+      JSON.stringify(contents),
+      readAuthorities,
+      []
+    )
+  }
+
+  public async createDirectory(): Promise<EncodeObject> {
+    throw Error("Not Implemented")
+  }
+
+  /**
+   * Build a replacement directory node with an adjusted child item count.
+   */
+  public async incrementDirectoryItemCount(path: string, delta: number): Promise<EncodeObject> {
+    const folderNode = await this.getTreeNode(path)
+    const contents = parseNodeContents<IAtlasDirectoryInfo>(folderNode.contents, path);
+
+    contents.itemCount = Math.max(0, (contents.itemCount ?? 0) + delta);
+    contents.dateUpdated = Date.now();
+
+    return MessageComposer.MsgPostNodeRaw(
+      this.client.address,
+      path,
+      folderNode.nodeType,
+      JSON.stringify(contents),
+      folderNode.viewers,
+      folderNode.editors,
+    );
+  }
 
   private async decryptTreeNode(node: TreeNode): Promise<TreeNode> {
     switch (node.contents.slice(1)) {
