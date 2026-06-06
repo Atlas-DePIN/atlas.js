@@ -9,5 +9,6 @@
   "excludeInternal": true,
   "includeVersion": true,
   "readme": "none",
+  "skipErrorChecking": true,
   "tsconfig": "./tsconfig.json"
 }
