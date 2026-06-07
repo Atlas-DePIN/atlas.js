@@ -12,13 +12,13 @@ export function parseNodeContents<T>(contents: string, path: string): T {
 /**
  * Build the JSON contents stored in the filetree node for an uploaded file.
  */
-export function buildFileNodeContents(queuedFile: IQueuedFile, dir: string): IAtlasFileInfo {
+export function buildFileNodeContents(queuedFile: IQueuedFile, owner: string): IAtlasFileInfo {
   const now = Date.now();
   const file = queuedFile.file;
 
   return {
     fid: queuedFile.fid,
-    owner: this.client.address,
+    owner,
     merkleRoot: bytesToHex(queuedFile.merkleRoot),
     dateUpdated: now,
     dateCreated: now,

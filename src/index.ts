@@ -7,8 +7,7 @@ export type {
 } from './interfaces';
 
 export type {
-  WalletInfo,
-  SigningResult,
+  WalletInfo
 } from './interfaces/wallet';
 
 export type {

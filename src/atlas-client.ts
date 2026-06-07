@@ -163,25 +163,19 @@ export class AtlasClient extends EventEmitter implements IAtlasClient {
    *
    * @throws If no wallet is connected.
    */
-  async signMessage(message: string | Uint8Array): Promise<{
-    signature: Uint8Array;
-    signedMessage: string | Uint8Array;
-  }> {
+  async signMessage(message: string | Uint8Array): Promise<string> {
     if (!this.isWalletConnected()) {
       throw new Error('Wallet not connected. Connect a wallet first.');
     }
 
-    const result = await this._walletManager.signArbitrary(message);
+    const signature = await this._walletManager.signArbitrary(message);
     
     this.emit('messageSigned', {
       message,
-      signature: result.signature
+      signature: signature
     });
     
-    return {
-      signature: result.signature,
-      signedMessage: message
-    };
+    return signature
   }
 
   /**

@@ -1,4 +1,4 @@
-import { TxRaw } from "cosmjs-types/cosmos/tx/v1beta1/tx";
+import { PubKey } from "cosmjs-types/cosmos/crypto/secp256k1/keys";
 
 export interface WalletInfo {
   name: string;
@@ -12,10 +12,4 @@ export interface TxOptions {
   fee?: any;
   gas?: string;
   gasAdjustment?: number;
-}
-
-export interface SigningResult {
-  signedTx?: TxRaw;
-  txHash?: string;
-  signature: Uint8Array;
 }

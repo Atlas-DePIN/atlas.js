@@ -8,7 +8,6 @@ import { WalletType } from '../types/wallet'
 import {
   AtlasConfig,
   TxOptions,
-  SigningResult,
 } from '../interfaces'
 
 /**
@@ -67,7 +66,7 @@ export abstract class BaseWallet {
    *
    * @param data - The data to sign, as a string or `Uint8Array`.
    */
-  abstract signArbitrary(data: string | Uint8Array): Promise<SigningResult>;
+  abstract signArbitrary(data: string | Uint8Array): Promise<string>;
   
   /**
    * Check whether the wallet is currently connected and ready for use.

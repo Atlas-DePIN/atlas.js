@@ -6,14 +6,14 @@ import { StorageSubscription } from "@atlas/atlas.js-protos/dist/types/atlas/sto
 import { TreeNode, QueuedFileStatus } from "./types";
 import { FileProcessingEvent, StorageEvents, StorageHandlerEvent, WalletEvents } from "./types/events";
 import { SubscriptionError } from "./types/errors";
-import { IAtlasDriveInfo, IAtlasDirectoryInfo, IDirectory, IQueuedFile, IFileUploadOptions } from "./interfaces";
+import { IAtlasDriveInfo, IAtlasDirectoryInfo, IDirectory, IQueuedFile, IFileUploadOptions, IAtlasFileInfo } from "./interfaces";
 
 import { DEFAULT_ENCYRPTION_CHUNK_SIZE, DEFAULT_REPLICAS } from "./utils/defaults";
 import { encryptFile, generateAesKey } from "./utils/crypto";
 import { buildMerkleTree } from "./utils/merkle";
 import { SIGNER_SEED } from "./utils/constants";
 import { bytesToHex } from "./utils/converters";
-import { buildFid } from "./utils/hash";
+import { buildFid, hashAndHex } from "./utils/hash";
 
 import { AtlasClient } from "./atlas-client";
 import { FiletreeHelper } from "./filetree-helper";
@@ -107,8 +107,8 @@ export class StorageHandler extends EventEmitter {
    */
   protected async enableSigner(): Promise<void> {
     const signature = await this.client.signMessage(SIGNER_SEED);
-    this.access = PrivateKey.fromHex(bytesToHex(signature.signature));
-    this.filetree.useAccessKey(this.access)
+    this.access = PrivateKey.fromHex(await hashAndHex(signature));
+    this.filetree.setAccessKey(this.access)
   }
 
   /**
@@ -134,13 +134,9 @@ export class StorageHandler extends EventEmitter {
    */
   protected async loadAccount() {
     // TODO: reset
-    try {
-      await this.loadSubscription();
-      await this.enableSigner();
-    } catch (err: any) {
-      // TODO: log warning
-    }
-    
+    await this.loadSubscription();
+    await this.enableSigner();
+
     this._drives = await this.listDrives();
     if (this.drives.length === 0) {
       const metadata: IAtlasDriveInfo = {
@@ -202,6 +198,7 @@ export class StorageHandler extends EventEmitter {
     }
     // Get directory tree node
     const node = await this.filetree.getTreeNode(path, owner)
+    console.log("[ATLAS.JS] FT Node:", node)
     const nextDirectory: IDirectory = {
       metadata: JSON.parse(node.contents) as IAtlasDirectoryInfo,
       path,
@@ -212,14 +209,14 @@ export class StorageHandler extends EventEmitter {
 
     // Get directory children on-chain
     const children: TreeNode[] = await this.filetree.getTreeNodeChildren(path, owner)
-
+    console.log("[ATLAS.JS] FT Node Children:", children)
     // Parse and sort directory children by their types
     for (const [index, node] of children.entries()) {
       try {
         if (node.nodeType === 'directory') {
-          nextDirectory.subdirs.push(parseNodeContents(node.contents, `${path}/children[${index}]:directory`));
+          nextDirectory.subdirs.push(parseNodeContents<IAtlasDirectoryInfo>(node.contents, `${path}/children[${index}]:directory`));
         } else if (node.nodeType === 'file') {
-          nextDirectory.files.push(parseNodeContents(node.contents, `${path}/children[${index}]:file`));
+          nextDirectory.files.push(parseNodeContents<IAtlasFileInfo>(node.contents, `${path}/children[${index}]:file`));
         } else {
           nextDirectory.objects.push(node.contents);
         }
@@ -245,7 +242,33 @@ export class StorageHandler extends EventEmitter {
       .map((node) => this.safeParseNodeContents<IAtlasDriveInfo>(node.contents, 'drive'));
   }
 
+  /**
+   * Purchase a storage subscription for the active account or a receiver.
+   *
+   * The minimum purchase is one gigabyte for one day.
+   */
+  public async purchaseSubscription(bytes: number, days: number, isDefault: boolean, address: string = this.client.address): Promise<string> {
+    if (bytes < 1000 ** 3) {
+      throw new Error('Cannot purchase less than 1GB of storage.');
+    }
+    if (days < 1) {
+      throw new Error('Cannot purchase storage for less than 1 day.');
+    }
 
+    const msgs: EncodeObject[] = [
+      MessageComposer.MsgBuyStorage(
+        this.client.address,
+        address,
+        days,
+        bytes,
+        isDefault
+      )
+    ];
+
+    const txResult = await this.client.signAndBroadcast(msgs);
+    await this.loadSubscription();
+    return txResult.hash;
+  }
 
   /**
    * Add a public file to the upload queue.
@@ -306,11 +329,18 @@ export class StorageHandler extends EventEmitter {
     }
     const queued = Array.from(this.queuedFiles.entries());
 
+    await this.processAll(queued);
     await this.commitAll(queued, dir);
     await this.uploadAll(queued, provider);
 
     await this.loadSubscription();
     // await this.reloadDirectory();
+  }
+
+  protected async processAll(files: Array<[string, IQueuedFile]>) {
+    await Promise.all(files.map(async ([key, _]) => {
+      await this.processFile(key)
+    }))
   }
 
   protected async commitAll(files: Array<[string, IQueuedFile]>, dir: string) {
@@ -346,8 +376,6 @@ export class StorageHandler extends EventEmitter {
 
     await Promise.all(
       files.map(async ([key, queued]) => {
-        await this.processFile(key);
-
         this.updateQueuedFileStatus(key, 'uploading');
 
         if (provider) {

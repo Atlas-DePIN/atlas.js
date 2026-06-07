@@ -1,6 +1,6 @@
 // src/messages/composer.ts
 import { EncodeObject } from '@cosmjs/proto-signing';
-import { MsgPostFile, MsgDeleteFile } from '@atlas/atlas.js-protos/dist/types/atlas/storage/v1/tx';
+import { MsgPostFile, MsgDeleteFile, MsgBuyStorage } from '@atlas/atlas.js-protos/dist/types/atlas/storage/v1/tx';
 import { MsgDeleteNode, MsgPostNode } from '@atlas/atlas.js-protos/dist/types/atlas/filetree/v1/tx';
 import { IReadAuthorityKeeper } from '../interfaces';
 
@@ -81,6 +81,26 @@ export class MessageComposer {
       value: MsgDeleteNode.fromPartial({
         creator,
         path: path.toLowerCase()
+      })
+    };
+  }
+
+  static MsgBuyStorage(
+    creator: string,
+    receiver: string,
+    days: number,
+    bytes: number,
+    isDefault: boolean
+  ): EncodeObject {
+    // Use the MessageComposer from your protos
+    return {
+      typeUrl: MsgBuyStorage.typeUrl,
+      value: MsgBuyStorage.fromPartial({
+        creator,
+        receiver,
+        duration: days,
+        bytes,
+        isDefault
       })
     };
   }

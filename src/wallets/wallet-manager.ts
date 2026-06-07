@@ -7,7 +7,6 @@ import { WalletEvents } from '../types/events'
 import { 
   AtlasConfig,
   WalletInfo,
-  SigningResult,
   TxOptions,
 } from '../interfaces';
 
@@ -182,7 +181,7 @@ export class WalletManager extends EventEmitter {
    *
    * @throws If no wallet is connected.
    */
-  async signArbitrary(data: string | Uint8Array): Promise<SigningResult> {
+  async signArbitrary(data: string | Uint8Array): Promise<string> {
     if (!this.wallet) {
       throw new Error('No wallet connected');
     }

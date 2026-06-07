@@ -17,8 +17,9 @@ export class FiletreeHelper {
     this.client = client
   }
 
-  public async useAccessKey(accessKey: PrivateKey) {
+  public async setAccessKey(accessKey: PrivateKey) {
     this.accessKey = accessKey
+    console.debug(`[ATLAS.JS] FiletreeHelper Access Key: `, this.accessKey)
   }
 
   public async getTreeNodeChildren(path: string, owner: string = this.client.address): Promise<TreeNode[]> {
@@ -84,7 +85,8 @@ export class FiletreeHelper {
   }
 
   public async createFile(file: IQueuedFile, dir: string): Promise<EncodeObject> {
-    let contents = JSON.stringify(buildFileNodeContents(file, dir));
+    console.debug(`[ATLAS.JS] Create file ${file.fid} @ ${dir}`)
+    let contents = JSON.stringify(buildFileNodeContents(file, this.client.address));
     let readAuthorities = {}
 
     if (file.encryption?.aes) {
@@ -96,7 +98,7 @@ export class FiletreeHelper {
       this.client.address,
       `${dir.replace(/\/+$/, '')}/${file.fid.replace(/^\/+/, '')}`,
       'file',
-      JSON.stringify(contents),
+      contents,
       readAuthorities,
       []
     )
@@ -177,6 +179,7 @@ export class FiletreeHelper {
    */
   private requireSigner(): void {
     if (!this.accessKey) {
+      console.error(`[ATLAS.JS] FiletreeHelper cannot perform this operation without a signer.`)
       throw new Error(`Signer is not enabled.`);
     }
   }

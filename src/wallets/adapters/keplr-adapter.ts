@@ -1,19 +1,22 @@
 import { OfflineSigner } from '@cosmjs/proto-signing';
 
 import { WalletType } from '../../types/wallet';
-import { 
-  AtlasConfig,
-  SigningResult,  
-} from '../../interfaces';
+import { AtlasConfig } from '../../interfaces';
 
 import { BaseWallet } from '..';
 import { atlasDevnetChainConfig } from '../../utils/defaults';
+import { PubKey } from 'cosmjs-types/cosmos/crypto/secp256k1/keys';
 
 declare global {
   interface Window {
     keplr: any;
     leap: any;
   }
+}
+
+export interface StdSignature {
+  readonly pub_key: PubKey;
+  readonly signature: string;
 }
 
 export class KeplrWallet extends BaseWallet {
@@ -65,18 +68,14 @@ export class KeplrWallet extends BaseWallet {
     this._address = "";
   }
 
-  async signArbitrary(data: string | Uint8Array): Promise<SigningResult> {
+  async signArbitrary(data: string | Uint8Array): Promise<string> {
     if (!this.address) {
       throw new Error("Wallet not connected");
     }
 
     try {
-      const signature = await this.keplr.signArbitrary(this.config.chainId, this.address, data);
-
-      return {
-        signature: Uint8Array.from(atob(signature.signature), c => c.charCodeAt(0)),
-        txHash: ''
-      };
+      const result: StdSignature = await this.keplr.signArbitrary(this.config.chainId, this.address, data);
+      return result.signature
     } catch (error: any) {
       throw new Error(`Signing failed: ${error.message}`);
     }
