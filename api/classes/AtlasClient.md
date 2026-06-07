@@ -1,4 +1,4 @@
-[**atlas.js v0.1.0**](../README.md)
+[**atlas.js v0.2.0**](../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 # Class: AtlasClient
 
-Defined in: [src/atlas-client.ts:23](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/atlas-client.ts#L23)
+Defined in: [src/atlas-client.ts:23](https://github.com/Atlas-DePIN/atlas.js/blob/69650d8e09f33d42ed4e3b3886bc77ab85f5ade6/src/atlas-client.ts#L23)
 
 High-level client for interacting with an Atlas blockchain node.
 
@@ -28,7 +28,7 @@ can react to connection state changes without polling.
 
 > **new AtlasClient**(`config`): `AtlasClient`
 
-Defined in: [src/atlas-client.ts:58](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/atlas-client.ts#L58)
+Defined in: [src/atlas-client.ts:58](https://github.com/Atlas-DePIN/atlas.js/blob/69650d8e09f33d42ed4e3b3886bc77ab85f5ade6/src/atlas-client.ts#L58)
 
 #### Parameters
 
@@ -57,7 +57,7 @@ If `chainId` or `rpcEndpoint` are missing.
 
 > **emit**: (`event`, ...`args`) => `boolean`
 
-Defined in: [src/atlas-client.ts:50](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/atlas-client.ts#L50)
+Defined in: [src/atlas-client.ts:50](https://github.com/Atlas-DePIN/atlas.js/blob/69650d8e09f33d42ed4e3b3886bc77ab85f5ade6/src/atlas-client.ts#L50)
 
 Synchronously calls each of the listeners registered for the event named `eventName`, in the order they were registered, passing the supplied arguments
 to each.
@@ -125,7 +125,7 @@ v0.1.26
 
 > **off**: (`event`, `listener`) => `this`
 
-Defined in: [src/atlas-client.ts:49](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/atlas-client.ts#L49)
+Defined in: [src/atlas-client.ts:49](https://github.com/Atlas-DePIN/atlas.js/blob/69650d8e09f33d42ed4e3b3886bc77ab85f5ade6/src/atlas-client.ts#L49)
 
 Alias for `emitter.removeListener()`.
 
@@ -157,7 +157,7 @@ v10.0.0
 
 > **on**: (`event`, `listener`) => `this`
 
-Defined in: [src/atlas-client.ts:48](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/atlas-client.ts#L48)
+Defined in: [src/atlas-client.ts:48](https://github.com/Atlas-DePIN/atlas.js/blob/69650d8e09f33d42ed4e3b3886bc77ab85f5ade6/src/atlas-client.ts#L48)
 
 Adds the `listener` function to the end of the listeners array for the event
 named `eventName`. No checks are made to see if the `listener` has already
@@ -331,7 +331,7 @@ v13.6.0, v12.17.0
 
 > **get** **address**(): `string`
 
-Defined in: [src/atlas-client.ts:44](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/atlas-client.ts#L44)
+Defined in: [src/atlas-client.ts:44](https://github.com/Atlas-DePIN/atlas.js/blob/69650d8e09f33d42ed4e3b3886bc77ab85f5ade6/src/atlas-client.ts#L44)
 
 Get the on-chain address of the active wallet, or an empty string
 if no wallet is connected.
@@ -352,7 +352,7 @@ if no wallet is connected.
 
 > **get** **query**(): [`QueryHelper`](QueryHelper.md)
 
-Defined in: [src/atlas-client.ts:35](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/atlas-client.ts#L35)
+Defined in: [src/atlas-client.ts:35](https://github.com/Atlas-DePIN/atlas.js/blob/69650d8e09f33d42ed4e3b3886bc77ab85f5ade6/src/atlas-client.ts#L35)
 
 ##### Returns
 
@@ -442,7 +442,7 @@ v0.1.26
 
 > **connectWallet**(`type`, `options?`): `Promise`\<`void`\>
 
-Defined in: [src/atlas-client.ts:141](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/atlas-client.ts#L141)
+Defined in: [src/atlas-client.ts:141](https://github.com/Atlas-DePIN/atlas.js/blob/69650d8e09f33d42ed4e3b3886bc77ab85f5ade6/src/atlas-client.ts#L141)
 
 Connect a wallet of the specified type.
 
@@ -481,7 +481,7 @@ If the wallet type is unavailable or connection fails.
 
 > **disconnectWallet**(): `Promise`\<`void`\>
 
-Defined in: [src/atlas-client.ts:149](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/atlas-client.ts#L149)
+Defined in: [src/atlas-client.ts:149](https://github.com/Atlas-DePIN/atlas.js/blob/69650d8e09f33d42ed4e3b3886bc77ab85f5ade6/src/atlas-client.ts#L149)
 
 Disconnect the active wallet.
 
@@ -499,7 +499,7 @@ Disconnect the active wallet.
 
 > **dispose**(): `Promise`\<`void`\>
 
-Defined in: [src/atlas-client.ts:287](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/atlas-client.ts#L287)
+Defined in: [src/atlas-client.ts:281](https://github.com/Atlas-DePIN/atlas.js/blob/69650d8e09f33d42ed4e3b3886bc77ab85f5ade6/src/atlas-client.ts#L281)
 
 Tear down the client: disconnect the wallet, mark as uninitialized,
 and remove all event listeners.
@@ -574,7 +574,7 @@ v1.0.0
 
 > **getWalletType**(): [`WalletType`](../enumerations/WalletType.md)
 
-Defined in: [src/atlas-client.ts:126](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/atlas-client.ts#L126)
+Defined in: [src/atlas-client.ts:126](https://github.com/Atlas-DePIN/atlas.js/blob/69650d8e09f33d42ed4e3b3886bc77ab85f5ade6/src/atlas-client.ts#L126)
 
 Return the wallet type for the active session, or `null` if no wallet
 is connected.
@@ -593,7 +593,7 @@ is connected.
 
 > **initialize**(): `Promise`\<`void`\>
 
-Defined in: [src/atlas-client.ts:92](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/atlas-client.ts#L92)
+Defined in: [src/atlas-client.ts:92](https://github.com/Atlas-DePIN/atlas.js/blob/69650d8e09f33d42ed4e3b3886bc77ab85f5ade6/src/atlas-client.ts#L92)
 
 Initialize the query client and helper.
 
@@ -619,7 +619,7 @@ If the RPC connection or protobuf client creation fails.
 
 > **isWalletConnected**(): `boolean`
 
-Defined in: [src/atlas-client.ts:118](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/atlas-client.ts#L118)
+Defined in: [src/atlas-client.ts:118](https://github.com/Atlas-DePIN/atlas.js/blob/69650d8e09f33d42ed4e3b3886bc77ab85f5ade6/src/atlas-client.ts#L118)
 
 `true` when a wallet is connected and ready for signing operations.
 
@@ -1135,7 +1135,7 @@ v0.3.5
 
 > **signAndBroadcast**(`messages`, `options?`): `Promise`\<`IndexedTx`\>
 
-Defined in: [src/atlas-client.ts:201](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/atlas-client.ts#L201)
+Defined in: [src/atlas-client.ts:195](https://github.com/Atlas-DePIN/atlas.js/blob/69650d8e09f33d42ed4e3b3886bc77ab85f5ade6/src/atlas-client.ts#L195)
 
 Sign and broadcast a set of messages, then wait for
 on-chain inclusion.
@@ -1172,9 +1172,9 @@ If no wallet is connected, broadcasting fails, or the
 
 ### signMessage()
 
-> **signMessage**(`message`): `Promise`\<\{ `signature`: `Uint8Array`; `signedMessage`: `string` \| `Uint8Array`\<`ArrayBufferLike`\>; \}\>
+> **signMessage**(`message`): `Promise`\<`string`\>
 
-Defined in: [src/atlas-client.ts:166](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/atlas-client.ts#L166)
+Defined in: [src/atlas-client.ts:166](https://github.com/Atlas-DePIN/atlas.js/blob/69650d8e09f33d42ed4e3b3886bc77ab85f5ade6/src/atlas-client.ts#L166)
 
 Sign an arbitrary message using the active wallet's key.
 
@@ -1188,7 +1188,7 @@ The data to sign (plain string or raw bytes).
 
 #### Returns
 
-`Promise`\<\{ `signature`: `Uint8Array`; `signedMessage`: `string` \| `Uint8Array`\<`ArrayBufferLike`\>; \}\>
+`Promise`\<`string`\>
 
 An object containing the raw `signature` and the original
          `signedMessage`.
@@ -1422,7 +1422,7 @@ Since v3.2.0 - Use `listenerCount` instead.
 
 > `static` **new**(`config`): `Promise`\<`AtlasClient`\>
 
-Defined in: [src/atlas-client.ts:77](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/atlas-client.ts#L77)
+Defined in: [src/atlas-client.ts:77](https://github.com/Atlas-DePIN/atlas.js/blob/69650d8e09f33d42ed4e3b3886bc77ab85f5ade6/src/atlas-client.ts#L77)
 
 #### Parameters
 

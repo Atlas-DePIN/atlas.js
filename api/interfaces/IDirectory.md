@@ -1,4 +1,4 @@
-[**atlas.js v0.1.0**](../README.md)
+[**atlas.js v0.2.0**](../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 # Interface: IDirectory
 
-Defined in: [src/interfaces/IDirectory.ts:4](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/interfaces/IDirectory.ts#L4)
+Defined in: [src/interfaces/IDirectory.ts:4](https://github.com/Atlas-DePIN/atlas.js/blob/69650d8e09f33d42ed4e3b3886bc77ab85f5ade6/src/interfaces/IDirectory.ts#L4)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/interfaces/IDirectory.ts:4](https://github.com/Atlas-DePIN/atla
 
 > **files**: [`IAtlasFileInfo`](IAtlasFileInfo.md)[]
 
-Defined in: [src/interfaces/IDirectory.ts:8](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/interfaces/IDirectory.ts#L8)
+Defined in: [src/interfaces/IDirectory.ts:8](https://github.com/Atlas-DePIN/atlas.js/blob/69650d8e09f33d42ed4e3b3886bc77ab85f5ade6/src/interfaces/IDirectory.ts#L8)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/interfaces/IDirectory.ts:8](https://github.com/Atlas-DePIN/atla
 
 > **metadata**: [`IAtlasDirectoryInfo`](IAtlasDirectoryInfo.md)
 
-Defined in: [src/interfaces/IDirectory.ts:6](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/interfaces/IDirectory.ts#L6)
+Defined in: [src/interfaces/IDirectory.ts:6](https://github.com/Atlas-DePIN/atlas.js/blob/69650d8e09f33d42ed4e3b3886bc77ab85f5ade6/src/interfaces/IDirectory.ts#L6)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [src/interfaces/IDirectory.ts:6](https://github.com/Atlas-DePIN/atla
 
 > **objects**: `string`[]
 
-Defined in: [src/interfaces/IDirectory.ts:10](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/interfaces/IDirectory.ts#L10)
+Defined in: [src/interfaces/IDirectory.ts:10](https://github.com/Atlas-DePIN/atlas.js/blob/69650d8e09f33d42ed4e3b3886bc77ab85f5ade6/src/interfaces/IDirectory.ts#L10)
 
 ***
 
@@ -38,7 +38,7 @@ Defined in: [src/interfaces/IDirectory.ts:10](https://github.com/Atlas-DePIN/atl
 
 > **path**: `string`
 
-Defined in: [src/interfaces/IDirectory.ts:5](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/interfaces/IDirectory.ts#L5)
+Defined in: [src/interfaces/IDirectory.ts:5](https://github.com/Atlas-DePIN/atlas.js/blob/69650d8e09f33d42ed4e3b3886bc77ab85f5ade6/src/interfaces/IDirectory.ts#L5)
 
 ***
 
@@ -46,4 +46,4 @@ Defined in: [src/interfaces/IDirectory.ts:5](https://github.com/Atlas-DePIN/atla
 
 > **subdirs**: [`IAtlasDirectoryInfo`](IAtlasDirectoryInfo.md)[]
 
-Defined in: [src/interfaces/IDirectory.ts:9](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/interfaces/IDirectory.ts#L9)
+Defined in: [src/interfaces/IDirectory.ts:9](https://github.com/Atlas-DePIN/atlas.js/blob/69650d8e09f33d42ed4e3b3886bc77ab85f5ade6/src/interfaces/IDirectory.ts#L9)

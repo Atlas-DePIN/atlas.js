@@ -1,4 +1,4 @@
-[**atlas.js v0.1.0**](../README.md)
+[**atlas.js v0.2.0**](../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 # Interface: TxOptions
 
-Defined in: [src/interfaces/wallet.ts:10](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/interfaces/wallet.ts#L10)
+Defined in: [src/interfaces/wallet.ts:10](https://github.com/Atlas-DePIN/atlas.js/blob/69650d8e09f33d42ed4e3b3886bc77ab85f5ade6/src/interfaces/wallet.ts#L10)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/interfaces/wallet.ts:10](https://github.com/Atlas-DePIN/atlas.j
 
 > `optional` **fee?**: `any`
 
-Defined in: [src/interfaces/wallet.ts:12](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/interfaces/wallet.ts#L12)
+Defined in: [src/interfaces/wallet.ts:12](https://github.com/Atlas-DePIN/atlas.js/blob/69650d8e09f33d42ed4e3b3886bc77ab85f5ade6/src/interfaces/wallet.ts#L12)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/interfaces/wallet.ts:12](https://github.com/Atlas-DePIN/atlas.j
 
 > `optional` **gas?**: `string`
 
-Defined in: [src/interfaces/wallet.ts:13](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/interfaces/wallet.ts#L13)
+Defined in: [src/interfaces/wallet.ts:13](https://github.com/Atlas-DePIN/atlas.js/blob/69650d8e09f33d42ed4e3b3886bc77ab85f5ade6/src/interfaces/wallet.ts#L13)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [src/interfaces/wallet.ts:13](https://github.com/Atlas-DePIN/atlas.j
 
 > `optional` **gasAdjustment?**: `number`
 
-Defined in: [src/interfaces/wallet.ts:14](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/interfaces/wallet.ts#L14)
+Defined in: [src/interfaces/wallet.ts:14](https://github.com/Atlas-DePIN/atlas.js/blob/69650d8e09f33d42ed4e3b3886bc77ab85f5ade6/src/interfaces/wallet.ts#L14)
 
 ***
 
@@ -38,4 +38,4 @@ Defined in: [src/interfaces/wallet.ts:14](https://github.com/Atlas-DePIN/atlas.j
 
 > `optional` **memo?**: `string`
 
-Defined in: [src/interfaces/wallet.ts:11](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/interfaces/wallet.ts#L11)
+Defined in: [src/interfaces/wallet.ts:11](https://github.com/Atlas-DePIN/atlas.js/blob/69650d8e09f33d42ed4e3b3886bc77ab85f5ade6/src/interfaces/wallet.ts#L11)

@@ -1,4 +1,4 @@
-[**atlas.js v0.1.0**](../README.md)
+[**atlas.js v0.2.0**](../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 # Interface: IQueryHelper
 
-Defined in: [src/interfaces/classes/IQueryHelper.ts:7](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/interfaces/classes/IQueryHelper.ts#L7)
+Defined in: [src/interfaces/classes/IQueryHelper.ts:7](https://github.com/Atlas-DePIN/atlas.js/blob/69650d8e09f33d42ed4e3b3886bc77ab85f5ade6/src/interfaces/classes/IQueryHelper.ts#L7)
 
 ## Methods
 
@@ -14,7 +14,7 @@ Defined in: [src/interfaces/classes/IQueryHelper.ts:7](https://github.com/Atlas-
 
 > **file**(`fid`): `Promise`\<`File`\>
 
-Defined in: [src/interfaces/classes/IQueryHelper.ts:11](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/interfaces/classes/IQueryHelper.ts#L11)
+Defined in: [src/interfaces/classes/IQueryHelper.ts:11](https://github.com/Atlas-DePIN/atlas.js/blob/69650d8e09f33d42ed4e3b3886bc77ab85f5ade6/src/interfaces/classes/IQueryHelper.ts#L11)
 
 #### Parameters
 
@@ -32,7 +32,7 @@ Defined in: [src/interfaces/classes/IQueryHelper.ts:11](https://github.com/Atlas
 
 > **fileStats**(): `Promise`\<`QueryFileStatsResponse`\>
 
-Defined in: [src/interfaces/classes/IQueryHelper.ts:8](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/interfaces/classes/IQueryHelper.ts#L8)
+Defined in: [src/interfaces/classes/IQueryHelper.ts:8](https://github.com/Atlas-DePIN/atlas.js/blob/69650d8e09f33d42ed4e3b3886bc77ab85f5ade6/src/interfaces/classes/IQueryHelper.ts#L8)
 
 #### Returns
 
@@ -44,7 +44,7 @@ Defined in: [src/interfaces/classes/IQueryHelper.ts:8](https://github.com/Atlas-
 
 > **provider**(`address`): `Promise`\<`Provider`\>
 
-Defined in: [src/interfaces/classes/IQueryHelper.ts:14](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/interfaces/classes/IQueryHelper.ts#L14)
+Defined in: [src/interfaces/classes/IQueryHelper.ts:14](https://github.com/Atlas-DePIN/atlas.js/blob/69650d8e09f33d42ed4e3b3886bc77ab85f5ade6/src/interfaces/classes/IQueryHelper.ts#L14)
 
 #### Parameters
 
@@ -62,7 +62,7 @@ Defined in: [src/interfaces/classes/IQueryHelper.ts:14](https://github.com/Atlas
 
 > **providers**(): `Promise`\<`Provider`[]\>
 
-Defined in: [src/interfaces/classes/IQueryHelper.ts:15](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/interfaces/classes/IQueryHelper.ts#L15)
+Defined in: [src/interfaces/classes/IQueryHelper.ts:15](https://github.com/Atlas-DePIN/atlas.js/blob/69650d8e09f33d42ed4e3b3886bc77ab85f5ade6/src/interfaces/classes/IQueryHelper.ts#L15)
 
 #### Returns
 
@@ -74,7 +74,7 @@ Defined in: [src/interfaces/classes/IQueryHelper.ts:15](https://github.com/Atlas
 
 > **storageStats**(): `Promise`\<`QueryStorageStatsResponse`\>
 
-Defined in: [src/interfaces/classes/IQueryHelper.ts:9](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/interfaces/classes/IQueryHelper.ts#L9)
+Defined in: [src/interfaces/classes/IQueryHelper.ts:9](https://github.com/Atlas-DePIN/atlas.js/blob/69650d8e09f33d42ed4e3b3886bc77ab85f5ade6/src/interfaces/classes/IQueryHelper.ts#L9)
 
 #### Returns
 
@@ -86,7 +86,7 @@ Defined in: [src/interfaces/classes/IQueryHelper.ts:9](https://github.com/Atlas-
 
 > **subscription**(`address`, `id?`): `Promise`\<`StorageSubscription`\>
 
-Defined in: [src/interfaces/classes/IQueryHelper.ts:13](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/interfaces/classes/IQueryHelper.ts#L13)
+Defined in: [src/interfaces/classes/IQueryHelper.ts:13](https://github.com/Atlas-DePIN/atlas.js/blob/69650d8e09f33d42ed4e3b3886bc77ab85f5ade6/src/interfaces/classes/IQueryHelper.ts#L13)
 
 #### Parameters
 
@@ -108,7 +108,7 @@ Defined in: [src/interfaces/classes/IQueryHelper.ts:13](https://github.com/Atlas
 
 > **subscriptions**(`address`): `Promise`\<`StorageSubscription`[]\>
 
-Defined in: [src/interfaces/classes/IQueryHelper.ts:12](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/interfaces/classes/IQueryHelper.ts#L12)
+Defined in: [src/interfaces/classes/IQueryHelper.ts:12](https://github.com/Atlas-DePIN/atlas.js/blob/69650d8e09f33d42ed4e3b3886bc77ab85f5ade6/src/interfaces/classes/IQueryHelper.ts#L12)
 
 #### Parameters
 
@@ -126,7 +126,7 @@ Defined in: [src/interfaces/classes/IQueryHelper.ts:12](https://github.com/Atlas
 
 > **treeNode**(`path`, `subscription`, `owner`): `Promise`\<`TreeNode`\>
 
-Defined in: [src/interfaces/classes/IQueryHelper.ts:17](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/interfaces/classes/IQueryHelper.ts#L17)
+Defined in: [src/interfaces/classes/IQueryHelper.ts:17](https://github.com/Atlas-DePIN/atlas.js/blob/69650d8e09f33d42ed4e3b3886bc77ab85f5ade6/src/interfaces/classes/IQueryHelper.ts#L17)
 
 #### Parameters
 
@@ -152,7 +152,7 @@ Defined in: [src/interfaces/classes/IQueryHelper.ts:17](https://github.com/Atlas
 
 > **treeNodeChildren**(`path`, `subscription`, `owner`): `Promise`\<`TreeNode`[]\>
 
-Defined in: [src/interfaces/classes/IQueryHelper.ts:18](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/interfaces/classes/IQueryHelper.ts#L18)
+Defined in: [src/interfaces/classes/IQueryHelper.ts:18](https://github.com/Atlas-DePIN/atlas.js/blob/69650d8e09f33d42ed4e3b3886bc77ab85f5ade6/src/interfaces/classes/IQueryHelper.ts#L18)
 
 #### Parameters
 

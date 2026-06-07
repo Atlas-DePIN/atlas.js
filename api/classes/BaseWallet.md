@@ -1,4 +1,4 @@
-[**atlas.js v0.1.0**](../README.md)
+[**atlas.js v0.2.0**](../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 # Abstract Class: BaseWallet
 
-Defined in: [src/wallets/base-wallet.ts:24](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/wallets/base-wallet.ts#L24)
+Defined in: [src/wallets/base-wallet.ts:23](https://github.com/Atlas-DePIN/atlas.js/blob/69650d8e09f33d42ed4e3b3886bc77ab85f5ade6/src/wallets/base-wallet.ts#L23)
 
 Abstract base class for wallet implementations.
 
@@ -23,7 +23,7 @@ Subclasses must implement [connect](#connect), [disconnect](#disconnect),
 
 > **new BaseWallet**(`config`): `BaseWallet`
 
-Defined in: [src/wallets/base-wallet.ts:46](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/wallets/base-wallet.ts#L46)
+Defined in: [src/wallets/base-wallet.ts:45](https://github.com/Atlas-DePIN/atlas.js/blob/69650d8e09f33d42ed4e3b3886bc77ab85f5ade6/src/wallets/base-wallet.ts#L45)
 
 #### Parameters
 
@@ -44,7 +44,7 @@ Configuration object containing endpoint, gas price,
 
 > `protected` **\_address**: `string` = `""`
 
-Defined in: [src/wallets/base-wallet.ts:29](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/wallets/base-wallet.ts#L29)
+Defined in: [src/wallets/base-wallet.ts:28](https://github.com/Atlas-DePIN/atlas.js/blob/69650d8e09f33d42ed4e3b3886bc77ab85f5ade6/src/wallets/base-wallet.ts#L28)
 
 Active wallet address
 
@@ -54,7 +54,7 @@ Active wallet address
 
 > `protected` **config**: [`AtlasConfig`](../interfaces/AtlasConfig.md)
 
-Defined in: [src/wallets/base-wallet.ts:26](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/wallets/base-wallet.ts#L26)
+Defined in: [src/wallets/base-wallet.ts:25](https://github.com/Atlas-DePIN/atlas.js/blob/69650d8e09f33d42ed4e3b3886bc77ab85f5ade6/src/wallets/base-wallet.ts#L25)
 
 Wallet-level configuration (RPC endpoint, gas price, etc.).
 
@@ -64,7 +64,7 @@ Wallet-level configuration (RPC endpoint, gas price, etc.).
 
 > `protected` **queryClient**: `StargateClient` = `null`
 
-Defined in: [src/wallets/base-wallet.ts:35](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/wallets/base-wallet.ts#L35)
+Defined in: [src/wallets/base-wallet.ts:34](https://github.com/Atlas-DePIN/atlas.js/blob/69650d8e09f33d42ed4e3b3886bc77ab85f5ade6/src/wallets/base-wallet.ts#L34)
 
 Read-only Stargate client for queries (balance, account info).
 
@@ -74,7 +74,7 @@ Read-only Stargate client for queries (balance, account info).
 
 > `protected` **signingClient**: `SigningStargateClient` = `null`
 
-Defined in: [src/wallets/base-wallet.ts:38](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/wallets/base-wallet.ts#L38)
+Defined in: [src/wallets/base-wallet.ts:37](https://github.com/Atlas-DePIN/atlas.js/blob/69650d8e09f33d42ed4e3b3886bc77ab85f5ade6/src/wallets/base-wallet.ts#L37)
 
 Signing Stargate client for broadcasting transactions.
 
@@ -86,7 +86,7 @@ Signing Stargate client for broadcasting transactions.
 
 > **get** **address**(): `string`
 
-Defined in: [src/wallets/base-wallet.ts:30](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/wallets/base-wallet.ts#L30)
+Defined in: [src/wallets/base-wallet.ts:29](https://github.com/Atlas-DePIN/atlas.js/blob/69650d8e09f33d42ed4e3b3886bc77ab85f5ade6/src/wallets/base-wallet.ts#L29)
 
 ##### Returns
 
@@ -98,7 +98,7 @@ Defined in: [src/wallets/base-wallet.ts:30](https://github.com/Atlas-DePIN/atlas
 
 > `abstract` **connect**(): `Promise`\<`void`\>
 
-Defined in: [src/wallets/base-wallet.ts:57](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/wallets/base-wallet.ts#L57)
+Defined in: [src/wallets/base-wallet.ts:56](https://github.com/Atlas-DePIN/atlas.js/blob/69650d8e09f33d42ed4e3b3886bc77ab85f5ade6/src/wallets/base-wallet.ts#L56)
 
 Establish a wallet connection.
 
@@ -116,7 +116,7 @@ metadata.
 
 > `abstract` **disconnect**(): `Promise`\<`void`\>
 
-Defined in: [src/wallets/base-wallet.ts:60](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/wallets/base-wallet.ts#L60)
+Defined in: [src/wallets/base-wallet.ts:59](https://github.com/Atlas-DePIN/atlas.js/blob/69650d8e09f33d42ed4e3b3886bc77ab85f5ade6/src/wallets/base-wallet.ts#L59)
 
 Tear down the wallet connection and release any held resources.
 
@@ -130,7 +130,7 @@ Tear down the wallet connection and release any held resources.
 
 > **getAccountBalance**(): `Promise`\<readonly `Coin`[]\>
 
-Defined in: [src/wallets/base-wallet.ts:111](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/wallets/base-wallet.ts#L111)
+Defined in: [src/wallets/base-wallet.ts:110](https://github.com/Atlas-DePIN/atlas.js/blob/69650d8e09f33d42ed4e3b3886bc77ab85f5ade6/src/wallets/base-wallet.ts#L110)
 
 Fetch all non-zero balance coins for the connected wallet address.
 
@@ -148,7 +148,7 @@ If the wallet is not connected.
 
 > **getAccountInfo**(): `Promise`\<`Account`\>
 
-Defined in: [src/wallets/base-wallet.ts:101](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/wallets/base-wallet.ts#L101)
+Defined in: [src/wallets/base-wallet.ts:100](https://github.com/Atlas-DePIN/atlas.js/blob/69650d8e09f33d42ed4e3b3886bc77ab85f5ade6/src/wallets/base-wallet.ts#L100)
 
 Fetch the on-chain account information for the connected wallet address.
 
@@ -166,7 +166,7 @@ If the wallet is not connected.
 
 > **getQueryClient**(): `StargateClient`
 
-Defined in: [src/wallets/base-wallet.ts:92](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/wallets/base-wallet.ts#L92)
+Defined in: [src/wallets/base-wallet.ts:91](https://github.com/Atlas-DePIN/atlas.js/blob/69650d8e09f33d42ed4e3b3886bc77ab85f5ade6/src/wallets/base-wallet.ts#L91)
 
 Return the active query client, or `null` if not connected.
 
@@ -180,7 +180,7 @@ Return the active query client, or `null` if not connected.
 
 > **getSigningClient**(): `SigningStargateClient`
 
-Defined in: [src/wallets/base-wallet.ts:85](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/wallets/base-wallet.ts#L85)
+Defined in: [src/wallets/base-wallet.ts:84](https://github.com/Atlas-DePIN/atlas.js/blob/69650d8e09f33d42ed4e3b3886bc77ab85f5ade6/src/wallets/base-wallet.ts#L84)
 
 Return the active signing client, or `null` if not connected.
 
@@ -194,7 +194,7 @@ Return the active signing client, or `null` if not connected.
 
 > `abstract` **getWalletType**(): [`WalletType`](../enumerations/WalletType.md)
 
-Defined in: [src/wallets/base-wallet.ts:63](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/wallets/base-wallet.ts#L63)
+Defined in: [src/wallets/base-wallet.ts:62](https://github.com/Atlas-DePIN/atlas.js/blob/69650d8e09f33d42ed4e3b3886bc77ab85f5ade6/src/wallets/base-wallet.ts#L62)
 
 Return the concrete wallet type for this implementation.
 
@@ -208,7 +208,7 @@ Return the concrete wallet type for this implementation.
 
 > `protected` **initializeClients**(`offlineSigner`, `address`): `Promise`\<`void`\>
 
-Defined in: [src/wallets/base-wallet.ts:189](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/wallets/base-wallet.ts#L189)
+Defined in: [src/wallets/base-wallet.ts:188](https://github.com/Atlas-DePIN/atlas.js/blob/69650d8e09f33d42ed4e3b3886bc77ab85f5ade6/src/wallets/base-wallet.ts#L188)
 
 Initialize the query and signing Stargate clients.
 
@@ -246,7 +246,7 @@ If either client fails to initialize.
 
 > **isConnected**(): `boolean`
 
-Defined in: [src/wallets/base-wallet.ts:78](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/wallets/base-wallet.ts#L78)
+Defined in: [src/wallets/base-wallet.ts:77](https://github.com/Atlas-DePIN/atlas.js/blob/69650d8e09f33d42ed4e3b3886bc77ab85f5ade6/src/wallets/base-wallet.ts#L77)
 
 Check whether the wallet is currently connected and ready for use.
 
@@ -263,7 +263,7 @@ are all not null.
 
 > **refreshClients**(): `Promise`\<`void`\>
 
-Defined in: [src/wallets/base-wallet.ts:227](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/wallets/base-wallet.ts#L227)
+Defined in: [src/wallets/base-wallet.ts:226](https://github.com/Atlas-DePIN/atlas.js/blob/69650d8e09f33d42ed4e3b3886bc77ab85f5ade6/src/wallets/base-wallet.ts#L226)
 
 Re-initialize the query and signing clients using the existing
 wallet connection.
@@ -284,7 +284,7 @@ If no wallet connection has been established.
 
 > **signAndBroadcastTransaction**(`txBody`, `options?`): `Promise`\<`DeliverTxResponse`\>
 
-Defined in: [src/wallets/base-wallet.ts:132](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/wallets/base-wallet.ts#L132)
+Defined in: [src/wallets/base-wallet.ts:131](https://github.com/Atlas-DePIN/atlas.js/blob/69650d8e09f33d42ed4e3b3886bc77ab85f5ade6/src/wallets/base-wallet.ts#L131)
 
 Sign and broadcast a transaction constructed from a `TxBody`.
 
@@ -323,9 +323,9 @@ If the wallet is not connected or the transaction fails.
 
 ### signArbitrary()
 
-> `abstract` **signArbitrary**(`data`): `Promise`\<[`SigningResult`](../interfaces/SigningResult.md)\>
+> `abstract` **signArbitrary**(`data`): `Promise`\<`string`\>
 
-Defined in: [src/wallets/base-wallet.ts:70](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/wallets/base-wallet.ts#L70)
+Defined in: [src/wallets/base-wallet.ts:69](https://github.com/Atlas-DePIN/atlas.js/blob/69650d8e09f33d42ed4e3b3886bc77ab85f5ade6/src/wallets/base-wallet.ts#L69)
 
 Sign an arbitrary piece of data (string or bytes) using the wallet's key.
 
@@ -339,7 +339,7 @@ The data to sign, as a string or `Uint8Array`.
 
 #### Returns
 
-`Promise`\<[`SigningResult`](../interfaces/SigningResult.md)\>
+`Promise`\<`string`\>
 
 ***
 
@@ -347,7 +347,7 @@ The data to sign, as a string or `Uint8Array`.
 
 > **simulateTransaction**(`messages`, `options?`): `Promise`\<`number`\>
 
-Defined in: [src/wallets/base-wallet.ts:169](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/wallets/base-wallet.ts#L169)
+Defined in: [src/wallets/base-wallet.ts:168](https://github.com/Atlas-DePIN/atlas.js/blob/69650d8e09f33d42ed4e3b3886bc77ab85f5ade6/src/wallets/base-wallet.ts#L168)
 
 Simulate a transaction without broadcasting it.
 

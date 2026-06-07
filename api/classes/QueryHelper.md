@@ -1,4 +1,4 @@
-[**atlas.js v0.1.0**](../README.md)
+[**atlas.js v0.2.0**](../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 # Class: QueryHelper
 
-Defined in: [src/query-helper.ts:11](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/query-helper.ts#L11)
+Defined in: [src/query-helper.ts:11](https://github.com/Atlas-DePIN/atlas.js/blob/69650d8e09f33d42ed4e3b3886bc77ab85f5ade6/src/query-helper.ts#L11)
 
 ## Implements
 
@@ -18,7 +18,7 @@ Defined in: [src/query-helper.ts:11](https://github.com/Atlas-DePIN/atlas.js/blo
 
 > **new QueryHelper**(`client`): `QueryHelper`
 
-Defined in: [src/query-helper.ts:14](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/query-helper.ts#L14)
+Defined in: [src/query-helper.ts:14](https://github.com/Atlas-DePIN/atlas.js/blob/69650d8e09f33d42ed4e3b3886bc77ab85f5ade6/src/query-helper.ts#L14)
 
 #### Parameters
 
@@ -36,7 +36,7 @@ Defined in: [src/query-helper.ts:14](https://github.com/Atlas-DePIN/atlas.js/blo
 
 > `protected` **client**: [`QueryClient`](../interfaces/QueryClient.md)
 
-Defined in: [src/query-helper.ts:12](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/query-helper.ts#L12)
+Defined in: [src/query-helper.ts:12](https://github.com/Atlas-DePIN/atlas.js/blob/69650d8e09f33d42ed4e3b3886bc77ab85f5ade6/src/query-helper.ts#L12)
 
 ## Methods
 
@@ -44,7 +44,7 @@ Defined in: [src/query-helper.ts:12](https://github.com/Atlas-DePIN/atlas.js/blo
 
 > **file**(`fid`): `Promise`\<`File`\>
 
-Defined in: [src/query-helper.ts:24](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/query-helper.ts#L24)
+Defined in: [src/query-helper.ts:24](https://github.com/Atlas-DePIN/atlas.js/blob/69650d8e09f33d42ed4e3b3886bc77ab85f5ade6/src/query-helper.ts#L24)
 
 #### Parameters
 
@@ -66,7 +66,7 @@ Defined in: [src/query-helper.ts:24](https://github.com/Atlas-DePIN/atlas.js/blo
 
 > **fileStats**(): `Promise`\<`QueryFileStatsResponse`\>
 
-Defined in: [src/query-helper.ts:18](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/query-helper.ts#L18)
+Defined in: [src/query-helper.ts:18](https://github.com/Atlas-DePIN/atlas.js/blob/69650d8e09f33d42ed4e3b3886bc77ab85f5ade6/src/query-helper.ts#L18)
 
 #### Returns
 
@@ -82,7 +82,7 @@ Defined in: [src/query-helper.ts:18](https://github.com/Atlas-DePIN/atlas.js/blo
 
 > **provider**(`address`): `Promise`\<`Provider`\>
 
-Defined in: [src/query-helper.ts:30](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/query-helper.ts#L30)
+Defined in: [src/query-helper.ts:30](https://github.com/Atlas-DePIN/atlas.js/blob/69650d8e09f33d42ed4e3b3886bc77ab85f5ade6/src/query-helper.ts#L30)
 
 #### Parameters
 
@@ -104,7 +104,7 @@ Defined in: [src/query-helper.ts:30](https://github.com/Atlas-DePIN/atlas.js/blo
 
 > **providers**(): `Promise`\<`Provider`[]\>
 
-Defined in: [src/query-helper.ts:33](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/query-helper.ts#L33)
+Defined in: [src/query-helper.ts:33](https://github.com/Atlas-DePIN/atlas.js/blob/69650d8e09f33d42ed4e3b3886bc77ab85f5ade6/src/query-helper.ts#L33)
 
 #### Returns
 
@@ -120,7 +120,7 @@ Defined in: [src/query-helper.ts:33](https://github.com/Atlas-DePIN/atlas.js/blo
 
 > **storageStats**(): `Promise`\<`QueryStorageStatsResponse`\>
 
-Defined in: [src/query-helper.ts:21](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/query-helper.ts#L21)
+Defined in: [src/query-helper.ts:21](https://github.com/Atlas-DePIN/atlas.js/blob/69650d8e09f33d42ed4e3b3886bc77ab85f5ade6/src/query-helper.ts#L21)
 
 #### Returns
 
@@ -136,7 +136,7 @@ Defined in: [src/query-helper.ts:21](https://github.com/Atlas-DePIN/atlas.js/blo
 
 > **subscription**(`address`, `id?`): `Promise`\<`StorageSubscription`\>
 
-Defined in: [src/query-helper.ts:43](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/query-helper.ts#L43)
+Defined in: [src/query-helper.ts:43](https://github.com/Atlas-DePIN/atlas.js/blob/69650d8e09f33d42ed4e3b3886bc77ab85f5ade6/src/query-helper.ts#L43)
 
 #### Parameters
 
@@ -162,7 +162,7 @@ Defined in: [src/query-helper.ts:43](https://github.com/Atlas-DePIN/atlas.js/blo
 
 > **subscriptions**(`address`): `Promise`\<`StorageSubscription`[]\>
 
-Defined in: [src/query-helper.ts:27](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/query-helper.ts#L27)
+Defined in: [src/query-helper.ts:27](https://github.com/Atlas-DePIN/atlas.js/blob/69650d8e09f33d42ed4e3b3886bc77ab85f5ade6/src/query-helper.ts#L27)
 
 #### Parameters
 
@@ -184,7 +184,7 @@ Defined in: [src/query-helper.ts:27](https://github.com/Atlas-DePIN/atlas.js/blo
 
 > **treeNode**(`owner`, `path`): `Promise`\<`TreeNode`\>
 
-Defined in: [src/query-helper.ts:36](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/query-helper.ts#L36)
+Defined in: [src/query-helper.ts:36](https://github.com/Atlas-DePIN/atlas.js/blob/69650d8e09f33d42ed4e3b3886bc77ab85f5ade6/src/query-helper.ts#L36)
 
 #### Parameters
 
@@ -210,7 +210,7 @@ Defined in: [src/query-helper.ts:36](https://github.com/Atlas-DePIN/atlas.js/blo
 
 > **treeNodeChildren**(`owner`, `path`): `Promise`\<`TreeNode`[]\>
 
-Defined in: [src/query-helper.ts:39](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/query-helper.ts#L39)
+Defined in: [src/query-helper.ts:39](https://github.com/Atlas-DePIN/atlas.js/blob/69650d8e09f33d42ed4e3b3886bc77ab85f5ade6/src/query-helper.ts#L39)
 
 #### Parameters
 

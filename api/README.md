@@ -1,8 +1,8 @@
-**atlas.js v0.1.0**
+**atlas.js v0.2.0**
 
 ***
 
-# atlas.js v0.1.0
+# atlas.js v0.2.0
 
 ## Enumerations
 
@@ -38,7 +38,6 @@
 - [IQueryHelper](interfaces/IQueryHelper.md)
 - [IQueuedFile](interfaces/IQueuedFile.md)
 - [QueryClient](interfaces/QueryClient.md)
-- [SigningResult](interfaces/SigningResult.md)
 - [TxOptions](interfaces/TxOptions.md)
 - [WalletInfo](interfaces/WalletInfo.md)
 

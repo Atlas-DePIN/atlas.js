@@ -1,4 +1,4 @@
-[**atlas.js v0.1.0**](../README.md)
+[**atlas.js v0.2.0**](../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 # Class: StorageHandler
 
-Defined in: [src/storage-handler.ts:40](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/storage-handler.ts#L40)
+Defined in: [src/storage-handler.ts:41](https://github.com/Atlas-DePIN/atlas.js/blob/69650d8e09f33d42ed4e3b3886bc77ab85f5ade6/src/storage-handler.ts#L41)
 
 Manages the storage lifecycle for a connected Atlas wallet.
 
@@ -27,7 +27,7 @@ directory navigation without polling.
 
 > **new StorageHandler**(`client`): `StorageHandler`
 
-Defined in: [src/storage-handler.ts:77](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/storage-handler.ts#L77)
+Defined in: [src/storage-handler.ts:78](https://github.com/Atlas-DePIN/atlas.js/blob/69650d8e09f33d42ed4e3b3886bc77ab85f5ade6/src/storage-handler.ts#L78)
 
 Create a storage handler bound to an Atlas client and its active wallet.
 
@@ -54,7 +54,7 @@ storage state when the user switches accounts.
 
 > `protected` **access**: `PrivateKey`
 
-Defined in: [src/storage-handler.ts:42](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/storage-handler.ts#L42)
+Defined in: [src/storage-handler.ts:43](https://github.com/Atlas-DePIN/atlas.js/blob/69650d8e09f33d42ed4e3b3886bc77ab85f5ade6/src/storage-handler.ts#L43)
 
 ***
 
@@ -62,7 +62,7 @@ Defined in: [src/storage-handler.ts:42](https://github.com/Atlas-DePIN/atlas.js/
 
 > `protected` **client**: [`AtlasClient`](AtlasClient.md)
 
-Defined in: [src/storage-handler.ts:41](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/storage-handler.ts#L41)
+Defined in: [src/storage-handler.ts:42](https://github.com/Atlas-DePIN/atlas.js/blob/69650d8e09f33d42ed4e3b3886bc77ab85f5ade6/src/storage-handler.ts#L42)
 
 ***
 
@@ -70,7 +70,7 @@ Defined in: [src/storage-handler.ts:41](https://github.com/Atlas-DePIN/atlas.js/
 
 > **emit**: (`event`, ...`args`) => `boolean`
 
-Defined in: [src/storage-handler.ts:88](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/storage-handler.ts#L88)
+Defined in: [src/storage-handler.ts:89](https://github.com/Atlas-DePIN/atlas.js/blob/69650d8e09f33d42ed4e3b3886bc77ab85f5ade6/src/storage-handler.ts#L89)
 
 Synchronously calls each of the listeners registered for the event named `eventName`, in the order they were registered, passing the supplied arguments
 to each.
@@ -138,7 +138,7 @@ v0.1.26
 
 > `protected` **filetree**: [`FiletreeHelper`](FiletreeHelper.md)
 
-Defined in: [src/storage-handler.ts:43](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/storage-handler.ts#L43)
+Defined in: [src/storage-handler.ts:44](https://github.com/Atlas-DePIN/atlas.js/blob/69650d8e09f33d42ed4e3b3886bc77ab85f5ade6/src/storage-handler.ts#L44)
 
 ***
 
@@ -146,7 +146,7 @@ Defined in: [src/storage-handler.ts:43](https://github.com/Atlas-DePIN/atlas.js/
 
 > **off**: (`event`, `listener`) => `this`
 
-Defined in: [src/storage-handler.ts:87](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/storage-handler.ts#L87)
+Defined in: [src/storage-handler.ts:88](https://github.com/Atlas-DePIN/atlas.js/blob/69650d8e09f33d42ed4e3b3886bc77ab85f5ade6/src/storage-handler.ts#L88)
 
 Alias for `emitter.removeListener()`.
 
@@ -178,7 +178,7 @@ v10.0.0
 
 > **on**: (`event`, `listener`) => `this`
 
-Defined in: [src/storage-handler.ts:86](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/storage-handler.ts#L86)
+Defined in: [src/storage-handler.ts:87](https://github.com/Atlas-DePIN/atlas.js/blob/69650d8e09f33d42ed4e3b3886bc77ab85f5ade6/src/storage-handler.ts#L87)
 
 Adds the `listener` function to the end of the listeners array for the event
 named `eventName`. No checks are made to see if the `listener` has already
@@ -237,7 +237,7 @@ v0.1.101
 
 > `protected` **queuedFiles**: `Map`\<`string`, [`IQueuedFile`](../interfaces/IQueuedFile.md)\>
 
-Defined in: [src/storage-handler.ts:45](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/storage-handler.ts#L45)
+Defined in: [src/storage-handler.ts:46](https://github.com/Atlas-DePIN/atlas.js/blob/69650d8e09f33d42ed4e3b3886bc77ab85f5ade6/src/storage-handler.ts#L46)
 
 ***
 
@@ -360,7 +360,7 @@ v13.6.0, v12.17.0
 
 > **get** **directory**(): [`IDirectory`](../interfaces/IDirectory.md)
 
-Defined in: [src/storage-handler.ts:67](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/storage-handler.ts#L67)
+Defined in: [src/storage-handler.ts:68](https://github.com/Atlas-DePIN/atlas.js/blob/69650d8e09f33d42ed4e3b3886bc77ab85f5ade6/src/storage-handler.ts#L68)
 
 ##### Returns
 
@@ -374,7 +374,7 @@ Defined in: [src/storage-handler.ts:67](https://github.com/Atlas-DePIN/atlas.js/
 
 > **get** **drives**(): [`IAtlasDriveInfo`](../interfaces/IAtlasDriveInfo.md)[]
 
-Defined in: [src/storage-handler.ts:61](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/storage-handler.ts#L61)
+Defined in: [src/storage-handler.ts:62](https://github.com/Atlas-DePIN/atlas.js/blob/69650d8e09f33d42ed4e3b3886bc77ab85f5ade6/src/storage-handler.ts#L62)
 
 ##### Returns
 
@@ -388,7 +388,7 @@ Defined in: [src/storage-handler.ts:61](https://github.com/Atlas-DePIN/atlas.js/
 
 > **get** **providers**(): `Provider`[]
 
-Defined in: [src/storage-handler.ts:49](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/storage-handler.ts#L49)
+Defined in: [src/storage-handler.ts:50](https://github.com/Atlas-DePIN/atlas.js/blob/69650d8e09f33d42ed4e3b3886bc77ab85f5ade6/src/storage-handler.ts#L50)
 
 ##### Returns
 
@@ -402,7 +402,7 @@ Defined in: [src/storage-handler.ts:49](https://github.com/Atlas-DePIN/atlas.js/
 
 > **get** **subscription**(): `StorageSubscription`
 
-Defined in: [src/storage-handler.ts:55](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/storage-handler.ts#L55)
+Defined in: [src/storage-handler.ts:56](https://github.com/Atlas-DePIN/atlas.js/blob/69650d8e09f33d42ed4e3b3886bc77ab85f5ade6/src/storage-handler.ts#L56)
 
 ##### Returns
 
@@ -488,7 +488,7 @@ v0.1.26
 
 > `protected` **commitAll**(`files`, `dir`): `Promise`\<`void`\>
 
-Defined in: [src/storage-handler.ts:315](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/storage-handler.ts#L315)
+Defined in: [src/storage-handler.ts:394](https://github.com/Atlas-DePIN/atlas.js/blob/69650d8e09f33d42ed4e3b3886bc77ab85f5ade6/src/storage-handler.ts#L394)
 
 #### Parameters
 
@@ -506,11 +506,70 @@ Defined in: [src/storage-handler.ts:315](https://github.com/Atlas-DePIN/atlas.js
 
 ***
 
+### downloadFile()
+
+> **downloadFile**(`fid`, `basepath?`): `Promise`\<`File`\>
+
+Defined in: [src/storage-handler.ts:347](https://github.com/Atlas-DePIN/atlas.js/blob/69650d8e09f33d42ed4e3b3886bc77ab85f5ade6/src/storage-handler.ts#L347)
+
+Download a file by FID from one of its assigned storage providers.
+
+Encrypted files are decrypted with the viewer authority bundle stored on
+the filetree node.
+
+#### Parameters
+
+##### fid
+
+`string`
+
+##### basepath?
+
+`string` = `...`
+
+#### Returns
+
+`Promise`\<`File`\>
+
+***
+
+### downloadRaw()
+
+> **downloadRaw**(`fid`, `provider`, `fileName`, `fileMeta`): `Promise`\<`File`\>
+
+Defined in: [src/storage-handler.ts:376](https://github.com/Atlas-DePIN/atlas.js/blob/69650d8e09f33d42ed4e3b3886bc77ab85f5ade6/src/storage-handler.ts#L376)
+
+Fetch raw file bytes from the configured storage gateway.
+
+#### Parameters
+
+##### fid
+
+`string`
+
+##### provider
+
+`string`
+
+##### fileName
+
+`string`
+
+##### fileMeta
+
+`FilePropertyBag`
+
+#### Returns
+
+`Promise`\<`File`\>
+
+***
+
 ### enableSigner()
 
 > `protected` **enableSigner**(): `Promise`\<`void`\>
 
-Defined in: [src/storage-handler.ts:107](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/storage-handler.ts#L107)
+Defined in: [src/storage-handler.ts:109](https://github.com/Atlas-DePIN/atlas.js/blob/69650d8e09f33d42ed4e3b3886bc77ab85f5ade6/src/storage-handler.ts#L109)
 
 Derive an ECIES access key from the wallet's signature.
 
@@ -588,7 +647,7 @@ v1.0.0
 
 > `protected` **listDrives**(): `Promise`\<[`IAtlasDriveInfo`](../interfaces/IAtlasDriveInfo.md)[]\>
 
-Defined in: [src/storage-handler.ts:240](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/storage-handler.ts#L240)
+Defined in: [src/storage-handler.ts:239](https://github.com/Atlas-DePIN/atlas.js/blob/69650d8e09f33d42ed4e3b3886bc77ab85f5ade6/src/storage-handler.ts#L239)
 
 List all drives owned by the connected wallet.
 
@@ -691,7 +750,7 @@ v0.1.26
 
 > `protected` **loadAccount**(): `Promise`\<`void`\>
 
-Defined in: [src/storage-handler.ts:134](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/storage-handler.ts#L134)
+Defined in: [src/storage-handler.ts:136](https://github.com/Atlas-DePIN/atlas.js/blob/69650d8e09f33d42ed4e3b3886bc77ab85f5ade6/src/storage-handler.ts#L136)
 
 Load the wallet's subscription, derive the access key, then resolve
 drives and the default directory.
@@ -709,7 +768,7 @@ Otherwise loads the first drive marked as default.
 
 > **loadDirectory**(`path`, `owner?`): `Promise`\<`void`\>
 
-Defined in: [src/storage-handler.ts:198](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/storage-handler.ts#L198)
+Defined in: [src/storage-handler.ts:196](https://github.com/Atlas-DePIN/atlas.js/blob/69650d8e09f33d42ed4e3b3886bc77ab85f5ade6/src/storage-handler.ts#L196)
 
 Load the contents of a directory and update the `directory` getter.
 
@@ -747,7 +806,7 @@ If no owner is available (no wallet connected).
 
 > **loadProviders**(): `Promise`\<`void`\>
 
-Defined in: [src/storage-handler.ts:118](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/storage-handler.ts#L118)
+Defined in: [src/storage-handler.ts:120](https://github.com/Atlas-DePIN/atlas.js/blob/69650d8e09f33d42ed4e3b3886bc77ab85f5ade6/src/storage-handler.ts#L120)
 
 Fetch the list of storage providers from the chain.
 
@@ -763,7 +822,7 @@ Updates the `providers` getter on success.
 
 > **loadSubscription**(`id?`): `Promise`\<`void`\>
 
-Defined in: [src/storage-handler.ts:174](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/storage-handler.ts#L174)
+Defined in: [src/storage-handler.ts:172](https://github.com/Atlas-DePIN/atlas.js/blob/69650d8e09f33d42ed4e3b3886bc77ab85f5ade6/src/storage-handler.ts#L172)
 
 Load the storage subscription for the connected wallet.
 
@@ -958,11 +1017,29 @@ v6.0.0
 
 ***
 
+### processAll()
+
+> `protected` **processAll**(`files`): `Promise`\<`void`\>
+
+Defined in: [src/storage-handler.ts:388](https://github.com/Atlas-DePIN/atlas.js/blob/69650d8e09f33d42ed4e3b3886bc77ab85f5ade6/src/storage-handler.ts#L388)
+
+#### Parameters
+
+##### files
+
+\[`string`, [`IQueuedFile`](../interfaces/IQueuedFile.md)\][]
+
+#### Returns
+
+`Promise`\<`void`\>
+
+***
+
 ### processFile()
 
 > `protected` **processFile**(`fileKey`): `Promise`\<`void`\>
 
-Defined in: [src/storage-handler.ts:441](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/storage-handler.ts#L441)
+Defined in: [src/storage-handler.ts:518](https://github.com/Atlas-DePIN/atlas.js/blob/69650d8e09f33d42ed4e3b3886bc77ab85f5ade6/src/storage-handler.ts#L518)
 
 #### Parameters
 
@@ -976,11 +1053,45 @@ Defined in: [src/storage-handler.ts:441](https://github.com/Atlas-DePIN/atlas.js
 
 ***
 
+### purchaseSubscription()
+
+> **purchaseSubscription**(`bytes`, `days`, `isDefault`, `address?`): `Promise`\<`string`\>
+
+Defined in: [src/storage-handler.ts:251](https://github.com/Atlas-DePIN/atlas.js/blob/69650d8e09f33d42ed4e3b3886bc77ab85f5ade6/src/storage-handler.ts#L251)
+
+Purchase a storage subscription for the active account or a receiver.
+
+The minimum purchase is one gigabyte for one day.
+
+#### Parameters
+
+##### bytes
+
+`number`
+
+##### days
+
+`number`
+
+##### isDefault
+
+`boolean`
+
+##### address?
+
+`string` = `...`
+
+#### Returns
+
+`Promise`\<`string`\>
+
+***
+
 ### queuePrivateFile()
 
 > **queuePrivateFile**(`file`, `options`): `Promise`\<`void`\>
 
-Defined in: [src/storage-handler.ts:275](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/storage-handler.ts#L275)
+Defined in: [src/storage-handler.ts:300](https://github.com/Atlas-DePIN/atlas.js/blob/69650d8e09f33d42ed4e3b3886bc77ab85f5ade6/src/storage-handler.ts#L300)
 
 Add a private (encrypted) file to the upload queue.
 
@@ -1008,7 +1119,7 @@ Upload options (replicas, encryption config).
 
 > **queuePublicFile**(`file`, `options`): `Promise`\<`void`\>
 
-Defined in: [src/storage-handler.ts:255](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/storage-handler.ts#L255)
+Defined in: [src/storage-handler.ts:280](https://github.com/Atlas-DePIN/atlas.js/blob/69650d8e09f33d42ed4e3b3886bc77ab85f5ade6/src/storage-handler.ts#L280)
 
 Add a public file to the upload queue.
 
@@ -1279,7 +1390,7 @@ v0.3.5
 
 > **startUploads**(`provider?`, `dir?`): `Promise`\<`void`\>
 
-Defined in: [src/storage-handler.ts:302](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/storage-handler.ts#L302)
+Defined in: [src/storage-handler.ts:327](https://github.com/Atlas-DePIN/atlas.js/blob/69650d8e09f33d42ed4e3b3886bc77ab85f5ade6/src/storage-handler.ts#L327)
 
 Commit queued files to the chain and upload them to storage providers.
 
@@ -1314,7 +1425,7 @@ The target directory path on the filetree. Defaults
 
 > `protected` **uploadAll**(`files`, `provider?`): `Promise`\<`void`\>
 
-Defined in: [src/storage-handler.ts:338](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/storage-handler.ts#L338)
+Defined in: [src/storage-handler.ts:417](https://github.com/Atlas-DePIN/atlas.js/blob/69650d8e09f33d42ed4e3b3886bc77ab85f5ade6/src/storage-handler.ts#L417)
 
 #### Parameters
 
@@ -1553,9 +1664,9 @@ Since v3.2.0 - Use `listenerCount` instead.
 
 ### new()
 
-> `static` **new**(`client`): `Promise`\<`void`\>
+> `static` **new**(`client`): `Promise`\<`StorageHandler`\>
 
-Defined in: [src/storage-handler.ts:95](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/storage-handler.ts#L95)
+Defined in: [src/storage-handler.ts:96](https://github.com/Atlas-DePIN/atlas.js/blob/69650d8e09f33d42ed4e3b3886bc77ab85f5ade6/src/storage-handler.ts#L96)
 
 Create a storage handler and load the user's storage account.
 
@@ -1567,7 +1678,7 @@ Create a storage handler and load the user's storage account.
 
 #### Returns
 
-`Promise`\<`void`\>
+`Promise`\<`StorageHandler`\>
 
 The initialised handler instance.
 

@@ -1,4 +1,4 @@
-[**atlas.js v0.1.0**](../README.md)
+[**atlas.js v0.2.0**](../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 # Enumeration: WalletEvents
 
-Defined in: [src/types/events.ts:5](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/types/events.ts#L5)
+Defined in: [src/types/events.ts:5](https://github.com/Atlas-DePIN/atlas.js/blob/69650d8e09f33d42ed4e3b3886bc77ab85f5ade6/src/types/events.ts#L5)
 
 ## Enumeration Members
 
@@ -14,7 +14,7 @@ Defined in: [src/types/events.ts:5](https://github.com/Atlas-DePIN/atlas.js/blob
 
 > **CONNECT**: `"connected"`
 
-Defined in: [src/types/events.ts:6](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/types/events.ts#L6)
+Defined in: [src/types/events.ts:6](https://github.com/Atlas-DePIN/atlas.js/blob/69650d8e09f33d42ed4e3b3886bc77ab85f5ade6/src/types/events.ts#L6)
 
 ***
 
@@ -22,4 +22,4 @@ Defined in: [src/types/events.ts:6](https://github.com/Atlas-DePIN/atlas.js/blob
 
 > **DISCONNECT**: `"disconnected"`
 
-Defined in: [src/types/events.ts:7](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/types/events.ts#L7)
+Defined in: [src/types/events.ts:7](https://github.com/Atlas-DePIN/atlas.js/blob/69650d8e09f33d42ed4e3b3886bc77ab85f5ade6/src/types/events.ts#L7)

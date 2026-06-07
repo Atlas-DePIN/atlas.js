@@ -1,4 +1,4 @@
-[**atlas.js v0.1.0**](../README.md)
+[**atlas.js v0.2.0**](../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 # Class: WalletManager
 
-Defined in: [src/wallets/wallet-manager.ts:26](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/wallets/wallet-manager.ts#L26)
+Defined in: [src/wallets/wallet-manager.ts:25](https://github.com/Atlas-DePIN/atlas.js/blob/69650d8e09f33d42ed4e3b3886bc77ab85f5ade6/src/wallets/wallet-manager.ts#L25)
 
 Central wallet manager that orchestrates wallet lifecycle and delegates
 chain operations to the active [BaseWallet](BaseWallet.md) implementation.
@@ -24,7 +24,7 @@ can react to wallet state changes without polling.
 
 > **new WalletManager**(`config`): `WalletManager`
 
-Defined in: [src/wallets/wallet-manager.ts:36](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/wallets/wallet-manager.ts#L36)
+Defined in: [src/wallets/wallet-manager.ts:35](https://github.com/Atlas-DePIN/atlas.js/blob/69650d8e09f33d42ed4e3b3886bc77ab85f5ade6/src/wallets/wallet-manager.ts#L35)
 
 #### Parameters
 
@@ -48,7 +48,7 @@ Wallet configuration (RPC endpoint, gas price, etc.).
 
 > **emit**: (`event`, ...`args`) => `boolean`
 
-Defined in: [src/wallets/wallet-manager.ts:43](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/wallets/wallet-manager.ts#L43)
+Defined in: [src/wallets/wallet-manager.ts:42](https://github.com/Atlas-DePIN/atlas.js/blob/69650d8e09f33d42ed4e3b3886bc77ab85f5ade6/src/wallets/wallet-manager.ts#L42)
 
 Synchronously calls each of the listeners registered for the event named `eventName`, in the order they were registered, passing the supplied arguments
 to each.
@@ -116,7 +116,7 @@ v0.1.26
 
 > **off**: (`event`, `listener`) => `this`
 
-Defined in: [src/wallets/wallet-manager.ts:42](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/wallets/wallet-manager.ts#L42)
+Defined in: [src/wallets/wallet-manager.ts:41](https://github.com/Atlas-DePIN/atlas.js/blob/69650d8e09f33d42ed4e3b3886bc77ab85f5ade6/src/wallets/wallet-manager.ts#L41)
 
 Alias for `emitter.removeListener()`.
 
@@ -148,7 +148,7 @@ v10.0.0
 
 > **on**: (`event`, `listener`) => `this`
 
-Defined in: [src/wallets/wallet-manager.ts:41](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/wallets/wallet-manager.ts#L41)
+Defined in: [src/wallets/wallet-manager.ts:40](https://github.com/Atlas-DePIN/atlas.js/blob/69650d8e09f33d42ed4e3b3886bc77ab85f5ade6/src/wallets/wallet-manager.ts#L40)
 
 Adds the `listener` function to the end of the listeners array for the event
 named `eventName`. No checks are made to see if the `listener` has already
@@ -322,7 +322,7 @@ v13.6.0, v12.17.0
 
 > **get** **address**(): `string`
 
-Defined in: [src/wallets/wallet-manager.ts:45](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/wallets/wallet-manager.ts#L45)
+Defined in: [src/wallets/wallet-manager.ts:44](https://github.com/Atlas-DePIN/atlas.js/blob/69650d8e09f33d42ed4e3b3886bc77ab85f5ade6/src/wallets/wallet-manager.ts#L44)
 
 ##### Returns
 
@@ -408,7 +408,7 @@ v0.1.26
 
 > **connect**(`type`, `options?`): `Promise`\<`void`\>
 
-Defined in: [src/wallets/wallet-manager.ts:72](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/wallets/wallet-manager.ts#L72)
+Defined in: [src/wallets/wallet-manager.ts:71](https://github.com/Atlas-DePIN/atlas.js/blob/69650d8e09f33d42ed4e3b3886bc77ab85f5ade6/src/wallets/wallet-manager.ts#L71)
 
 Connect a wallet of the specified type.
 
@@ -449,7 +449,7 @@ If the wallet type is unsupported or the browser extension
 
 > **disconnect**(): `Promise`\<`void`\>
 
-Defined in: [src/wallets/wallet-manager.ts:121](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/wallets/wallet-manager.ts#L121)
+Defined in: [src/wallets/wallet-manager.ts:120](https://github.com/Atlas-DePIN/atlas.js/blob/69650d8e09f33d42ed4e3b3886bc77ab85f5ade6/src/wallets/wallet-manager.ts#L120)
 
 Disconnect the active wallet.
 
@@ -504,7 +504,7 @@ v6.0.0
 
 > **getAccountBalance**(): `Promise`\<readonly `Coin`[]\>
 
-Defined in: [src/wallets/wallet-manager.ts:171](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/wallets/wallet-manager.ts#L171)
+Defined in: [src/wallets/wallet-manager.ts:170](https://github.com/Atlas-DePIN/atlas.js/blob/69650d8e09f33d42ed4e3b3886bc77ab85f5ade6/src/wallets/wallet-manager.ts#L170)
 
 Fetch all non-zero balance coins for the connected wallet address.
 
@@ -522,7 +522,7 @@ If no wallet is connected.
 
 > **getAccountInfo**(): `Promise`\<`Account`\>
 
-Defined in: [src/wallets/wallet-manager.ts:159](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/wallets/wallet-manager.ts#L159)
+Defined in: [src/wallets/wallet-manager.ts:158](https://github.com/Atlas-DePIN/atlas.js/blob/69650d8e09f33d42ed4e3b3886bc77ab85f5ade6/src/wallets/wallet-manager.ts#L158)
 
 Fetch on-chain account information for the connected wallet address.
 
@@ -540,7 +540,7 @@ If no wallet is connected.
 
 > **getAvailableWallets**(): [`WalletInfo`](../interfaces/WalletInfo.md)[]
 
-Defined in: [src/wallets/wallet-manager.ts:247](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/wallets/wallet-manager.ts#L247)
+Defined in: [src/wallets/wallet-manager.ts:246](https://github.com/Atlas-DePIN/atlas.js/blob/69650d8e09f33d42ed4e3b3886bc77ab85f5ade6/src/wallets/wallet-manager.ts#L246)
 
 Return metadata for all wallet types that can be used in the current
 environment.
@@ -581,7 +581,7 @@ v1.0.0
 
 > **getQueryClient**(): `StargateClient`
 
-Defined in: [src/wallets/wallet-manager.ts:135](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/wallets/wallet-manager.ts#L135)
+Defined in: [src/wallets/wallet-manager.ts:134](https://github.com/Atlas-DePIN/atlas.js/blob/69650d8e09f33d42ed4e3b3886bc77ab85f5ade6/src/wallets/wallet-manager.ts#L134)
 
 Return the read-only Stargate client from the active wallet, or `null`
 if no wallet is connected.
@@ -596,7 +596,7 @@ if no wallet is connected.
 
 > **getSigningClient**(): `SigningStargateClient`
 
-Defined in: [src/wallets/wallet-manager.ts:143](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/wallets/wallet-manager.ts#L143)
+Defined in: [src/wallets/wallet-manager.ts:142](https://github.com/Atlas-DePIN/atlas.js/blob/69650d8e09f33d42ed4e3b3886bc77ab85f5ade6/src/wallets/wallet-manager.ts#L142)
 
 Return the signing Stargate client from the active wallet, or `null`
 if no wallet is connected.
@@ -611,7 +611,7 @@ if no wallet is connected.
 
 > **getWalletType**(): [`WalletType`](../enumerations/WalletType.md)
 
-Defined in: [src/wallets/wallet-manager.ts:150](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/wallets/wallet-manager.ts#L150)
+Defined in: [src/wallets/wallet-manager.ts:149](https://github.com/Atlas-DePIN/atlas.js/blob/69650d8e09f33d42ed4e3b3886bc77ab85f5ade6/src/wallets/wallet-manager.ts#L149)
 
 Return the wallet type, or `null` if no wallet is connected.
 
@@ -625,7 +625,7 @@ Return the wallet type, or `null` if no wallet is connected.
 
 > **isConnected**(): `boolean`
 
-Defined in: [src/wallets/wallet-manager.ts:52](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/wallets/wallet-manager.ts#L52)
+Defined in: [src/wallets/wallet-manager.ts:51](https://github.com/Atlas-DePIN/atlas.js/blob/69650d8e09f33d42ed4e3b3886bc77ab85f5ade6/src/wallets/wallet-manager.ts#L51)
 
 Check whether a wallet is currently connected and ready.
 
@@ -954,7 +954,7 @@ v9.4.0
 
 > **refreshConnection**(): `Promise`\<`void`\>
 
-Defined in: [src/wallets/wallet-manager.ts:236](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/wallets/wallet-manager.ts#L236)
+Defined in: [src/wallets/wallet-manager.ts:235](https://github.com/Atlas-DePIN/atlas.js/blob/69650d8e09f33d42ed4e3b3886bc77ab85f5ade6/src/wallets/wallet-manager.ts#L235)
 
 Re-initialize the underlying query and signing clients using the
 active wallet's existing signer and address.
@@ -1158,7 +1158,7 @@ v0.3.5
 
 > **signAndBroadcast**(`messages`, `options?`): `Promise`\<`string`\>
 
-Defined in: [src/wallets/wallet-manager.ts:205](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/wallets/wallet-manager.ts#L205)
+Defined in: [src/wallets/wallet-manager.ts:204](https://github.com/Atlas-DePIN/atlas.js/blob/69650d8e09f33d42ed4e3b3886bc77ab85f5ade6/src/wallets/wallet-manager.ts#L204)
 
 Sign and broadcast a set of messages.
 
@@ -1194,9 +1194,9 @@ If no wallet is connected or broadcasting fails.
 
 ### signArbitrary()
 
-> **signArbitrary**(`data`): `Promise`\<[`SigningResult`](../interfaces/SigningResult.md)\>
+> **signArbitrary**(`data`): `Promise`\<`string`\>
 
-Defined in: [src/wallets/wallet-manager.ts:185](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/wallets/wallet-manager.ts#L185)
+Defined in: [src/wallets/wallet-manager.ts:184](https://github.com/Atlas-DePIN/atlas.js/blob/69650d8e09f33d42ed4e3b3886bc77ab85f5ade6/src/wallets/wallet-manager.ts#L184)
 
 Sign arbitrary data using the active wallet's key.
 
@@ -1210,7 +1210,7 @@ The data to sign (string or raw bytes).
 
 #### Returns
 
-`Promise`\<[`SigningResult`](../interfaces/SigningResult.md)\>
+`Promise`\<`string`\>
 
 #### Throws
 
@@ -1222,7 +1222,7 @@ If no wallet is connected.
 
 > **simulateTransaction**(`messages`, `options?`): `Promise`\<`number`\>
 
-Defined in: [src/wallets/wallet-manager.ts:224](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/wallets/wallet-manager.ts#L224)
+Defined in: [src/wallets/wallet-manager.ts:223](https://github.com/Atlas-DePIN/atlas.js/blob/69650d8e09f33d42ed4e3b3886bc77ab85f5ade6/src/wallets/wallet-manager.ts#L223)
 
 Dry-run a set of messages and return the estimated gas cost
 without broadcasting.

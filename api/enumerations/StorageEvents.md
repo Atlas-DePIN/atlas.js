@@ -1,4 +1,4 @@
-[**atlas.js v0.1.0**](../README.md)
+[**atlas.js v0.2.0**](../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 # Enumeration: StorageEvents
 
-Defined in: [src/types/events.ts:10](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/types/events.ts#L10)
+Defined in: [src/types/events.ts:10](https://github.com/Atlas-DePIN/atlas.js/blob/69650d8e09f33d42ed4e3b3886bc77ab85f5ade6/src/types/events.ts#L10)
 
 ## Enumeration Members
 
@@ -14,4 +14,4 @@ Defined in: [src/types/events.ts:10](https://github.com/Atlas-DePIN/atlas.js/blo
 
 > **NONE**: `"none"`
 
-Defined in: [src/types/events.ts:11](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/types/events.ts#L11)
+Defined in: [src/types/events.ts:11](https://github.com/Atlas-DePIN/atlas.js/blob/69650d8e09f33d42ed4e3b3886bc77ab85f5ade6/src/types/events.ts#L11)

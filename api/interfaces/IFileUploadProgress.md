@@ -1,4 +1,4 @@
-[**atlas.js v0.1.0**](../README.md)
+[**atlas.js v0.2.0**](../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 # Interface: IFileUploadProgress
 
-Defined in: [src/interfaces/IFileUploadProgress.ts:3](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/interfaces/IFileUploadProgress.ts#L3)
+Defined in: [src/interfaces/IFileUploadProgress.ts:3](https://github.com/Atlas-DePIN/atlas.js/blob/69650d8e09f33d42ed4e3b3886bc77ab85f5ade6/src/interfaces/IFileUploadProgress.ts#L3)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/interfaces/IFileUploadProgress.ts:3](https://github.com/Atlas-D
 
 > **progress**: `number`
 
-Defined in: [src/interfaces/IFileUploadProgress.ts:5](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/interfaces/IFileUploadProgress.ts#L5)
+Defined in: [src/interfaces/IFileUploadProgress.ts:5](https://github.com/Atlas-DePIN/atlas.js/blob/69650d8e09f33d42ed4e3b3886bc77ab85f5ade6/src/interfaces/IFileUploadProgress.ts#L5)
 
 ***
 
@@ -22,4 +22,4 @@ Defined in: [src/interfaces/IFileUploadProgress.ts:5](https://github.com/Atlas-D
 
 > **status**: `QueuedFileStatus`
 
-Defined in: [src/interfaces/IFileUploadProgress.ts:4](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/interfaces/IFileUploadProgress.ts#L4)
+Defined in: [src/interfaces/IFileUploadProgress.ts:4](https://github.com/Atlas-DePIN/atlas.js/blob/69650d8e09f33d42ed4e3b3886bc77ab85f5ade6/src/interfaces/IFileUploadProgress.ts#L4)

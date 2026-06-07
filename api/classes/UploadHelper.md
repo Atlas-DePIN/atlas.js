@@ -1,4 +1,4 @@
-[**atlas.js v0.1.0**](../README.md)
+[**atlas.js v0.2.0**](../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 # Class: UploadHelper
 
-Defined in: [src/upload-helper.ts:9](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/upload-helper.ts#L9)
+Defined in: [src/upload-helper.ts:9](https://github.com/Atlas-DePIN/atlas.js/blob/69650d8e09f33d42ed4e3b3886bc77ab85f5ade6/src/upload-helper.ts#L9)
 
 ## Constructors
 
@@ -24,7 +24,7 @@ Defined in: [src/upload-helper.ts:9](https://github.com/Atlas-DePIN/atlas.js/blo
 
 > `static` **upload**(`hostname`, `fileId`, `file`, `onProgress?`): `Promise`\<`UploadResult`\>
 
-Defined in: [src/upload-helper.ts:16](https://github.com/Atlas-DePIN/atlas.js/blob/d9ab24d6c846520a1837b7c412e4bbae28996536/src/upload-helper.ts#L16)
+Defined in: [src/upload-helper.ts:16](https://github.com/Atlas-DePIN/atlas.js/blob/69650d8e09f33d42ed4e3b3886bc77ab85f5ade6/src/upload-helper.ts#L16)
 
 Upload a file to a storage provider.
 
