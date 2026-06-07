@@ -1,10 +1,10 @@
 import { decrypt, encrypt, PrivateKey } from 'eciesjs'
 
-import { IAesBundle, IEncryptionOptions } from "@/interfaces"
+import { IAesBundle, IEncryptionOptions } from "../interfaces"
 import { keyAlgo } from "./constants"
 import { hexToBytes, bytesToHex } from './converters'
 import { DEFAULT_ENCYRPTION_CHUNK_SIZE } from './defaults';
-import { CancellationException } from '@/types/errors';
+import { CancellationException } from '../types/errors';
 
 export async function aesStringCrypt(
   data: string,
@@ -152,6 +152,7 @@ export async function decryptFile(file: File, fileName: string, fileMeta: FilePr
 }
 
 export function eciesEncrypt(key: string, content: Uint8Array): string {
+  // @ts-ignore – mismatched generic parameters
   return encrypt(key, content).toHex().toString()
   // Dev Note: toHex only exists on Uint8Array in NodeJS 22+/modern browser versions
 }

@@ -1,5 +1,5 @@
-import { WalletType } from "@/types"
-import { QueryHelper } from "@/query-helper";
+import { WalletType } from "../../types"
+import { QueryHelper } from "../../query-helper";
 
 export interface IAtlasClient  {
   get query(): QueryHelper

@@ -1,4 +1,4 @@
-import { QueuedFileStatus } from "@/types/storage"
+import { QueuedFileStatus } from "../types/storage"
 import { IEncryptionOptions } from "./IEncryptionOptions"
 import { IFileMetadata } from "./IAtlasFileInfo"
 

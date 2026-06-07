@@ -1,84 +1,85 @@
-import { defineConfig } from "vite"
-
-import typescript from "@rollup/plugin-typescript"
-import { resolve } from "path"
-import { typescriptPaths } from "rollup-plugin-typescript-paths"
-import tsconfigPaths from 'vite-tsconfig-paths'
-import dts from 'vite-plugin-dts'
-import { nodePolyfills } from 'vite-plugin-node-polyfills'
+import { defineConfig } from "vite";
+import typescript from "@rollup/plugin-typescript";
+import { resolve } from "path";
+import { typescriptPaths } from "rollup-plugin-typescript-paths";
+import tsconfigPaths from "vite-tsconfig-paths";
+import dts from "vite-plugin-dts";
+import resolvePlugin from "@rollup/plugin-node-resolve";
+import commonjs from "@rollup/plugin-commonjs";
+import { nodePolyfills } from "vite-plugin-node-polyfills";
 
 export default defineConfig({
-  base: './',
+  base: "./",
   plugins: [
     tsconfigPaths(),
     dts({
       include: ["src"],
       rollupTypes: true,
-      logLevel: 'error'
+      logLevel: "error",
     }),
   ],
   resolve: {
     preserveSymlinks: true,
     alias: [
+      { find: "@", replacement: resolve(__dirname, "./src") },
       {
-        find: "@",
-        replacement: resolve(__dirname, "./src"),
-      },
-      {
-        find: "function-bind",
-        replacement: resolve(__dirname, "./node_modules", "function-bind", "implementation.js"),
-      },
-      {
-        find: "symbol-observable/ponyfill",
-        replacement: resolve(__dirname, "./node_modules", "symbol-observable", "ponyfill.js"),
-      },
-      {
-        find: 'browserify-aes',
-        replacement: resolve(__dirname, "./node_modules", "@jackallabs", "browserify-aes"),
+        find: "browserify-aes",
+        replacement: resolve(
+          __dirname,
+          "./node_modules",
+          "@jackallabs",
+          "browserify-aes",
+        ),
       },
     ],
-    extensions: ['.js', '.ts']
+    extensions: [".js", ".ts"],
   },
   build: {
-    manifest: true,
     minify: false,
     reportCompressedSize: true,
     rollupOptions: {
       input: resolve(__dirname, "src/index.ts"),
-      preserveEntrySignatures: 'allow-extension',
+      preserveEntrySignatures: "allow-extension",
       output: [
         {
-          dir: './dist',
-          entryFileNames: 'index.cjs.js',
-          format: 'cjs',
-          name: 'Atlas.js',
-          plugins: []
+          dir: "./dist",
+          entryFileNames: "index.cjs.js",
+          inlineDynamicImports: true,
+          exports: "named",
+          format: "cjs",
+          name: "Atlas.js",
+          plugins: [],
         },
         {
-          dir: './dist',
-          entryFileNames: 'index.esm.js',
-          format: 'esm',
-          name: 'Atlas.js',
+          dir: "./dist",
+          entryFileNames: "index.esm.js",
+          inlineDynamicImports: true,
+          exports: "named",
+          format: "esm",
+          name: "Atlas.js",
           plugins: [
-            nodePolyfills({ include: ['buffer', 'util'] })
-          ]
-        }
+            nodePolyfills({ include: ["buffer", "util", "events"] }),
+          ],
+        },
       ],
       external: [
-        /* Atlas.js-protos */
-        'grpc-web',
-        'ts-proto',
-        /* Atlas.js */
-        'ripemd160',
-        'create-hash',
-        'for-each',
+        "grpc-web",
+        "ts-proto",
+        "protobufjs",
       ],
       plugins: [
-        typescriptPaths({
-          absolute: false,
+        typescriptPaths({ absolute: false }),
+        typescript({
+          tsconfig: "./tsconfig.esm.json",
+          exclude: ["node_modules/**", "**/node_modules/**"],
+          noEmitOnError: false,
         }),
-        typescript({ tsconfig: './tsconfig.json' }),
+        // Resolve node_modules — needed to find cosmjs-types
+        resolvePlugin({
+          browser: true,
+          preferBuiltins: false,
+        }),
       ],
     },
   },
-})
+});

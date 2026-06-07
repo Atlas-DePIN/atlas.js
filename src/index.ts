@@ -4,12 +4,12 @@ export type {
 
   AtlasConfig,
   TxOptions,
-} from '@/interfaces';
+} from './interfaces';
 
 export type {
   WalletInfo,
   SigningResult,
-} from '@/interfaces/wallet';
+} from './interfaces/wallet';
 
 export type {
   FileStats,
@@ -17,7 +17,7 @@ export type {
   IChainConfig,
   TreeNode,
   QueryClient,
-} from '@/types';
+} from './types';
 
 export type {
   IAtlasDriveInfo,
@@ -28,7 +28,7 @@ export type {
   IFileUploadOptions,
   IFileUploadProgress,
   IEncryptionOptions,
-} from '@/interfaces';
+} from './interfaces';
 
 export { AtlasClient } from './atlas-client';
 

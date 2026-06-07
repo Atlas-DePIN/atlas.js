@@ -1,11 +1,12 @@
 {
   "name": "atlas.js",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "",
   "license": "ISC",
   "author": "",
   "types": "./dist/index.d.ts",
-  "module": "./dist/index.esm.js",
+  "main": "./dist/index.js",
+  "module": "./dist/esm/index.js",
   "exports": {
     ".": {
       "import": {
@@ -18,6 +19,9 @@
       }
     }
   },
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "vite build",
     "type-check": "tsc --noEmit",
@@ -29,9 +33,13 @@
     "docs:website:serve": "cd website && pnpm serve"
   },
   "devDependencies": {
+    "@rollup/plugin-commonjs": "^29.0.3",
+    "@rollup/plugin-node-resolve": "^16.0.3",
     "@rollup/plugin-typescript": "^12.3.0",
     "@types/node": "^22.9.0",
+    "esbuild": "^0.28.0",
     "rollup-plugin-typescript-paths": "^1.5.0",
+    "ts-alias": "^0.0.7",
     "tslib": "^2.8.1",
     "typedoc": "^0.28.19",
     "typedoc-plugin-markdown": "^4.11.0",
@@ -42,7 +50,7 @@
     "vite-tsconfig-paths": "^4.2.1"
   },
   "dependencies": {
-    "@atlas/atlas.js-protos": "file:atlas-atlas.js-protos-0.2.0.tgz",
+    "@atlas/atlas.js-protos": "file:atlas-atlas.js-protos-0.3.0.tgz",
     "@cosmjs/encoding": "^0.38.1",
     "@cosmjs/proto-signing": "^0.38.1",
     "@cosmjs/stargate": "^0.38.1",
@@ -51,11 +59,14 @@
     "@noble/hashes": "^1.8.0",
     "@openzeppelin/merkle-tree": "^1.0.8",
     "axios": "^1.13.3",
+    "buffer": "^6.0.3",
     "cosmjs-types": "^0.11.0",
     "eciesjs": "^0.5.0",
+    "events": "^3.3.0",
     "hash-wasm": "^4.12.0",
     "merkletreejs": "^0.6.0",
     "treeify": "^1.1.0",
+    "util": "^0.12.5",
     "xxh3-ts": "^2.0.1"
   }
 }

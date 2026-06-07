@@ -1,13 +1,13 @@
 import { OfflineSigner } from '@cosmjs/proto-signing';
 
-import { WalletType } from '@/types/wallet';
+import { WalletType } from '../../types/wallet';
 import { 
   AtlasConfig,
   SigningResult,  
-} from '@/interfaces';
+} from '../../interfaces';
 
-import { BaseWallet } from '@/wallets';
-import { atlasDevnetChainConfig } from '@/utils/defaults';
+import { BaseWallet } from '..';
+import { atlasDevnetChainConfig } from '../../utils/defaults';
 
 declare global {
   interface Window {

@@ -1,2 +1,2 @@
-export * from '@/wallets/base-wallet'
-export * from '@/wallets/wallet-manager'
+export * from './base-wallet'
+export * from './wallet-manager'

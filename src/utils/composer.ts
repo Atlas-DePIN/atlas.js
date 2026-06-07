@@ -2,7 +2,7 @@
 import { EncodeObject } from '@cosmjs/proto-signing';
 import { MsgPostFile, MsgDeleteFile } from '@atlas/atlas.js-protos/dist/types/atlas/storage/v1/tx';
 import { MsgDeleteNode, MsgPostNode } from '@atlas/atlas.js-protos/dist/types/atlas/filetree/v1/tx';
-import { IReadAuthorityKeeper } from '@/interfaces';
+import { IReadAuthorityKeeper } from '../interfaces';
 
 export class MessageComposer {
   /**

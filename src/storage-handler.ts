@@ -3,17 +3,17 @@ import { PrivateKey } from "eciesjs";
 import { Provider } from "@atlas/atlas.js-protos/dist/types/atlas/storage/v1/provider";
 import { StorageSubscription } from "@atlas/atlas.js-protos/dist/types/atlas/storage/v1/subscription";
 
-import { TreeNode, QueuedFileStatus } from "@/types";
-import { FileProcessingEvent, StorageEvents, StorageHandlerEvent, WalletEvents } from "@/types/events";
-import { SubscriptionError } from "@/types/errors";
-import { IAtlasDriveInfo, IAtlasDirectoryInfo, IDirectory, IQueuedFile, IFileUploadOptions } from "@/interfaces";
+import { TreeNode, QueuedFileStatus } from "./types";
+import { FileProcessingEvent, StorageEvents, StorageHandlerEvent, WalletEvents } from "./types/events";
+import { SubscriptionError } from "./types/errors";
+import { IAtlasDriveInfo, IAtlasDirectoryInfo, IDirectory, IQueuedFile, IFileUploadOptions } from "./interfaces";
 
-import { DEFAULT_ENCYRPTION_CHUNK_SIZE, DEFAULT_REPLICAS } from "@/utils/defaults";
-import { encryptFile, generateAesKey } from "@/utils/crypto";
-import { buildMerkleTree } from "@/utils/merkle";
-import { SIGNER_SEED } from "@/utils/constants";
-import { bytesToHex } from "@/utils/converters";
-import { buildFid } from "@/utils/hash";
+import { DEFAULT_ENCYRPTION_CHUNK_SIZE, DEFAULT_REPLICAS } from "./utils/defaults";
+import { encryptFile, generateAesKey } from "./utils/crypto";
+import { buildMerkleTree } from "./utils/merkle";
+import { SIGNER_SEED } from "./utils/constants";
+import { bytesToHex } from "./utils/converters";
+import { buildFid } from "./utils/hash";
 
 import { AtlasClient } from "./atlas-client";
 import { FiletreeHelper } from "./filetree-helper";
@@ -92,9 +92,10 @@ export class StorageHandler extends EventEmitter {
    *
    * @returns The initialised handler instance.
    */
-  static async new(client: AtlasClient) {
+  static async new(client: AtlasClient): Promise<StorageHandler> {
     const handler = new StorageHandler(client)
     await handler.loadAccount()
+    return handler;
   }
 
   /**

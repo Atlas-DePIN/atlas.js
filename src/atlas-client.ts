@@ -6,12 +6,12 @@ import {
   IAtlasClient,
   AtlasConfig,
   TxOptions,
-} from "@/interfaces"
-import { WalletType } from '@/types'
-import { ClientEvent, WalletEvents } from '@/types/events';
+} from "./interfaces"
+import { WalletType } from './types'
+import { ClientEvent, WalletEvents } from './types/events';
 
-import { WalletManager } from '@/wallets';
-import { QueryHelper } from '@/query-helper';
+import { WalletManager } from './wallets';
+import { QueryHelper } from './query-helper';
 
 /**
  * High-level client for interacting with an Atlas blockchain node.

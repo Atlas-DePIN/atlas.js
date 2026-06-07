@@ -2,7 +2,7 @@ import { StorageSubscription } from "@atlas/atlas.js-protos/dist/types/atlas/sto
 import { File } from "@atlas/atlas.js-protos/dist/types/atlas/storage/v1/file";
 import { Provider } from "@atlas/atlas.js-protos/dist/types/atlas/storage/v1/provider";
 import { TreeNode } from "@atlas/atlas.js-protos/dist/types/atlas/filetree/v1/tree";
-import { FileStats, StorageStats } from "@/types";
+import { FileStats, StorageStats } from "../../types";
 
 export interface IQueryHelper {
   fileStats(): Promise<FileStats>;

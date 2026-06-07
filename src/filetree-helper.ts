@@ -1,8 +1,8 @@
-import { AtlasClient } from "@/atlas-client";
+import { AtlasClient } from "./atlas-client";
 import { PrivateKey } from "eciesjs";
-import { IAesBundle, IAtlasDirectoryInfo, IAtlasDriveInfo, IAtlasFileInfo, IQueuedFile, IReadAuthorityKeeper } from "@/interfaces";
-import { aesStringCrypt, exportAesBundle, generateAesKey, importAesBundle } from "@/utils/crypto";
-import { EncryptionType, TreeNode } from "@/types"
+import { IAesBundle, IAtlasDirectoryInfo, IAtlasDriveInfo, IAtlasFileInfo, IQueuedFile, IReadAuthorityKeeper } from "./interfaces";
+import { aesStringCrypt, exportAesBundle, generateAesKey, importAesBundle } from "./utils/crypto";
+import { EncryptionType, TreeNode } from "./types"
 import { MessageComposer } from "./utils/composer";
 import { bytesToHex } from "./utils/converters";
 import { EncodeObject } from "@atlas/atlas.js-protos";

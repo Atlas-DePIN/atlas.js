@@ -1,4 +1,4 @@
-import { QueuedFileStatus } from "@/types";
+import { QueuedFileStatus } from "../types";
 
 export interface IFileUploadProgress {
   status: QueuedFileStatus;

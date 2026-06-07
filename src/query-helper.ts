@@ -3,10 +3,10 @@ import { File } from "@atlas/atlas.js-protos/dist/types/atlas/storage/v1/file";
 import { Provider } from "@atlas/atlas.js-protos/dist/types/atlas/storage/v1/provider";
 import { TreeNode } from "@atlas/atlas.js-protos/dist/types/atlas/filetree/v1/tree";
 
-import { IQueryHelper } from "./interfaces/classes/IQueryHelper";
+import { IQueryHelper } from "./interfaces";
 
-import { FileStats, StorageStats } from "@/types";
-import { QueryClient } from "@/types/wallet";
+import { FileStats, StorageStats } from "./types";
+import { QueryClient } from "./types/wallet";
 
 export class QueryHelper implements IQueryHelper {
   protected client: QueryClient

@@ -1,4 +1,4 @@
-import { IAtlasFileInfo, IQueuedFile } from "@/interfaces";
+import { IAtlasFileInfo, IQueuedFile } from "../interfaces";
 import { bytesToHex } from "./converters";
 
 export function parseNodeContents<T>(contents: string, path: string): T {

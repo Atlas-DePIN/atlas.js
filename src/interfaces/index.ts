@@ -1,5 +1,4 @@
-export * from './classes/IAtlasClient'
-export * from './classes/IQueryHelper'
+export * from './classes'
 
 export * from './IAesBundle'
 export * from './IEncryptionOptions'
