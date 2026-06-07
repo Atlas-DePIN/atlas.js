@@ -33,3 +33,9 @@ export function buildFileNodeContents(queuedFile: IQueuedFile, owner: string): I
     },
   };
 }
+
+export function joinPath(basepath: string, child: string): string {
+  if (!basepath) return child;
+  if (!child) return basepath;
+  return `${basepath.replace(/\/+$/, '')}/${child.replace(/^\/+/, '')}`;
+}

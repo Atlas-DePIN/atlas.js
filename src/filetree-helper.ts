@@ -6,7 +6,7 @@ import { EncryptionType, TreeNode } from "./types"
 import { MessageComposer } from "./utils/composer";
 import { bytesToHex } from "./utils/converters";
 import { EncodeObject } from "@atlas/atlas.js-protos";
-import { buildFileNodeContents, parseNodeContents } from "./utils/meta";
+import { buildFileNodeContents, joinPath, parseNodeContents } from "./utils/meta";
 
 
 export class FiletreeHelper {
@@ -96,7 +96,7 @@ export class FiletreeHelper {
 
     return MessageComposer.MsgPostNode(
       this.client.address,
-      `${dir.replace(/\/+$/, '')}/${file.fid.replace(/^\/+/, '')}`,
+      joinPath(dir, file.fid),
       'file',
       contents,
       readAuthorities,
@@ -150,7 +150,7 @@ export class FiletreeHelper {
   /**
    * Decrypt the AES bundle granted to the connected wallet.
    */
-  private async extractAesKey(permissions: string): Promise<IAesBundle> {
+  public async extractAesKey(permissions: string): Promise<IAesBundle> {
     if (!this.accessKey) {
       // TODO: throw error not authorized
     }

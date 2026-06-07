@@ -9,7 +9,7 @@ import { SubscriptionError } from "./types/errors";
 import { IAtlasDriveInfo, IAtlasDirectoryInfo, IDirectory, IQueuedFile, IFileUploadOptions, IAtlasFileInfo } from "./interfaces";
 
 import { DEFAULT_ENCYRPTION_CHUNK_SIZE, DEFAULT_REPLICAS } from "./utils/defaults";
-import { encryptFile, generateAesKey } from "./utils/crypto";
+import { decryptFile, encryptFile, generateAesKey } from "./utils/crypto";
 import { buildMerkleTree } from "./utils/merkle";
 import { SIGNER_SEED } from "./utils/constants";
 import { bytesToHex } from "./utils/converters";
@@ -20,6 +20,7 @@ import { FiletreeHelper } from "./filetree-helper";
 import { EncodeObject } from "@atlas/atlas.js-protos";
 import { MessageComposer } from "./utils/composer";
 import { UploadHelper } from "./upload-helper";
+import { joinPath, parseNodeContents } from "./utils/meta";
 
 /** Maximum distinct providers to try per file before giving up. */
 const MAX_UPLOAD_PROVIDER_ATTEMPTS = 5;
@@ -337,6 +338,53 @@ export class StorageHandler extends EventEmitter {
     // await this.reloadDirectory();
   }
 
+  /**
+   * Download a file by FID from one of its assigned storage providers.
+   *
+   * Encrypted files are decrypted with the viewer authority bundle stored on
+   * the filetree node.
+   */
+  public async downloadFile(fid: string, basepath: string = this.directory.path): Promise<File> {
+    const fileDetails = await this.client.query.file(fid);
+    const provider = fileDetails.providers?.[0];
+    if (!provider) {
+      throw new Error(`File "${fid}" does not have an assigned storage provider.`);
+    }
+
+    const nodeDetails = await this.filetree.getTreeNode(joinPath(basepath, fid), this.client.address);
+    if (!nodeDetails || nodeDetails.nodeType !== 'file') {
+      throw new Error(`Node "${joinPath(basepath, fid)}" is not a file.`);
+    }
+    const nodeContents = parseNodeContents<IAtlasFileInfo>(nodeDetails.contents, fid);
+
+    const fileMeta: FilePropertyBag = {
+      ...nodeContents.meta,
+      type: (nodeContents.meta as Record<string, string>).mime ?? nodeContents.meta.type,
+    };
+    const rawFile = await this.downloadRaw(fid, provider, nodeContents.meta.name, fileMeta);
+    if (!nodeContents.encrypted) {
+      return ensureNonEmptyFile(rawFile);
+    }
+
+    const aes = await this.filetree.extractAesKey(nodeDetails.viewers);
+    return ensureNonEmptyFile(await decryptFile(rawFile, nodeContents.meta.name, fileMeta, aes));
+  }
+
+  /**
+   * Fetch raw file bytes from the configured storage gateway.
+   */
+  public async downloadRaw(fid: string, provider: string, fileName: string, fileMeta: FilePropertyBag): Promise<File> {
+    const providerInfo = await this.client.query.provider(provider);
+    const response = await fetch(`https://${providerInfo.hostname}/api/v1/download/${fid}`, { method: 'GET' });
+
+    if (!response.ok) {
+      throw new Error(`Failed to download file "${fid}": ${response.status} ${response.statusText}`);
+    }
+
+    const body = await response.blob();
+    return new File([body], fileName, fileMeta);
+  }
+
   protected async processAll(files: Array<[string, IQueuedFile]>) {
     await Promise.all(files.map(async ([key, _]) => {
       await this.processFile(key)
@@ -547,10 +595,9 @@ export class StorageHandler extends EventEmitter {
   }
 }
 
-function parseNodeContents<T>(contents: string, path: string): T {
-  try {
-    return JSON.parse(contents) as T;
-  } catch (error) {
-    throw new Error(`Failed to parse filetree contents for "${path}": ${error}`);
+function ensureNonEmptyFile(file: File): File {
+  if (file.size === 0) {
+    throw new Error('File is empty.');
   }
+  return file;
 }
