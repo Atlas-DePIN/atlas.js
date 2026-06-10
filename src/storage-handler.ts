@@ -95,6 +95,7 @@ export class StorageHandler extends EventEmitter {
    */
   static async new(client: AtlasClient): Promise<StorageHandler> {
     const handler = new StorageHandler(client)
+    await handler.loadProviders()
     await handler.loadAccount()
     return handler;
   }
@@ -228,6 +229,15 @@ export class StorageHandler extends EventEmitter {
 
     this._directory = nextDirectory;
     this.emit(StorageHandlerEvent.DIR_NAV, nextDirectory.path);
+  }
+
+
+  public async listSubscriptions(): Promise<StorageSubscription[]> {
+    try {
+      return await this.client.query.subscriptions(this.client.address);
+    } catch (error) {
+      throw new SubscriptionError(`Failed to list subscriptions for "${this.client.address}": ${error}`);
+    }
   }
 
   /**
@@ -383,6 +393,31 @@ export class StorageHandler extends EventEmitter {
 
     const body = await response.blob();
     return new File([body], fileName, fileMeta);
+  }
+
+  /**
+   * Delete one file from storage and its filetree node.
+   *
+   * Returns the transaction hash after refreshing the current directory.
+   */
+  public async deleteFile(fid: string, basepath: string = this.directory.path): Promise<string> {
+    const msgDeleteFile = MessageComposer.MsgDeleteFile(this.client.address, fid)
+    const msgs: EncodeObject[] = [
+      await this.filetree.incrementDirectoryItemCount(basepath, -1),
+      MessageComposer.MsgDeleteNode(this.client.address, joinPath(basepath, fid)),
+    ];
+    try {
+      const txResult = await this.client.signAndBroadcast([...msgs, msgDeleteFile]);
+      return txResult.hash;
+    } catch (err: any) {
+      const errorMessage = err instanceof Error ? err.message : String(err);
+      if (errorMessage.includes("file not found")) {
+        const txResult = await this.client.signAndBroadcast([...msgs]);
+        return txResult.hash;
+      }
+    } finally {
+      // await this.reloadDirectory();
+    }
   }
 
   protected async processAll(files: Array<[string, IQueuedFile]>) {

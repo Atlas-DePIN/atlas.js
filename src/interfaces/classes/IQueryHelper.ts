@@ -9,11 +9,11 @@ export interface IQueryHelper {
   storageStats(): Promise<StorageStats>;
 
   file(fid: string): Promise<File>;
-  subscriptions(address: string): Promise<StorageSubscription[]>;
   subscription(address: string, id?: string): Promise<StorageSubscription>;
+  subscriptions(address?: string): Promise<StorageSubscription[]>;
   provider(address: string): Promise<Provider>;
   providers(): Promise<Provider[]>;
 
-  treeNode(path: string, subscription: string, owner: string): Promise<TreeNode>;
-  treeNodeChildren(path: string, subscription: string, owner: string): Promise<TreeNode[]>;
+  treeNode(owner: string, path: string): Promise<TreeNode>;
+  treeNodeChildren(owner: string, path: string): Promise<TreeNode[]>;
 }

@@ -6,10 +6,11 @@ export interface IAtlasClient  {
   get address(): string
 
   initialize(): Promise<void>
-  
-  isWalletConnected(): boolean
+  isInitialized(): boolean
+
   connectWallet(type: WalletType, options?: any): Promise<void>
   disconnectWallet(): Promise<void>
+  isWalletConnected(): boolean
   getWalletType(): WalletType | null
 
 }

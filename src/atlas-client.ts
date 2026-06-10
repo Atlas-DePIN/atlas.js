@@ -108,6 +108,10 @@ export class AtlasClient extends EventEmitter implements IAtlasClient {
     }
   }
 
+  isInitialized(): boolean {
+    return this._isInitialized
+  }
+
   // ---------------------------------------------------------------------------
   // Wallet connection
   // ---------------------------------------------------------------------------

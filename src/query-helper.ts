@@ -24,7 +24,7 @@ export class QueryHelper implements IQueryHelper {
   file = async (fid: string): Promise<File> =>
     (await this.client.atlas.storage.v1.file({ fid })).file;
 
-  subscriptions = async (address: string): Promise<StorageSubscription[]> => 
+  subscriptions = async (address?: string): Promise<StorageSubscription[]> => 
     (await this.client.atlas.storage.v1.subscriptions({ subscriberAddress: address })).subscriptions ?? [];
 
   provider = async (address: string): Promise<Provider> =>
