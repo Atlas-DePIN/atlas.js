@@ -351,13 +351,15 @@ export class StorageManager extends EventEmitter {
   /**
    * Download a file by FID from one of its assigned storage providers.
    *
+   * Tries each provider assigned to the file until one succeeds.
+   *
    * Encrypted files are decrypted with the viewer authority bundle stored on
    * the filetree node.
    */
   public async downloadFile(fid: string, basepath: string = this.directory.path): Promise<File> {
     const fileDetails = await this.client.query.file(fid);
-    const provider = fileDetails.providers?.[0];
-    if (!provider) {
+    const providers = fileDetails.providers ?? [];
+    if (providers.length === 0) {
       throw new Error(`File "${fid}" does not have an assigned storage provider.`);
     }
 
@@ -371,13 +373,27 @@ export class StorageManager extends EventEmitter {
       ...nodeContents.meta,
       type: (nodeContents.meta as Record<string, string>).mime ?? nodeContents.meta.type,
     };
-    const rawFile = await this.downloadRaw(fid, provider, nodeContents.meta.name, fileMeta);
-    if (!nodeContents.encrypted) {
-      return ensureNonEmptyFile(rawFile);
+
+    let lastError: Error | null = null;
+
+    for (const provider of providers) {
+      try {
+        const rawFile = await this.downloadRaw(fid, provider, nodeContents.meta.name, fileMeta);
+        if (!nodeContents.encrypted) {
+          return ensureNonEmptyFile(rawFile);
+        }
+
+        const aes = await this.filetree.extractAesKey(nodeDetails.viewers);
+        return ensureNonEmptyFile(await decryptFile(rawFile, nodeContents.meta.name, aes, fileMeta));
+      } catch (err: any) {
+        console.warn(`Download of "${fid}" from "${provider}" failed: ${err.message}. Trying next provider...`);
+        lastError = err;
+      }
     }
 
-    const aes = await this.filetree.extractAesKey(nodeDetails.viewers);
-    return ensureNonEmptyFile(await decryptFile(rawFile, nodeContents.meta.name, aes, fileMeta));
+    throw new Error(
+      `Failed to download file "${fid}" after ${providers.length} provider(s): ${lastError?.message}`,
+    );
   }
 
   /**
