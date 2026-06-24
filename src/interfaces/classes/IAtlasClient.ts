@@ -1,7 +1,7 @@
 import { WalletType } from "../../types"
 import { QueryHelper } from "../../query-helper";
 
-import { StorageHandler } from "../../storage-handler";
+import { StorageManager } from "../../storage-manager";
 
 export interface IAtlasClient  {
   get query(): QueryHelper
@@ -15,5 +15,5 @@ export interface IAtlasClient  {
   isWalletConnected(): boolean
   getWalletType(): WalletType | null
 
-  createStorageHandler(): StorageHandler
+  createStorageHandler(): StorageManager
 }

@@ -38,7 +38,7 @@ const SPECIFIC_PROVIDER_ATTEMPTS = 3;
  * Emits storage events so consumers can react to subscription changes and
  * directory navigation without polling.
  */
-export class StorageHandler extends EventEmitter {
+export class StorageManager extends EventEmitter {
   protected client: AtlasClient;
   protected access: PrivateKey;
   protected filetree: FiletreeHelper
@@ -93,8 +93,8 @@ export class StorageHandler extends EventEmitter {
    *
    * @returns The initialised handler instance.
    */
-  static async new(client: AtlasClient): Promise<StorageHandler> {
-    const handler = new StorageHandler(client)
+  static async new(client: AtlasClient): Promise<StorageManager> {
+    const handler = new StorageManager(client)
     await handler.loadProviders()
     await handler.loadAccount()
     return handler;
@@ -377,7 +377,7 @@ export class StorageHandler extends EventEmitter {
     }
 
     const aes = await this.filetree.extractAesKey(nodeDetails.viewers);
-    return ensureNonEmptyFile(await decryptFile(rawFile, nodeContents.meta.name, fileMeta, aes));
+    return ensureNonEmptyFile(await decryptFile(rawFile, nodeContents.meta.name, aes, fileMeta));
   }
 
   /**

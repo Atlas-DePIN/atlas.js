@@ -134,7 +134,7 @@ export async function encryptFile(file: File, opts: IEncryptionOptions, onProgre
   });
 }
 
-export async function decryptFile(file: File, fileName: string, fileMeta: FilePropertyBag, aes: IAesBundle): Promise<File> {
+export async function decryptFile(file: File, fileName: string, aes: IAesBundle, fileMeta?: FilePropertyBag): Promise<File> {
   const parts: Blob[] = [];
   for (let cursor = 0; cursor < file.size;) {
     const headerEnd = cursor + 8;

@@ -31,7 +31,7 @@ export type {
 
 export { AtlasClient } from './atlas-client';
 
-export { StorageHandler } from './storage-handler';
+export { StorageManager as StorageHandler } from './storage-manager';
 export { UploadHelper } from './upload-helper';
 export { FiletreeHelper } from './filetree-helper';
 export { QueryHelper } from './query-helper';

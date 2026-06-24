@@ -12,7 +12,7 @@ import { ClientEvent, WalletEvents } from './types/events';
 
 import { WalletManager } from './wallets';
 import { QueryHelper } from './query-helper';
-import { StorageHandler } from './storage-handler';
+import { StorageManager } from './storage-manager';
 
 /**
  * High-level client for interacting with an Atlas blockchain node.
@@ -285,10 +285,10 @@ export class AtlasClient extends EventEmitter implements IAtlasClient {
    * The handler manages the full storage lifecycle — subscriptions, providers,
    * drives, directory trees, uploads, encryption, and access key derivation.
    *
-   * @returns A fresh {@link StorageHandler} instance.
+   * @returns A fresh {@link StorageManager} instance.
    */
-  createStorageHandler(): StorageHandler {
-    return new StorageHandler(this);
+  createStorageHandler(): StorageManager {
+    return new StorageManager(this);
   }
 
   // ---------------------------------------------------------------------------
