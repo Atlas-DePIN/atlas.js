@@ -5,10 +5,9 @@ import { IAesBundle, IEncryptionOptions } from "./interfaces";
 import { DEFAULT_REPLICAS } from "./utils/defaults";
 import { decryptFile, encryptFile, generateAesKey } from "./utils/crypto";
 import { buildMerkleTree } from "./utils/merkle";
-import { buildFid, hashAndHex } from "./utils/hash";
+import { buildFid } from "./utils/hash";
 
 import { AtlasClient } from "./atlas-client";
-import { FiletreeHelper } from "./filetree-helper";
 import { EncodeObject } from "@atlas/atlas.js-protos";
 import { MessageComposer } from "./utils/composer";
 import { UploadHelper } from "./upload-helper";
@@ -20,16 +19,14 @@ const MAX_UPLOAD_PROVIDER_ATTEMPTS = 5;
 const SPECIFIC_PROVIDER_ATTEMPTS = 3;
 
 /**
- * Manages the storage lifecycle for a connected Atlas wallet.
+ * Bare-bones storage operations for the Atlas Protocol.
  *
- * Loads subscription info, provider list, drives, and directory contents from
- * the chain.  Uses {@link FiletreeHelper} for filetree operations and derives
- * an access key from the wallet's signature for authenticated queries.
+ * Provides upload, download, delete, and provider-management methods without
+ * any filetree or queue state.  Intended for direct use or as a building
+ * block for higher-level abstractions like {@link StorageHelper}.
  *
- * Emits storage events so consumers can react to subscription changes and
- * directory navigation without polling.
  */
-export class StorageManager {
+export class StorageHelper {
   protected client: AtlasClient;
 
   /** Providers available on the network. */
@@ -53,8 +50,8 @@ export class StorageManager {
    *
    * @returns The initialised handler instance.
    */
-  static async new(client: AtlasClient): Promise<StorageManager> {
-    const handler = new StorageManager(client)
+  static async new(client: AtlasClient): Promise<StorageHelper> {
+    const handler = new StorageHelper(client)
     await handler.loadProviders()
     return handler;
   }
