@@ -1,32 +1,32 @@
+import { EncodeObject } from "@atlas/atlas.js-protos";
 import { Provider } from "@atlas/atlas.js-protos/dist/types/atlas/storage/v1/provider";
 
+
 import { IAesBundle, IEncryptionOptions } from "./interfaces";
+import { Privacy } from "./types";
 
 import { DEFAULT_REPLICAS } from "./utils/defaults";
-import { decryptFile, encryptFile, generateAesKey } from "./utils/crypto";
+import { MessageComposer } from "./utils/composer";
 import { buildMerkleTree } from "./utils/merkle";
 import { buildFid } from "./utils/hash";
+import { decryptFile, encryptFile, generateAesKey } from "./utils/crypto";
 
 import { AtlasClient } from "./atlas-client";
-import { EncodeObject } from "@atlas/atlas.js-protos";
-import { MessageComposer } from "./utils/composer";
 import { UploadHelper } from "./upload-helper";
 
-/** Maximum distinct providers to try per file before giving up. */
-const MAX_UPLOAD_PROVIDER_ATTEMPTS = 5;
-
-/** Upload attempts on a specific provider when one is explicitly named. */
-const SPECIFIC_PROVIDER_ATTEMPTS = 3;
+/** Result of a single file upload, including the key if encryption was used. */
+export interface UploadedFile {
+  fid: string;
+  aes?: IAesBundle;
+}
 
 /**
  * Bare-bones storage operations for the Atlas Protocol.
  *
  * Provides upload, download, delete, and provider-management methods without
- * any filetree or queue state.  Intended for direct use or as a building
- * block for higher-level abstractions like {@link StorageHelper}.
- *
+ * any filetree or queue state.
  */
-export class StorageHelper {
+export class StorageHandler {
   protected client: AtlasClient;
 
   /** Providers available on the network. */
@@ -37,32 +37,13 @@ export class StorageHelper {
 
   /**
    * Create a storage handler bound to an Atlas client and its active wallet.
-   *
-   * The handler listens for wallet connection changes so it can reload account
-   * storage state when the user switches accounts.
    */
   constructor(client: AtlasClient) {
     this.client = client;
   }
 
   /**
-   * Create a storage handler and load the user's storage account.
-   *
-   * @returns The initialised handler instance.
-   */
-  static async new(client: AtlasClient): Promise<StorageHelper> {
-    const handler = new StorageHelper(client)
-    await handler.loadProviders()
-    return handler;
-  }
-
-  /**
-   * Load providers from the chain, optionally filtered to specific addresses.
-   *
-   * When `addresses` is given, only providers whose on-chain address appears
-   * in the list are retained.  When omitted, all providers are loaded.
-   *
-   * Updates the `providers` getter on success.
+   * Load providers from the chain, optionally filtered to specific hostnames.
    */
   public async loadProviders(hostnames?: string[]): Promise<void> {
     try {
@@ -71,7 +52,6 @@ export class StorageHelper {
         ? all.filter((p) => hostnames.includes(p.hostname))
         : all;
     } catch (err: any) {
-      // TODO: log error
       throw err;
     }
   }
@@ -108,50 +88,31 @@ export class StorageHelper {
   // ---------------------------------------------------------------------------
 
   /**
-   * Encrypt, merkle, commit to chain, and upload a single file to storage
-   * providers.
+   * Encrypt, merkle, commit to chain, and upload files to storage providers.
    *
-   * Returns the on-chain file ID (FID).
+   * When `opts.encryption` is provided the file is encrypted before upload
+   * and an AES key is auto-generated if none is supplied.  The key is
+   * returned alongside each FID so the caller can decrypt or share it.
    *
-   * @param file           - The file to upload.
-   * @param subscriptionId - The storage subscription to post under.
-   * @param opts           - Optional settings (replicas, encryption, provider
-   *                         hostname).
-   */
-  public async uploadFile(
-    file: File,
-    subscriptionId: string,
-    opts?: {
-      replicas?: number;
-      encryption?: IEncryptionOptions;
-      provider?: string;
-    },
-  ): Promise<string> {
-    return (await this.uploadFiles([file], subscriptionId, opts))[0];
-  }
-
-  /**
-   * Upload multiple files in a single batch.
-   *
-   * All files share the same subscription and encryption settings.
-   * Processing (encrypt + merkle) runs in parallel across files;
-   * chain commits are batched into one transaction.
-   *
-   * @returns An array of FIDs in the same order as the input files.
+   * @returns An array of `{ fid, aes }` — `aes` is present only when
+   *          encryption was used.
    */
   public async uploadFiles(
     files: File[],
     subscriptionId: string,
+    privacy: Privacy = Privacy.PUBLIC,
     opts?: {
       replicas?: number;
       encryption?: IEncryptionOptions;
       provider?: string;
+      maxProviderAttempts?: number;
     },
-  ): Promise<string[]> {
+  ): Promise<UploadedFile[]> {
     if (files.length === 0) {
       return [];
     }
 
+    const isPrivate = privacy === Privacy.ENCRYPTED;
     const replicas = opts?.replicas ?? DEFAULT_REPLICAS;
     const nonce = Math.floor(Math.random() * 2_147_483_647);
 
@@ -160,19 +121,16 @@ export class StorageHelper {
       files.map(async (file, i) => {
         const currentNonce = nonce + i;
         let processedFile = file;
-        let encryption = opts?.encryption;
+        let encryption = isPrivate ? (opts?.encryption ?? {}) : undefined;
 
-        // Encrypt if options provided
-        if (encryption) {
-          encryption.aes = encryption.aes ?? (await generateAesKey());
-          processedFile = await encryptFile(file, encryption);
+        if (isPrivate) {
+          encryption!.aes = encryption!.aes ?? (await generateAesKey());
+          processedFile = await encryptFile(file, encryption!);
         }
 
-        // Build merkle tree
         const tree = await buildMerkleTree(processedFile);
         const merkleRoot = tree.root;
 
-        // Generate file ID
         const fid = await buildFid(merkleRoot, this.client.address, currentNonce);
 
         return { file: processedFile, fid, merkleRoot, encryption };
@@ -193,36 +151,59 @@ export class StorageHelper {
     await this.client.signAndBroadcast(msgs);
 
     // --- Step 3: Upload file data to providers ---
+    const maxAttempts = opts?.maxProviderAttempts;
     await Promise.all(
       entries.map(async (e) => {
         if (opts?.provider) {
-          await this.uploadToSpecificProvider(e.fid, e.file, opts.provider!);
+          await this.uploadToSpecificProvider(e.fid, e.file, opts.provider!, maxAttempts);
         } else {
-          await this.uploadToRandomProvider(e.fid, e.file);
+          await this.uploadToRandomProvider(e.fid, e.file, maxAttempts);
         }
       }),
     );
 
-    return entries.map((e) => e.fid);
+    return entries.map((e) => ({
+      fid: e.fid,
+      aes: e.encryption?.aes,
+    }));
+  }
+
+  /**
+   * Upload a single file.
+   *
+   * Convenience wrapper around {@link uploadFiles}.
+   */
+  public async uploadFile(
+    file: File,
+    subscriptionId: string,
+    privacy: Privacy = Privacy.PUBLIC,
+    opts?: {
+      replicas?: number;
+      encryption?: IEncryptionOptions;
+      provider?: string;
+      maxProviderAttempts?: number;
+    },
+  ): Promise<UploadedFile> {
+    return (await this.uploadFiles([file], subscriptionId, privacy, opts))[0];
   }
 
   /**
    * Upload a single file to a specific provider, retrying on failure.
    */
-  private async uploadToSpecificProvider(fid: string, file: File, hostname: string): Promise<void> {
+  private async uploadToSpecificProvider(fid: string, file: File, hostname: string, maxAttempts: number = 3): Promise<void> {
     let lastError: Error | null = null;
-    for (let attempt = 1; attempt <= SPECIFIC_PROVIDER_ATTEMPTS; attempt++) {
+    for (let attempt = 1; attempt <= maxAttempts; attempt++) {
       try {
         const result = await UploadHelper.upload(hostname, fid, file);
         if (result.success) return;
         lastError = new Error(result.message ?? "Upload returned unsuccessful status.");
       } catch (err: any) {
-        console.warn(`Upload attempt ${attempt}/${SPECIFIC_PROVIDER_ATTEMPTS} to "${hostname}" failed: ${err.message}.`);
+        console.warn(`Upload attempt ${attempt}/${maxAttempts} to "${hostname}" failed: ${err.message}.`);
         lastError = err;
       }
     }
     throw new Error(
-      `Failed to upload file "${fid}" to "${hostname}" after ${SPECIFIC_PROVIDER_ATTEMPTS} attempts: ${lastError?.message}`,
+      `Failed to upload file "${fid}" to "${hostname}" after ${maxAttempts} attempts: ${lastError?.message}`,
     );
   }
 
@@ -230,7 +211,7 @@ export class StorageHelper {
    * Upload a file to a randomly selected provider, retrying with different
    * providers on failure.
    */
-  private async uploadToRandomProvider(fid: string, file: File): Promise<void> {
+  private async uploadToRandomProvider(fid: string, file: File, maxAttempts: number = 5): Promise<void> {
     if (this._providers.length === 0) {
       throw new Error("Cannot upload. No storage providers available.");
     }
@@ -238,7 +219,7 @@ export class StorageHelper {
     const tried = new Set<string>();
     let lastError: Error | null = null;
 
-    while (tried.size < Math.min(MAX_UPLOAD_PROVIDER_ATTEMPTS, this._providers.length)) {
+    while (tried.size < Math.min(maxAttempts, this._providers.length)) {
       const untried = this._providers.filter((p) => !tried.has(p.hostname));
       if (untried.length === 0) break;
 
@@ -270,8 +251,7 @@ export class StorageHelper {
    * Tries each provider assigned to the file until one succeeds.  When a
    * specific `provider` is passed only that host is attempted.
    *
-   * Encrypted files are decrypted with the viewer authority bundle stored on
-   * the filetree node.
+   * Encrypted files are decrypted with the provided AES bundle.
    */
   public async downloadFile(fid: string, aes?: IAesBundle, provider?: string, name?: string): Promise<File> {
     let providers: string[];
@@ -328,15 +308,29 @@ export class StorageHelper {
   // ---------------------------------------------------------------------------
 
   /**
-   * Delete one file from storage and its filetree node.
-   *
-   * Returns the transaction hash after refreshing the current directory.
+   * Delete one file from storage.
    */
   public async deleteFile(fid: string): Promise<string> {
-    const msg = MessageComposer.MsgDeleteFile(this.client.address, fid)
+    return (await this.deleteFiles([fid]))[0];
+  }
+
+  /**
+   * Delete multiple files from storage in a single transaction.
+   *
+   * Each FID is batched into the same `signAndBroadcast` call.
+   *
+   * @returns An array of transaction hashes (one per batch — all FIDs
+   *          share the same hash when batched).
+   */
+  public async deleteFiles(fids: string[]): Promise<string[]> {
+    if (fids.length === 0) return [];
+
+    const msgs = fids.map((fid) =>
+      MessageComposer.MsgDeleteFile(this.client.address, fid),
+    );
     try {
-      const txResult = await this.client.signAndBroadcast([msg]);
-      return txResult.hash;
+      const txResult = await this.client.signAndBroadcast(msgs);
+      return new Array(fids.length).fill(txResult.hash);
     } catch (err: any) {
       const errorMessage = err instanceof Error ? err.message : String(err);
       if (errorMessage.includes("file not found")) {

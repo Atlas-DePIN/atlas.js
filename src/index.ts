@@ -18,6 +18,8 @@ export type {
   QueryClient,
 } from './types';
 
+export { Privacy } from './types';
+
 export type {
   IAtlasDriveInfo,
   IAtlasDirectoryInfo,
@@ -31,7 +33,8 @@ export type {
 
 export { AtlasClient } from './atlas-client';
 
-export { StorageManager as StorageHandler } from './storage-manager';
+export { StorageManager } from './storage-manager';
+export { StorageHandler, UploadedFile } from './storage-handler';
 export { UploadHelper } from './upload-helper';
 export { FiletreeHelper } from './filetree-helper';
 export { QueryHelper } from './query-helper';

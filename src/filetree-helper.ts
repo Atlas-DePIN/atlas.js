@@ -2,7 +2,7 @@ import { AtlasClient } from "./atlas-client";
 import { PrivateKey } from "eciesjs";
 import { IAesBundle, IAtlasDirectoryInfo, IAtlasDriveInfo, IAtlasFileInfo, IQueuedFile, IReadAuthorityKeeper } from "./interfaces";
 import { aesStringCrypt, exportAesBundle, generateAesKey, importAesBundle } from "./utils/crypto";
-import { EncryptionType, TreeNode } from "./types"
+import { Privacy, TreeNode } from "./types"
 import { MessageComposer } from "./utils/composer";
 import { bytesToHex } from "./utils/converters";
 import { EncodeObject } from "@atlas/atlas.js-protos";
@@ -53,14 +53,14 @@ export class FiletreeHelper {
   /**
    * Create a top-level drive node for the active account.
    */
-  public async createDrive(metadata: IAtlasDriveInfo, encryption: EncryptionType = EncryptionType.ENCRYPTED): Promise<EncodeObject> {
+  public async createDrive(metadata: IAtlasDriveInfo, encryption: Privacy = Privacy.ENCRYPTED): Promise<EncodeObject> {
     this.requireSigner();
 
     let contents = JSON.stringify(metadata)
     let readAuthorities = {}
 
     switch (encryption) {
-      case EncryptionType.ENCRYPTED:
+      case Privacy.ENCRYPTED:
         // Create a new AES key
         const aes = await generateAesKey();
         // Encrypt the drive name and contents
@@ -133,15 +133,15 @@ export class FiletreeHelper {
       case "1":
         const aes = await this.extractAesKey(node.viewers)
         node.contents = await aesStringCrypt(node.contents, aes, 'decrypt')
-        node.encryption = EncryptionType.ENCRYPTED
+        node.encryption = Privacy.ENCRYPTED
         break
       case "2":
         // TODO: password-protected file
-        node.encryption = EncryptionType.PASSWORD_PROTECTED
+        node.encryption = Privacy.PASSWORD_PROTECTED
         break
       case "0":
       default:
-        node.encryption = EncryptionType.PUBLIC
+        node.encryption = Privacy.PUBLIC
         break
     }
     return node
