@@ -9,6 +9,7 @@ import { DEFAULT_REPLICAS } from "./utils/defaults";
 import { MessageComposer } from "./utils/composer";
 import { buildMerkleTree } from "./utils/merkle";
 import { buildFid } from "./utils/hash";
+import { ProviderError } from "./types/errors";
 import { decryptFile, encryptFile, generateAesKey } from "./utils/crypto";
 
 import { AtlasClient } from "./atlas-client";
@@ -203,7 +204,7 @@ export class StorageHandler {
       }
     }
     throw new Error(
-      `Failed to upload file "${fid}" to "${hostname}" after ${maxAttempts} attempts: ${lastError?.message}`,
+      `Failed to upload file "${fid}" to "${hostname}" after ${maxAttempts} attempts: ${lastError?.message}`
     );
   }
 
@@ -213,7 +214,7 @@ export class StorageHandler {
    */
   private async uploadToRandomProvider(fid: string, file: File, maxAttempts: number = 5): Promise<void> {
     if (this._providers.length === 0) {
-      throw new Error("Cannot upload. No storage providers available.");
+      throw new ProviderError("Cannot upload. No storage providers available.");
     }
 
     const tried = new Set<string>();
@@ -264,7 +265,7 @@ export class StorageHandler {
     }
 
     if (providers.length === 0) {
-      throw new Error(`File "${fid}" does not have an assigned storage provider.`);
+      throw new ProviderError(`File "${fid}" does not have an assigned storage provider.`);
     }
 
     let lastError: Error | null = null;

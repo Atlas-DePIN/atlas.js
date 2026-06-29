@@ -18,3 +18,10 @@ export class DirectoryLoadError extends Error {
     this.name = 'DirectoryLoadError';
   }
 }
+
+export class ProviderError extends Error {
+  constructor(message: string, public readonly address?: string) {
+    super(message);
+    this.name = 'ProviderError';
+  }
+}

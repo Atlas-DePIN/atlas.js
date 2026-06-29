@@ -4,7 +4,7 @@ import { Provider, StorageSubscription } from "atlas.js-protos/storage";
 
 import { TreeNode, QueuedFileStatus } from "./types";
 import { FileProcessingEvent, StorageEvents, StorageHandlerEvent, WalletEvents } from "./types/events";
-import { SubscriptionError } from "./types/errors";
+import { SubscriptionError, ProviderError } from "./types/errors";
 import { IAtlasDriveInfo, IAtlasDirectoryInfo, IDirectory, IQueuedFile, IFileUploadOptions, IAtlasFileInfo } from "./interfaces";
 
 import { DEFAULT_ENCYRPTION_CHUNK_SIZE, DEFAULT_REPLICAS } from "./utils/defaults";
@@ -113,16 +113,20 @@ export class StorageManager extends EventEmitter {
   }
 
   /**
-   * Fetch the list of storage providers from the chain.
+   * Load providers from the chain, optionally filtered to specific hostnames.
    *
-   * Updates the `providers` getter on success.
+   * When `hostnames` is given, only providers whose hostname appears in the
+   * list are retained.  When omitted, all providers are loaded.
    */
-  public async loadProviders(): Promise<void> {
+  public async loadProviders(hostnames?: string[]): Promise<void> {
     try {
-      this._providers = await this.client.query.providers();
+      const all = await this.client.query.providers();
+      this._providers = hostnames
+        ? all.filter((p) => hostnames.includes(p.hostname))
+        : all;
     } catch (err: any) {
-      // TODO: log error
-      throw err;
+      const message = err instanceof Error ? err.message : String(err);
+      throw new ProviderError(`Failed to load providers: ${message}`);
     }
   }
 
