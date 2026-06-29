@@ -53,11 +53,8 @@ export {
 export { AtlasClient } from './atlas-client';
 export { StorageManager } from './storage-manager';
 export { StorageHandler, UploadedFile } from './storage-handler';
-export { UploadHelper, UploadResult } from './upload-helper';
 export { FiletreeHelper } from './filetree-helper';
 export { QueryHelper } from './query-helper';
-export { WalletManager } from './wallets';
-export { BaseWallet } from './wallets/base-wallet';
 
 // ---------------------------------------------------------------------------
 // Enums

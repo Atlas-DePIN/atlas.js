@@ -1,9 +1,9 @@
 {
   "name": "atlas.js",
-  "version": "0.2.0",
-  "description": "",
-  "license": "ISC",
-  "author": "",
+  "version": "0.1.0",
+  "description": "TypeScript SDK for interacting with Atlas Protocol — wallet management, storage, file tree, and transactions.",
+  "license": "MIT",
+  "author": "Ahmed Moussa",
   "types": "./dist/index.d.ts",
   "main": "./dist/index.js",
   "module": "./dist/esm/index.js",
