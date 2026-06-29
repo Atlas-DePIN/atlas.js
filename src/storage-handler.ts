@@ -312,26 +312,25 @@ export class StorageHandler {
    * Delete one file from storage.
    */
   public async deleteFile(fid: string): Promise<string> {
-    return (await this.deleteFiles([fid]))[0];
+    return await this.deleteFiles([fid]);
   }
 
   /**
    * Delete multiple files from storage in a single transaction.
    *
-   * Each FID is batched into the same `signAndBroadcast` call.
+   * All FIDs are batched into the same `signAndBroadcast` call.
    *
-   * @returns An array of transaction hashes (one per batch — all FIDs
-   *          share the same hash when batched).
+   * @returns The transaction hash.
    */
-  public async deleteFiles(fids: string[]): Promise<string[]> {
-    if (fids.length === 0) return [];
+  public async deleteFiles(fids: string[]): Promise<string> {
+    if (fids.length === 0) throw new Error('No files specified for deletion.');
 
     const msgs = fids.map((fid) =>
       MessageComposer.MsgDeleteFile(this.client.address, fid),
     );
     try {
       const txResult = await this.client.signAndBroadcast(msgs);
-      return new Array(fids.length).fill(txResult.hash);
+      return txResult.hash;
     } catch (err: any) {
       const errorMessage = err instanceof Error ? err.message : String(err);
       if (errorMessage.includes("file not found")) {

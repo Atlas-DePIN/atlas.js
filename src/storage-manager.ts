@@ -421,25 +421,43 @@ export class StorageManager extends EventEmitter {
   /**
    * Delete one file from storage and its filetree node.
    *
-   * Returns the transaction hash after refreshing the current directory.
+   * Returns the transaction hash.
    */
   public async deleteFile(fid: string, basepath: string = this.directory.path): Promise<string> {
-    const msgDeleteFile = MessageComposer.MsgDeleteFile(this.client.address, fid)
-    const msgs: EncodeObject[] = [
-      await this.filetree.incrementDirectoryItemCount(basepath, -1),
-      MessageComposer.MsgDeleteNode(this.client.address, joinPath(basepath, fid)),
+    return await this.deleteFiles([fid], basepath);
+  }
+
+  /**
+   * Delete multiple files in a single transaction.
+   *
+   * All files are deleted together.  If any file cannot be found on-chain
+   * the entire batch fails.
+   *
+   * @returns The transaction hash.
+   */
+  public async deleteFiles(fids: string[], basepath: string = this.directory.path): Promise<string> {
+    if (fids.length === 0) throw new Error('No files specified for deletion.');
+
+    const treeMsgs: EncodeObject[] = [
+      await this.filetree.incrementDirectoryItemCount(basepath, -fids.length),
+      ...fids.map((fid) =>
+        MessageComposer.MsgDeleteNode(this.client.address, joinPath(basepath, fid)),
+      ),
     ];
+    const deleteMsgs = fids.map((fid) =>
+      MessageComposer.MsgDeleteFile(this.client.address, fid),
+    );
+
     try {
-      const txResult = await this.client.signAndBroadcast([...msgs, msgDeleteFile]);
+      const txResult = await this.client.signAndBroadcast([...treeMsgs, ...deleteMsgs]);
       return txResult.hash;
     } catch (err: any) {
       const errorMessage = err instanceof Error ? err.message : String(err);
-      if (errorMessage.includes("file not found")) {
-        const txResult = await this.client.signAndBroadcast([...msgs]);
+      if (fids.length === 1 && errorMessage.includes("file not found")) {
+        const txResult = await this.client.signAndBroadcast(treeMsgs);
         return txResult.hash;
       }
-    } finally {
-      // await this.reloadDirectory();
+      throw err;
     }
   }
 
