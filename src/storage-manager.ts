@@ -137,8 +137,7 @@ export class StorageManager extends EventEmitter {
    * If no drives exist, creates a default "home" drive and navigates into it.
    * Otherwise loads the first drive marked as default.
    */
-  protected async loadAccount() {
-    // TODO: reset
+  protected async loadAccount(): Promise<void> {
     await this.loadSubscription();
     await this.enableSigner();
 
@@ -147,19 +146,18 @@ export class StorageManager extends EventEmitter {
       const metadata: IAtlasDriveInfo = {
         name: 'home',
         size: 0,
-        isDefault: true
-      }
-      const msg = await this.filetree.createDrive(metadata)
+        isDefault: true,
+      };
+      const msg = await this.filetree.createDrive(metadata);
       await this.client.signAndBroadcast([msg], {
         gasAdjustment: 2,   // Dev Note: needed higher gas limit for this Tx. To investigate why.
       });
       this._drives = [metadata];
       await this.loadDirectory('home');
-      return
-    } else {
-      const defaultDrive = this.drives.find((drive) => drive.isDefault) ?? this.drives[0];
-      await this.loadDirectory(defaultDrive.name);
+      return;
     }
+    const defaultDrive = this.drives.find((drive) => drive.isDefault) ?? this.drives[0];
+    await this.loadDirectory(defaultDrive.name);
   }
 
   /**
@@ -177,7 +175,7 @@ export class StorageManager extends EventEmitter {
     try {
       this._subscription = await this.client.query.subscription(this.client.address, id);
       this.emit(StorageHandlerEvent.SUB_NEW, this.subscription);
-    } catch (error) {
+    } catch (error: any) {
       this.emit(StorageHandlerEvent.SUB_NONE);
       throw new SubscriptionError(`Failed to load subscription "${id}" for "${this.client.address}": ${error}`);
     }
@@ -202,8 +200,10 @@ export class StorageManager extends EventEmitter {
       throw new TypeError('Unable to load directory. No owner specified and no wallet connected.');
     }
     // Get directory tree node
-    const node = await this.filetree.getTreeNode(path, owner)
-    console.log("[ATLAS.JS] FT Node:", node)
+    const node = await this.filetree.getTreeNode(path, owner);
+    if (!node || !node.contents) {
+      throw new Error(`Directory "${path}" not found or has no contents.`);
+    }
     const nextDirectory: IDirectory = {
       metadata: JSON.parse(node.contents) as IAtlasDirectoryInfo,
       path,
@@ -213,8 +213,7 @@ export class StorageManager extends EventEmitter {
     };
 
     // Get directory children on-chain
-    const children: TreeNode[] = await this.filetree.getTreeNodeChildren(path, owner)
-    console.log("[ATLAS.JS] FT Node Children:", children)
+    const children: TreeNode[] = await this.filetree.getTreeNodeChildren(path, owner);
     // Parse and sort directory children by their types
     for (const [index, node] of children.entries()) {
       try {
@@ -234,12 +233,15 @@ export class StorageManager extends EventEmitter {
     this.emit(StorageHandlerEvent.DIR_NAV, nextDirectory.path);
   }
 
-
+  /**
+   * List all storage subscriptions for the connected wallet.
+   */
   public async listSubscriptions(): Promise<StorageSubscription[]> {
     try {
       return await this.client.query.subscriptions(this.client.address);
-    } catch (error) {
-      throw new SubscriptionError(`Failed to list subscriptions for "${this.client.address}": ${error}`);
+    } catch (err: any) {
+      const message = err instanceof Error ? err.message : String(err);
+      throw new SubscriptionError(`Failed to list subscriptions for "${this.client.address}": ${message}`);
     }
   }
 
@@ -248,12 +250,14 @@ export class StorageManager extends EventEmitter {
    *
    * Queries the filetree root children and filters for nodes with a
    * `drive` type, parsing their contents into {@link IAtlasDriveInfo}.
+   * Entries with unparseable metadata are silently skipped.
    */
   protected async listDrives(): Promise<IAtlasDriveInfo[]> {
     const nodes = await this.filetree.getTreeNodeChildren("");
     return nodes
       .filter((node) => node.nodeType === 'drive')
-      .map((node) => this.safeParseNodeContents<IAtlasDriveInfo>(node.contents, 'drive'));
+      .map((node) => this.safeParseNodeContents<IAtlasDriveInfo>(node.contents, 'drive'))
+      .filter((d): d is IAtlasDriveInfo => d !== undefined);
   }
 
   /**
@@ -262,7 +266,7 @@ export class StorageManager extends EventEmitter {
    * The minimum purchase is one gigabyte for one day.
    */
   public async purchaseSubscription(bytes: number, days: number, isDefault: boolean, address: string = this.client.address): Promise<string> {
-    if (bytes < 1000 ** 3) {
+    if (bytes < 1_000_000_000) {
       throw new Error('Cannot purchase less than 1GB of storage.');
     }
     if (days < 1) {
@@ -275,8 +279,8 @@ export class StorageManager extends EventEmitter {
         address,
         days,
         bytes,
-        isDefault
-      )
+        isDefault,
+      ),
     ];
 
     const txResult = await this.client.signAndBroadcast(msgs);
@@ -640,7 +644,7 @@ export class StorageManager extends EventEmitter {
     this.emit(FileProcessingEvent.ERROR, fileKey, error);
   }
 
-  private safeParseNodeContents<T>(contents: string, path: string): T {
+  private safeParseNodeContents<T>(contents: string, path: string): T | undefined {
     try {
       return JSON.parse(contents) as T;
     } catch (err: any) {
