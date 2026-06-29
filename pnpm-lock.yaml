@@ -8,9 +8,6 @@ importers:
 
   .:
     dependencies:
-      '@atlas/atlas.js-protos':
-        specifier: file:atlas-atlas.js-protos-0.1.0.tgz
-        version: file:atlas-atlas.js-protos-0.1.0.tgz(@chain-registry/v2-types@0.53.146)(@chain-registry/v2@1.71.237)(google-protobuf@3.21.4)
       '@cosmjs/encoding':
         specifier: ^0.38.1
         version: 0.38.1
@@ -32,6 +29,9 @@ importers:
       '@openzeppelin/merkle-tree':
         specifier: ^1.0.8
         version: 1.0.8
+      atlas.js-protos:
+        specifier: ^0.1.0
+        version: 0.1.0(@chain-registry/v2-types@0.53.146)(@chain-registry/v2@1.71.237)(google-protobuf@3.21.4)
       axios:
         specifier: ^1.13.3
         version: 1.16.1
@@ -129,10 +129,6 @@ packages:
   '@ahm23/telescope@2.3.2':
     resolution: {integrity: sha512-VfFT5s434CQeJ8AJEbA62w2KK4/zFZ/P6bUUVdKbQs302pMjLLl5Js/qSwjCc11aLpGM2VtziUTujlqCo38TEw==}
     hasBin: true
-
-  '@atlas/atlas.js-protos@file:atlas-atlas.js-protos-0.1.0.tgz':
-    resolution: {integrity: sha512-pziey9ciOCz/NR55p2RjxCJEA9XxFjSxnjU3qajujRkcA/6JSwKcFxYkMbkcpXzrsQ1V/hA9hCf+Sly0bGzrSQ==, tarball: file:atlas-atlas.js-protos-0.1.0.tgz}
-    version: 0.1.0
 
   '@babel/code-frame@7.29.7':
     resolution: {integrity: sha512-Aup7aUOfpbAUg2ROOJN6Iw5f9DMBlzu0mIkm/malLQFN/YQgO48wCj0Kxa3sEHJvPVFg7siR+qRInwXd2qhQKw==}
@@ -1136,6 +1132,9 @@ packages:
 
   asynckit@0.4.0:
     resolution: {integrity: sha512-Oei9OH4tRh0YqU3GxhX79dM/mwVgvbZJaSNaRk+bshkj0S5cfHcgYakreBjrHwatXKbz+IoIdYLxrKim2MjW0Q==}
+
+  atlas.js-protos@0.1.0:
+    resolution: {integrity: sha512-WX52YD9LFoO5NMvDzfzkoj46xeW+HNRKOxD8qILhw2uFO1BkPP4K+rHLWXtVC+ojMv2fhj+pEIzI1lA5O9Ep4w==}
 
   available-typed-arrays@1.0.7:
     resolution: {integrity: sha512-wvUjBtSGN7+7SjNpq/9M2Tg350UZD3q62IFZLbRAR1bSMlCo1ZaeW+BJ+D090e4hIIZLBcTDWe4Mh4jvUDajzQ==}
@@ -2594,33 +2593,6 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@atlas/atlas.js-protos@file:atlas-atlas.js-protos-0.1.0.tgz(@chain-registry/v2-types@0.53.146)(@chain-registry/v2@1.71.237)(google-protobuf@3.21.4)':
-    dependencies:
-      '@ahm23/telescope': 2.3.2
-      '@ahm23/telescope-ast': 2.3.1
-      '@ahm23/telescope-lcd': 0.17.1
-      '@ahm23/telescope-proto-parser': 2.2.2
-      '@cosmjs/amino': 0.29.4
-      '@cosmjs/proto-signing': 0.38.1
-      '@cosmjs/stargate': 0.38.1
-      '@cosmjs/tendermint-rpc': 0.38.1
-      '@improbable-eng/grpc-web': 0.15.0(google-protobuf@3.21.4)
-      '@improbable-eng/grpc-web-node-http-transport': 0.15.0(@improbable-eng/grpc-web@0.15.0(google-protobuf@3.21.4))
-      '@interchainjs/cosmos': 1.21.0(@chain-registry/v2-types@0.53.146)(@chain-registry/v2@1.71.237)
-      '@interchainjs/types': 1.21.0
-      browser-headers: 0.4.1
-      cosmjs-types: 0.11.0
-      long: 5.3.2
-      protobufjs: 8.6.5
-    transitivePeerDependencies:
-      - '@chain-registry/v2'
-      - '@chain-registry/v2-types'
-      - bufferutil
-      - debug
-      - google-protobuf
-      - supports-color
-      - utf-8-validate
-
   '@babel/code-frame@7.29.7':
     dependencies:
       '@babel/helper-validator-identifier': 7.29.7
@@ -3624,6 +3596,33 @@ snapshots:
       util: 0.12.5
 
   asynckit@0.4.0: {}
+
+  atlas.js-protos@0.1.0(@chain-registry/v2-types@0.53.146)(@chain-registry/v2@1.71.237)(google-protobuf@3.21.4):
+    dependencies:
+      '@ahm23/telescope': 2.3.2
+      '@ahm23/telescope-ast': 2.3.1
+      '@ahm23/telescope-lcd': 0.17.1
+      '@ahm23/telescope-proto-parser': 2.2.2
+      '@cosmjs/amino': 0.29.4
+      '@cosmjs/proto-signing': 0.38.1
+      '@cosmjs/stargate': 0.38.1
+      '@cosmjs/tendermint-rpc': 0.38.1
+      '@improbable-eng/grpc-web': 0.15.0(google-protobuf@3.21.4)
+      '@improbable-eng/grpc-web-node-http-transport': 0.15.0(@improbable-eng/grpc-web@0.15.0(google-protobuf@3.21.4))
+      '@interchainjs/cosmos': 1.21.0(@chain-registry/v2-types@0.53.146)(@chain-registry/v2@1.71.237)
+      '@interchainjs/types': 1.21.0
+      browser-headers: 0.4.1
+      cosmjs-types: 0.11.0
+      long: 5.3.2
+      protobufjs: 8.6.5
+    transitivePeerDependencies:
+      - '@chain-registry/v2'
+      - '@chain-registry/v2-types'
+      - bufferutil
+      - debug
+      - google-protobuf
+      - supports-color
+      - utf-8-validate
 
   available-typed-arrays@1.0.7:
     dependencies:

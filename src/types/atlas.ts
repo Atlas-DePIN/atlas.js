@@ -1,5 +1,5 @@
-import { QueryFileStatsResponse, QueryStorageStatsResponse } from "@atlas/atlas.js-protos/storage/query";
-import { TreeNode as AtlasTreeNode } from "@atlas/atlas.js-protos/filetree";
+import { QueryFileStatsResponse, QueryStorageStatsResponse } from "atlas.js-protos/storage/query";
+import { TreeNode as AtlasTreeNode } from "atlas.js-protos/filetree";
 
 export enum Privacy {
   PUBLIC,

@@ -5,7 +5,7 @@ import { aesStringCrypt, exportAesBundle, generateAesKey, importAesBundle } from
 import { Privacy, TreeNode } from "./types"
 import { MessageComposer } from "./utils/composer";
 import { bytesToHex } from "./utils/converters";
-import { EncodeObject } from "@atlas/atlas.js-protos";
+import { EncodeObject } from "atlas.js-protos";
 import { buildFileNodeContents, joinPath, parseNodeContents } from "./utils/meta";
 
 

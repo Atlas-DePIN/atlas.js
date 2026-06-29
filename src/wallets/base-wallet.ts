@@ -3,7 +3,7 @@ import { Coin, OfflineSigner as OfflineAminoSigner, Registry } from '@cosmjs/pro
 import { GasPrice } from '@cosmjs/stargate';
 import { TxBody } from 'cosmjs-types/cosmos/tx/v1beta1/tx';
 
-import { GlobalDecoderRegistry } from '@atlas/atlas.js-protos'
+import { GlobalDecoderRegistry } from 'atlas.js-protos'
 import { WalletType } from '../types/wallet'
 import {
   AtlasConfig,

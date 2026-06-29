@@ -1,5 +1,5 @@
-import { EncodeObject } from "@atlas/atlas.js-protos";
-import { Provider } from "@atlas/atlas.js-protos/storage";
+import { EncodeObject } from "atlas.js-protos";
+import { Provider } from "atlas.js-protos/storage";
 
 
 import { IAesBundle, IEncryptionOptions } from "./interfaces";
