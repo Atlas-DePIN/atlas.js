@@ -1,7 +1,6 @@
 import type { WalletType } from "../../types"
 import type { QueryHelper } from "../../query-helper";
-import type { StorageManager } from "../../storage-manager";
-import type { TxOptions } from "../../interfaces/wallet";
+import type { TxOptions } from "../../types/wallet";
 import type { IndexedTx } from "@cosmjs/stargate";
 
 export interface IAtlasClient {

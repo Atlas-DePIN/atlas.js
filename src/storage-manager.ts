@@ -24,9 +24,6 @@ import { joinPath, parseNodeContents } from "./utils/meta";
 /** Maximum distinct providers to try per file before giving up. */
 const MAX_UPLOAD_PROVIDER_ATTEMPTS = 5;
 
-/** Upload attempts on a specific provider when one is explicitly named. */
-const SPECIFIC_PROVIDER_ATTEMPTS = 3;
-
 /**
  * Manages the storage lifecycle for a connected Atlas wallet.
  *
@@ -515,7 +512,7 @@ export class StorageManager extends EventEmitter {
 
   /**
    * Attempt uploading to a single named provider, retrying up to
-   * {@link SPECIFIC_PROVIDER_ATTEMPTS} times.
+   * {@link 3} times.
    */
   private async trySpecificProvider(
     key: string,
@@ -524,7 +521,7 @@ export class StorageManager extends EventEmitter {
   ): Promise<void> {
     let lastError: Error | null = null;
 
-    for (let attempt = 1; attempt <= SPECIFIC_PROVIDER_ATTEMPTS; attempt++) {
+    for (let attempt = 1; attempt <= 3; attempt++) {
       try {
         const result = await UploadHelper.upload(hostname, queued.fid, queued.file);
 
@@ -536,7 +533,7 @@ export class StorageManager extends EventEmitter {
         lastError = new Error(result.message ?? `Upload returned unsuccessful status.`);
       } catch (err: any) {
         console.warn(
-          `Upload attempt ${attempt}/${SPECIFIC_PROVIDER_ATTEMPTS} to "${hostname}" failed: ${err.message}.`,
+          `Upload attempt ${attempt}/${3} to "${hostname}" failed: ${err.message}.`,
         );
         lastError = err;
       }
@@ -546,7 +543,7 @@ export class StorageManager extends EventEmitter {
 
     this.updateQueuedFileStatus(key, 'error');
     throw new Error(
-      `Failed to upload file "${key}" to "${hostname}" after ${SPECIFIC_PROVIDER_ATTEMPTS} attempts: ${lastError?.message}`,
+      `Failed to upload file "${key}" to "${hostname}" after ${3} attempts: ${lastError?.message}`,
     );
   }
 

@@ -9,6 +9,20 @@ export enum WalletType {
   NONE = 'none'
 }
 
+export interface WalletInfo {
+  name: string;
+  logo: string;
+  isInstalled: boolean;
+  isAvailable: boolean;
+}
+
+export interface TxOptions {
+  memo?: string;
+  fee?: any;
+  gas?: string;
+  gasAdjustment?: number;
+}
+
 export interface IChainConfig {
   chainId: string
   chainName: string

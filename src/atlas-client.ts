@@ -5,9 +5,8 @@ import { atlas } from 'atlas.js-protos';
 import { 
   IAtlasClient,
   AtlasConfig,
-  TxOptions,
 } from "./interfaces"
-import { WalletType } from './types'
+import { WalletType, TxOptions } from './types'
 import { ClientEvent, WalletEvents } from './types/events';
 
 import { WalletManager } from './wallets';

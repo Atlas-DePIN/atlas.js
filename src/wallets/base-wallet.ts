@@ -4,11 +4,8 @@ import { GasPrice } from '@cosmjs/stargate';
 import { TxBody } from 'cosmjs-types/cosmos/tx/v1beta1/tx';
 
 import { GlobalDecoderRegistry } from 'atlas.js-protos'
-import { WalletType } from '../types/wallet'
-import {
-  AtlasConfig,
-  TxOptions,
-} from '../interfaces'
+import { WalletType, TxOptions } from '../types/wallet'
+import { AtlasConfig } from '../interfaces'
 
 /**
  * Abstract base class for wallet implementations.

@@ -2,13 +2,9 @@ import EventEmitter from 'events';
 import { Account, Coin, SigningStargateClient, StargateClient } from '@cosmjs/stargate';
 import { TxBody } from 'cosmjs-types/cosmos/tx/v1beta1/tx';
 
-import { WalletType } from '../types/wallet'
+import { WalletType, WalletInfo, TxOptions } from '../types/wallet'
 import { WalletEvents } from '../types/events'
-import { 
-  AtlasConfig,
-  WalletInfo,
-  TxOptions,
-} from '../interfaces';
+import { AtlasConfig } from '../interfaces';
 
 import { BaseWallet } from './base-wallet';
 import { KeplrWallet } from './adapters/keplr-adapter';

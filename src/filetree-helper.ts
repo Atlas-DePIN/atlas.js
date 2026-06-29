@@ -1,6 +1,6 @@
 import { AtlasClient } from "./atlas-client";
 import { PrivateKey } from "eciesjs";
-import { IAesBundle, IAtlasDirectoryInfo, IAtlasDriveInfo, IAtlasFileInfo, IQueuedFile, IReadAuthorityKeeper } from "./interfaces";
+import { IAesBundle, IAtlasDirectoryInfo, IAtlasDriveInfo, IQueuedFile, IReadAuthorityPackage } from "./interfaces";
 import { aesStringCrypt, exportAesBundle, generateAesKey, importAesBundle } from "./utils/crypto";
 import { Privacy, TreeNode } from "./types"
 import { MessageComposer } from "./utils/composer";
@@ -169,7 +169,7 @@ export class FiletreeHelper {
    *
    * Unencrypted files do not need authority bundles.
    */
-  private async addReadAuthority(authorities: IReadAuthorityKeeper, address: string, aes: IAesBundle): Promise<IReadAuthorityKeeper> {
+  private async addReadAuthority(authorities: IReadAuthorityPackage, address: string, aes: IAesBundle): Promise<IReadAuthorityPackage> {
     authorities[address] = await exportAesBundle(this.accessKey.publicKey.toHex(), aes)
     return authorities
   }

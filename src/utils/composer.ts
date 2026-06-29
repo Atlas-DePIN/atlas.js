@@ -2,7 +2,7 @@
 import { EncodeObject } from '@cosmjs/proto-signing';
 import { MsgPostFile, MsgDeleteFile, MsgBuyStorage } from 'atlas.js-protos/storage/tx';
 import { MsgDeleteNode, MsgPostNode } from 'atlas.js-protos/filetree/tx';
-import { IReadAuthorityKeeper } from '../interfaces';
+import { IReadAuthorityPackage } from '../interfaces';
 
 export class MessageComposer {
   /**
@@ -47,7 +47,7 @@ export class MessageComposer {
   /**
    * Creates a file tree node message
    */
-  static MsgPostNode(creator: string, path: string, nodeType: string, contents: string, viewers: IReadAuthorityKeeper, editors: string[]): EncodeObject {
+  static MsgPostNode(creator: string, path: string, nodeType: string, contents: string, viewers: IReadAuthorityPackage, editors: string[]): EncodeObject {
     return {
       typeUrl: MsgPostNode.typeUrl,
       value: MsgPostNode.fromPartial({
