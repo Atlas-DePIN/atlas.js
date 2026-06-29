@@ -1,19 +1,22 @@
-import { WalletType } from "../../types"
-import { QueryHelper } from "../../query-helper";
+import type { WalletType } from "../../types"
+import type { QueryHelper } from "../../query-helper";
+import type { StorageManager } from "../../storage-manager";
+import type { TxOptions } from "../../interfaces/wallet";
+import type { IndexedTx } from "@cosmjs/stargate";
 
-import { StorageManager } from "../../storage-manager";
+export interface IAtlasClient {
+  get query(): QueryHelper;
+  get address(): string;
 
-export interface IAtlasClient  {
-  get query(): QueryHelper
-  get address(): string
+  initialize(): Promise<void>;
+  isInitialized(): boolean;
+  dispose(): Promise<void>;
 
-  initialize(): Promise<void>
-  isInitialized(): boolean
+  connectWallet(type: WalletType, options?: any): Promise<void>;
+  disconnectWallet(): Promise<void>;
+  isWalletConnected(): boolean;
+  getWalletType(): WalletType | null;
 
-  connectWallet(type: WalletType, options?: any): Promise<void>
-  disconnectWallet(): Promise<void>
-  isWalletConnected(): boolean
-  getWalletType(): WalletType | null
-
-  createStorageHandler(): StorageManager
+  signMessage(message: string | Uint8Array): Promise<string>;
+  signAndBroadcast(messages: any[], options?: TxOptions): Promise<IndexedTx>;
 }

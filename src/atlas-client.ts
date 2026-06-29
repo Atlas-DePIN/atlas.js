@@ -12,7 +12,6 @@ import { ClientEvent, WalletEvents } from './types/events';
 
 import { WalletManager } from './wallets';
 import { QueryHelper } from './query-helper';
-import { StorageManager } from './storage-manager';
 
 /**
  * High-level client for interacting with an Atlas blockchain node.
@@ -33,9 +32,8 @@ export class AtlasClient extends EventEmitter implements IAtlasClient {
 
   /** Read-only query helper for chain data. */
   private _queryHelper: QueryHelper;
-  get query(): QueryHelper
-  {
-    return this._queryHelper
+  get query(): QueryHelper {
+    return this._queryHelper;
   }
 
   /**
@@ -143,9 +141,9 @@ export class AtlasClient extends EventEmitter implements IAtlasClient {
    *
    * @throws If the wallet type is unavailable or connection fails.
    */
-  async connectWallet(type: WalletType,  options?: any): Promise<void> {
+  async connectWallet(type: WalletType, options?: any): Promise<void> {
     if (!this._isInitialized) await this.initialize();
-    return await this._walletManager.connect(type, options);
+    await this._walletManager.connect(type, options);
   }
 
   /**
@@ -163,8 +161,7 @@ export class AtlasClient extends EventEmitter implements IAtlasClient {
    * Sign an arbitrary message using the active wallet's key.
    *
    * @param message - The data to sign (plain string or raw bytes).
-   * @returns An object containing the raw `signature` and the original
-   *          `signedMessage`.
+   * @returns The raw signature as a hex string.
    *
    * @throws If no wallet is connected.
    */
@@ -177,10 +174,10 @@ export class AtlasClient extends EventEmitter implements IAtlasClient {
     
     this.emit('messageSigned', {
       message,
-      signature: signature
+      signature,
     });
     
-    return signature
+    return signature;
   }
 
   /**
@@ -276,22 +273,6 @@ export class AtlasClient extends EventEmitter implements IAtlasClient {
   }
 
   // ---------------------------------------------------------------------------
-  // Storage
-  // ---------------------------------------------------------------------------
-
-  /**
-   * Create a new storage handler bound to this client and its connected wallet.
-   *
-   * The handler manages the full storage lifecycle — subscriptions, providers,
-   * drives, directory trees, uploads, encryption, and access key derivation.
-   *
-   * @returns A fresh {@link StorageManager} instance.
-   */
-  createStorageHandler(): StorageManager {
-    return new StorageManager(this);
-  }
-
-  // ---------------------------------------------------------------------------
   // Cleanup
   // ---------------------------------------------------------------------------
 
@@ -300,8 +281,8 @@ export class AtlasClient extends EventEmitter implements IAtlasClient {
    * and remove all event listeners.
    */
   async dispose(): Promise<void> {
-    await this.disconnectWallet();
     this._isInitialized = false;
     this.removeAllListeners();
+    await this.disconnectWallet();
   }
 }
