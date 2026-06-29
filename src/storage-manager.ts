@@ -1,7 +1,6 @@
 import { EventEmitter } from "events";
 import { PrivateKey } from "eciesjs";
-import { Provider } from "@atlas/atlas.js-protos/dist/types/atlas/storage/v1/provider";
-import { StorageSubscription } from "@atlas/atlas.js-protos/dist/types/atlas/storage/v1/subscription";
+import { Provider, StorageSubscription } from "@atlas/atlas.js-protos/storage";
 
 import { TreeNode, QueuedFileStatus } from "./types";
 import { FileProcessingEvent, StorageEvents, StorageHandlerEvent, WalletEvents } from "./types/events";

@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@atlas/atlas.js-protos':
-        specifier: file:atlas-atlas.js-protos-0.3.0.tgz
-        version: file:atlas-atlas.js-protos-0.3.0.tgz(@chain-registry/v2-types@0.53.146)(@chain-registry/v2@1.71.237)(google-protobuf@3.21.4)
+        specifier: file:atlas-atlas.js-protos-0.1.0.tgz
+        version: file:atlas-atlas.js-protos-0.1.0.tgz(@chain-registry/v2-types@0.53.146)(@chain-registry/v2@1.71.237)(google-protobuf@3.21.4)
       '@cosmjs/encoding':
         specifier: ^0.38.1
         version: 0.38.1
@@ -130,9 +130,9 @@ packages:
     resolution: {integrity: sha512-VfFT5s434CQeJ8AJEbA62w2KK4/zFZ/P6bUUVdKbQs302pMjLLl5Js/qSwjCc11aLpGM2VtziUTujlqCo38TEw==}
     hasBin: true
 
-  '@atlas/atlas.js-protos@file:atlas-atlas.js-protos-0.3.0.tgz':
-    resolution: {integrity: sha512-YzqrWvmQZ+zv9/sFP2FePw7pO625WdQnwUkvqDC+d4aXtvSHKNDaQjUxOXRE1UyX90E1wTAhlOksnUM2x/flLA==, tarball: file:atlas-atlas.js-protos-0.3.0.tgz}
-    version: 0.3.0
+  '@atlas/atlas.js-protos@file:atlas-atlas.js-protos-0.1.0.tgz':
+    resolution: {integrity: sha512-pziey9ciOCz/NR55p2RjxCJEA9XxFjSxnjU3qajujRkcA/6JSwKcFxYkMbkcpXzrsQ1V/hA9hCf+Sly0bGzrSQ==, tarball: file:atlas-atlas.js-protos-0.1.0.tgz}
+    version: 0.1.0
 
   '@babel/code-frame@7.29.7':
     resolution: {integrity: sha512-Aup7aUOfpbAUg2ROOJN6Iw5f9DMBlzu0mIkm/malLQFN/YQgO48wCj0Kxa3sEHJvPVFg7siR+qRInwXd2qhQKw==}
@@ -2035,8 +2035,8 @@ packages:
     resolution: {integrity: sha512-cdGef/drWFoydD1JsMzuFf8100nZl+GT+yacc2bEced5f9Rjk4z+WtFUTBu9PhOi9j/jfmBPu0mMEY4wIdAF8A==}
     engines: {node: '>= 0.6.0'}
 
-  protobufjs@8.6.1:
-    resolution: {integrity: sha512-s4qQPr4pU0W95iYnUInh95skjIg+3aM2sakYsw60QYanU+qWRDY2zQxOAQV6zU7ROJpSNDG9B+VSmk4dqdWWSA==}
+  protobufjs@8.6.5:
+    resolution: {integrity: sha512-zeE5LPpencAGXvsxyOYmEgJhxzHY8IsmPAFzstZVhDSVT8QH03q6gMZwZRaQGApevZbAL6u28ugs4CC+YKB2jQ==}
     engines: {node: '>=12.0.0'}
 
   proxy-from-env@1.1.0:
@@ -2594,7 +2594,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@atlas/atlas.js-protos@file:atlas-atlas.js-protos-0.3.0.tgz(@chain-registry/v2-types@0.53.146)(@chain-registry/v2@1.71.237)(google-protobuf@3.21.4)':
+  '@atlas/atlas.js-protos@file:atlas-atlas.js-protos-0.1.0.tgz(@chain-registry/v2-types@0.53.146)(@chain-registry/v2@1.71.237)(google-protobuf@3.21.4)':
     dependencies:
       '@ahm23/telescope': 2.3.2
       '@ahm23/telescope-ast': 2.3.1
@@ -2611,7 +2611,7 @@ snapshots:
       browser-headers: 0.4.1
       cosmjs-types: 0.11.0
       long: 5.3.2
-      protobufjs: 8.6.1
+      protobufjs: 8.6.5
     transitivePeerDependencies:
       - '@chain-registry/v2'
       - '@chain-registry/v2-types'
@@ -4661,7 +4661,7 @@ snapshots:
 
   process@0.11.10: {}
 
-  protobufjs@8.6.1:
+  protobufjs@8.6.5:
     dependencies:
       long: 5.3.2
 
