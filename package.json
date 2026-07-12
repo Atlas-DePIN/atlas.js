@@ -1,5 +1,5 @@
 {
-  "name": "atlas.js",
+  "name": "@atlasdepin/atlas.js",
   "version": "0.1.0",
   "description": "TypeScript SDK for interacting with Atlas Protocol — wallet management, storage, file tree, and transactions.",
   "license": "MIT",
@@ -57,7 +57,7 @@
     "@cosmology/lcd": "^0.15.0",
     "@noble/hashes": "^1.8.0",
     "@openzeppelin/merkle-tree": "^1.0.8",
-    "atlas.js-protos": "^0.1.1",
+    "@atlasdepin/atlas.js-protos": "^0.1.1",
     "axios": "^1.13.3",
     "buffer": "^6.0.3",
     "cosmjs-types": "^0.11.0",
