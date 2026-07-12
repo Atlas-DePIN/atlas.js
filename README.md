@@ -5,13 +5,13 @@ TypeScript SDK for interacting with the Atlas Protocol blockchain.
 ## Installation
 
 ```bash
-npm install atlas.js
+npm install @atlasdepin/atlas.js
 ```
 
 ## Quick start
 
 ```ts
-import { AtlasClient, WalletType } from 'atlas.js';
+import { AtlasClient, WalletType } from '@atlasdepin/atlas.js';
 
 const client = await AtlasClient.new({
   chainId: 'atlas-1',

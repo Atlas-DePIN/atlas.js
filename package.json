@@ -1,6 +1,6 @@
 {
   "name": "@atlasdepin/atlas.js",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "TypeScript SDK for interacting with Atlas Protocol — wallet management, storage, file tree, and transactions.",
   "license": "MIT",
   "author": "Ahmed Moussa",
