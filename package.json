@@ -50,7 +50,6 @@
     "vite-tsconfig-paths": "^4.2.1"
   },
   "dependencies": {
-    "atlas.js-protos": "^0.1.0",
     "@cosmjs/encoding": "^0.38.1",
     "@cosmjs/proto-signing": "^0.38.1",
     "@cosmjs/stargate": "^0.38.1",
@@ -58,6 +57,7 @@
     "@cosmology/lcd": "^0.15.0",
     "@noble/hashes": "^1.8.0",
     "@openzeppelin/merkle-tree": "^1.0.8",
+    "atlas.js-protos": "^0.1.1",
     "axios": "^1.13.3",
     "buffer": "^6.0.3",
     "cosmjs-types": "^0.11.0",

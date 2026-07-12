@@ -36,8 +36,8 @@ console.log(stats);
 
 ## Documentation
 
-- [SDK reference] Coming Soon
-- [Atlas Protocol docs] Coming Soon
+- [atlas.js docs] https://docs.atlasprotocol.cloud/docs/atlas-js/intro
+- [SDK reference] https://docs.atlasprotocol.cloud/docs/api
 
 ## License
 
